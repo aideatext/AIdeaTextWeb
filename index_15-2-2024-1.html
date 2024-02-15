@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+<!-- ========== Meta Tags ========== -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="Content-Type" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="texteEfimere, es un proyecto de LazosNexos, desde el cual nos preguntamos
+si es posible pensar en una escritura de carácter efímero." />
+<meta name="author" content="ManuelVarZen" />
+<meta name="generator" content="Arte; Tecnología; Filosofía" />
+<!-- ========== Title ========== -->
+<title>texteEfimere</title>
+<!-- ========== Favicon Icon ========== -->
+<link rel="icon" type="image/x-icon" href="" />
+<!-- ========== Google tag start (gtag.js) ========== -->
+<!-- Google tag end (gtag.js) -->
+<!-- ========== MetaData ========== -->
+<meta name="description" content="texteEfimere, es un proyecto de LazosNexos, desde el cual nos preguntamos
+si es posible pensar en una escritura de carácter efímero." />
+<link rel="canonical" href="https://texteefimere.lazosnexos.com" />
+
+<!-- Open Graph -->
+<meta property="og:local" content="es_ES" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://texteefimere.lazosnexos.com" />
+<meta property="og:title" content="texteEfimere, es un proyecto de LazosNexos, desde el cual nos preguntamos
+si es posible pensar en una escritura de carácter efímero." />
+<meta property="og:description" content="writing, reading, eleectronic writing, digital writing, AIart, ephemeral writing, ephemeral reading" />
+<meta property="og:url" content="https://texteefimere.lazosnexos.com" />
+<meta property="og:site_name" content="texteEfimere" />
+<meta property="article:publisher" content="" />
+<meta property="og:image" content="https://texteefimere.lazosnexos.com/img/img1.jpg" />
+<meta property="og:image:width" content="1920" />
+<meta property="og:image:height" content="1080" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:alt" content="writing, reading, eleectronic writing, digital writing, AIart, ephemeral writing, ephemeral reading" />
+<meta property="og:image:secure_url" content="https://texteefimere.lazosnexos.com/img/img1.jpg" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" >
+<meta name="twitter:site" content="@texteEfimere" >
+<meta name="twitter:creator" content="@lazosnexos">
+<meta name="twitter:title" content="texteEfimere," >
+<meta name="twitter:description" content="¿Es posible pensar en una escritura de carácter efimero? Is it possible to think of a writing of an ephemeral nature?" >
+<meta name="twitter:image" content="https://texteefimere.lazosnexos.com/img/img1.jpg">
+
+<!-- <script src="/pyscript/pyscript.js"></script>
+<link rel="stylesheet" href="/pyscript/pyscript.css">
+<script src="/pyodide/pyodide.js"></script> -->
+<!-- Script -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+  <script defer onload="console.log(`${pyscript.version}`)" src="https://pyscript.net/latest/pyscript.js"></script>
+
+<!-- ========== Start Stylesheet ========== -->
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<link rel="icon" type="image/png" href="favicon.png">
+<!-- ========== End Stylesheet ========== -->
+
+<body>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<header>texteEfimere</header>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<section>
+  <p>Las palabras, escritas a mano o ingresadas a una computadora o producidas por una, tienen esta obligación o ¿es su destino? acaso, servir de manera útil y utilitaria
+    a perennizar los hechos, los acontecimientos, los eventos, de lo conocido como historia. ¿Es posible liberarla de esta forma de ser y de hacer? ¿le interesa a la escritura
+    ser de otra manera, algo nunca visto y radicalmente distinto? Así, ¿podría existir una escritura efímera? Si esto fuera posible ni siquiera este experimento seria posible.
+    Pero ¿podríamos imaginar un mundo donde la escritura deje de ser esclava del registro en piedra, en papel o en un byte? </p>
+</section>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<div class="container">
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+  <div class="left">
+    <h2>El momento</h2>
+    <textarea id="inputText"></textarea>
+    <button id="submitButton">Visualiza</button>
+  </div>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+  <div class="right">
+    <h2>El recuerdo</h2>
+    <div id="outputDiv"></div>
+  </div>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+</div>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+  <py-config>
+    packages = ["matplotlib", "networkx", "ssl", "pandas"]
+  </py-config>
+
+  <py-script>
+    import io
+    import matplotlib.pyplot as plt
+    import networkx as nx
+    import base64
+
+    def process_text(text):
+      tokens = text.split()
+      graph = nx.Graph()
+
+      for i in range(len(tokens) - 1):
+          graph.add_edge(tokens[i], tokens[i + 1])
+
+      # Ajusta el tamaño del gráfico aquí
+      fig, ax = plt.subplots(figsize=(14, 8))  # Puedes ajustar estos valores según necesites
+      nx.draw(graph, ax=ax, with_labels=True)
+      plt.axis('off')  # Esto quitará los ejes
+
+      fig, ax = plt.subplots(figsize=(17, 20))  # Ajusta estos valores según las dimensiones del contenedor
+      nx.draw(graph, ax=ax, with_labels=True)
+      plt.axis('off')
+      img = io.BytesIO()
+      plt.savefig(img, format='png', bbox_inches='tight', pad_inches=0)  # Reducir el espacio alrededor del gráfico
+      img.seek(0)
+      img_base64 = base64.b64encode(img.read()).decode('utf-8')
+  </py-script>
+
+<!--//////////////////////////////////////////-->
+  <script type="text/javascript">
+    window.onload = function() {
+        document.getElementById('submitButton').addEventListener('click', submitText);
+    }
+
+    function submitText() {
+        let inputText = document.getElementById('inputText').value;
+
+        if(pyodide) {
+            var formattedInputText = inputText.replace(/[\r\n]+/g, ' ');
+            pyodide.runPythonAsync(`
+                text = '${formattedInputText}'
+                img_base64 = process_text(text)
+            `).then(() => {
+                let imgBase64 = pyodide.globals.get('img_base64');
+                outputDiv.innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+            }).catch(console.error);
+        } else {
+            console.error("Pyodide has not loaded correctly");
+        }
+    }
+  </script>
+  <!--//////////////////////////////////////////-->
+</body>
+</html>
