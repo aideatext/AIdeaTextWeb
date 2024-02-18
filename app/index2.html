@@ -20,9 +20,11 @@
 
     <script type="text/javascript">
       async function loadNLTKAndResources(pyodide) {
-        await pyodide.loadPackage("micropip");
+         await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
+        
         const micropip = pyodide.pyimport("micropip");
         await micropip.install("nltk");
+        
         await pyodide.runPythonAsync(`
           import nltk
           nltk.download('punkt')
