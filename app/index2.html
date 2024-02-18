@@ -59,17 +59,20 @@
         });
       }
 
-      function cleanText(text, pyodide) {
-        return pyodide.runPython(`
+  function cleanText(text, pyodide) {
+    return pyodide.runPython(`
+      def clean_text(input_text):
           from nltk.tokenize import word_tokenize
           from nltk.corpus import stopwords
-          tokens = word_tokenize(text)
+          tokens = word_tokenize(input_text)
           tokens = [word for word in tokens if word.isalpha()]
           stop_words = set(stopwords.words('spanish'))
           tokens = [word for word in tokens if not word in stop_words]
           return tokens
-        `);
-      }
+
+      clean_text(${JSON.stringify(text)})
+    `);
+  }
 
       function processText(tokens, pyodide) {
         return pyodide.runPython(`
