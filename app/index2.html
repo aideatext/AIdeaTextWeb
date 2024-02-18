@@ -26,25 +26,25 @@
   <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
   </div>
   <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
-
-    <script type="text/javascript">
-      async function loadNLTKAndResources(pyodide) {
-         await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
-        
-        const micropip = pyodide.pyimport("micropip");
-        await micropip.install("nltk");
-        
-        await pyodide.runPythonAsync(`
-          import nltk
-          from nltk.data import path
-        
-          # Configura las rutas de NLTK para usar archivos locales
-          path.append('https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip')
-          path.append('https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.xml')
-        
-          # Omitir nltk.download ya que los archivos se cargan manualmente
-        `);
-      }
+  
+  <script type="text/javascript">
+    async function loadNLTKAndResources(pyodide) {
+      await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
+      
+      const micropip = pyodide.pyimport("micropip");
+      await micropip.install("nltk");
+      
+      await pyodide.runPythonAsync(`
+        import nltk
+        from nltk.data import path
+  
+        # Configura las rutas de NLTK para usar archivos desde GitHub
+        path.append('https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip')
+        path.append('https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.xml')
+  
+        # Omitir nltk.download ya que los archivos se cargan desde URLs
+      `);
+    }
 
       async function main() {
         let pyodide = await loadPyodide();
