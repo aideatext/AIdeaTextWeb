@@ -20,22 +20,17 @@
     </div>
 
     <script type="text/javascript">
-      async function loadNLTKAndResources(pyodide) {
+        async function loadNLTKAndResources(pyodide) {
         await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
         const micropip = pyodide.pyimport("micropip");
         await micropip.install("nltk");
 
+        // Importa los recursos necesarios de NLTK
         await pyodide.runPythonAsync(`
           import nltk
           from nltk.data import path
-        
-          # Configura las rutas de NLTK para usar archivos locales
-          path.append('/app/nltk_data/tokenizers/')
-          path.append('/app/nltk_data/corpora/')
-        
-          # Cargar manualmente los recursos
-          nltk.data.load('tokenizers/punkt/spanish.pickle')
-          nltk.data.load('corpora/stopwords/spanish')
+          nltk.download('punkt', download_dir='/nltk_data/')
+          nltk.download('stopwords', download_dir='/nltk_data/')
         `);
       }
 
