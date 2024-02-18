@@ -39,8 +39,18 @@
           from nltk.data import path
         
           # Configura las rutas de NLTK para usar archivos locales
-          local_nltk_data_path='/app/nltk_data/tokenizers/nltk_data
-          path.append(local_nltk_data_path)
+          await pyodide.runPythonAsync(`
+          import nltk
+          from nltk.data import path
+        
+          # Configura las rutas de NLTK para usar archivos locales
+          path.append('/app/nltk_data/tokenizers/punkt.zip')
+          path.append('/app/nltk_data/tokenizers/PY3/spanish.pickle')
+          path.append('/app/nltk_data/corpora/stopwords.zip')      
+        `);
+      }
+
+
         `);
       }
 
