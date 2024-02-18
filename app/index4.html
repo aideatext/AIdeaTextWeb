@@ -97,11 +97,11 @@
             import matplotlib.pyplot as plt
             import networkx as nx
             import base64
-
-     	ssl._create_default_https_context = ssl._create_unverified_context
-	# Download NLTK data (only need to run this once)
-	nltk.download('punkt')
-	nltk.download('averaged_perceptron_tagger')
+	
+	     	ssl._create_default_https_context = ssl._create_unverified_context
+		# Download NLTK data (only need to run this once)
+		nltk.download('punkt')
+		nltk.download('averaged_perceptron_tagger')
 
 	def process_text(tokens):
 	    plt.close('all')  # Cierra todas las figuras anteriores
