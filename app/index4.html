@@ -88,7 +88,7 @@
       loadPyodide({ indexURL: PYODIDE_BASE_URL }).then((loadedPyodide) => {
         pyodide = loadedPyodide;
         pyodide.loadPackage(['numpy', 'nltk', 'ssl', 'matplotlib', 'networkx']).then(() => {
-	  pyodide.runPython(`
+           pyodide.runPython(`
   	    import io
 	    import nltk
 	    from nltk.tokenize import word_tokenize
