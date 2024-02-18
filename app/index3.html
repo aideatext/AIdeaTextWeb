@@ -3,43 +3,29 @@
     <meta charset="utf-8" />
     <title>AIdeaText - Web</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
-    <!-- ========== Start Stylesheet ========== -->
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
-    <!-- ========== End Stylesheet ========== -->
   </head>
   <body>
-    <header>AIdeaText - Web </header>
-  <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
-  <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
-  <div class="container">
-  <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
-    <div class="left">
-      <button id="submitButton">Visualiza</button>
-      <textarea id="inputText"></textarea>
+    <header>AIdeaText - Web</header>
+    <div class="container">
+      <div class="left">
+        <button id="submitButton">Visualiza</button>
+        <textarea id="inputText"></textarea>
+      </div>
+      <div class="right">
+        <div id="outputDiv"></div>
+      </div>
     </div>
-  <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
-    <div class="right">
-      <div id="outputDiv"></div>
-    </div>
-  <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
-  </div>
-  <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
 
     <script type="text/javascript">
       async function loadNLTKAndResources(pyodide) {
-         await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
-        
+        await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
         const micropip = pyodide.pyimport("micropip");
         await micropip.install("nltk");
-        
+
         await pyodide.runPythonAsync(`
-          import nltk
-          from nltk.data import path
-        
-          # Configura las rutas de NLTK para usar archivos locales
-          await pyodide.runPythonAsync(`
           import nltk
           from nltk.data import path
         
@@ -53,37 +39,30 @@
         `);
       }
 
-
-        `);
-      }
-
       async function main() {
         let pyodide = await loadPyodide();
         await loadNLTKAndResources(pyodide);
-        
+
         document.getElementById('submitButton').addEventListener('click', function() {
-            const inputText = document.getElementById('inputText').value;
-            cleanText(inputText, pyodide).then(cleanedText => {
-                processText(cleanedText, pyodide).then(imgBase64 => {
-                    document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
-                }).catch(console.error);
+          const inputText = document.getElementById('inputText').value;
+          cleanText(inputText, pyodide).then(cleanedText => {
+            processText(cleanedText, pyodide).then(imgBase64 => {
+              document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
             }).catch(console.error);
+          }).catch(console.error);
         });
       }
 
       function cleanText(text, pyodide) {
-          return pyodide.runPython(`
-              def clean_text(input_text):
-                  from nltk.tokenize import word_tokenize
-                  from nltk.corpus import stopwords
-                  tokens = word_tokenize(input_text)
-                  tokens = [word for word in tokens if word.isalpha()]
-                  stop_words = set(stopwords.words('spanish'))
-                  tokens = [word for word in tokens if not word in stop_words]
-                  return tokens
-      
-              clean_text(${JSON.stringify(text)})
-          `);
+        return pyodide.runPython(`
+          from nltk.tokenize import word_tokenize
+          from nltk.corpus import stopwords
+          tokens = word_tokenize(${JSON.stringify(text)}, language='spanish')
+          tokens = [word for word in tokens if word.isalpha()]
+          stop_words = set(stopwords.words('spanish'))
+          tokens = [word for word in tokens if not word in stop_words]
+          return tokens
+        `);
       }
 
       function processText(tokens, pyodide) {
