@@ -49,26 +49,30 @@
       async function main() {
         let pyodide = await loadPyodide();
         await loadNLTKAndResources(pyodide);
-
+        
         document.getElementById('submitButton').addEventListener('click', function() {
-          const inputText = document.getElementById('inputText').value;
-          const cleanedText = cleanText(inputText, pyodide);
-          processText(cleanedText, pyodide).then(imgBase64 => {
-            document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
-          }).catch(console.error);
+            const inputText = document.getElementById('inputText').value;
+            cleanText(inputText, pyodide).then(cleanedText => {
+                processText(cleanedText, pyodide).then(imgBase64 => {
+                    document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+                }).catch(console.error);
+            }).catch(console.error);
         });
       }
 
       function cleanText(text, pyodide) {
-        return pyodide.runPython(`
-          from nltk.tokenize import word_tokenize
-          from nltk.corpus import stopwords
-          tokens = word_tokenize(text)
-          tokens = [word for word in tokens if word.isalpha()]
-          stop_words = set(stopwords.words('spanish'))
-          tokens = [word for word in tokens if not word in stop_words]
-          return tokens
-        `);
+          return pyodide.runPython(`
+              def clean_text(input_text):
+                  from nltk.tokenize import word_tokenize
+                  from nltk.corpus import stopwords
+                  tokens = word_tokenize(input_text)
+                  tokens = [word for word in tokens if word.isalpha()]
+                  stop_words = set(stopwords.words('spanish'))
+                  tokens = [word for word in tokens if not word in stop_words]
+                  return tokens
+      
+              clean_text(${JSON.stringify(text)})
+          `);
       }
 
       function processText(tokens, pyodide) {
