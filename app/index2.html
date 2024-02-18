@@ -27,8 +27,10 @@
         
         await pyodide.runPythonAsync(`
           import nltk
-          nltk.download('punkt')
-          nltk.download('stopwords')
+          # Configura las rutas de NLTK para usar archivos locales
+          nltk_path.append('/nltk_data/tokenizers/')
+          # nltk.download('punkt')
+          # nltk.download('stopwords')
         `);
       }
 
