@@ -109,7 +109,9 @@
         await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip")
         await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip")
 
-        nltk.data.path.append("/nltk_data/")
+        nltk.data.path.append("/nltk_data/tokenizers/punkt")
+	nltk.data.path.append("/nltk_data/tokenizers/punkt/PY3")
+	nltk.data.path.append("/nltk_data/corpora")
       `);
 
       console.log("NLTK and its models loaded successfully");
