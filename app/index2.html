@@ -1,15 +1,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no"/>
-    <meta name="theme-color"/>
     <title>AIdeaText - Web</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <!-- ========== Start Stylesheet ========== -->
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
+    <!-- ========== End Stylesheet ========== -->
   </head>
-
   <body>
     <header>AIdeaText - Web </header>
   <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
@@ -29,33 +28,22 @@
   <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
 
     <script type="text/javascript">
-      async function loadPyodide() {
-          // Cargar Pyodide
-          const pyodide = await globalThis.loadPyodide({
-              indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
-          });
-          await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
-          await pyodide.runPythonAsync(`
-              import nltk
-              from nltk.data import path
-      
-              # Configura las rutas de NLTK para usar archivos locales
-              path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/tokenizers/punkt.zip?raw=true')
-              path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/corpora/stopwords.zip?raw=true')
-          `);
-          return pyodide;
-      }
-      
-      async function main() {
-          let pyodide = await loadPyodide();
-          // el resto de tu código sigue aquí
-      }
-      
-      main();
-
       async function loadNLTKAndResources(pyodide) {
-         const micropip = pyodide.pyimport("micropip");
-         await micropip.install("nltk");
+         await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
+        
+        const micropip = pyodide.pyimport("micropip");
+        await micropip.install("nltk");
+        
+        await pyodide.runPythonAsync(`
+          import nltk
+          from nltk.data import path
+        
+          # Configura las rutas de NLTK para usar archivos locales
+          path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/tokenizers/punkt.zip')
+          path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/corpora/stopwords.zip')
+        
+          # Omitir nltk.download ya que los archivos se cargan manualmente
+        `);
       }
 
       async function main() {
@@ -72,16 +60,15 @@
       }
 
       function cleanText(text, pyodide) {
-          // Utiliza pyodide.runPython para ejecutar el código Python
-          return pyodide.runPython(`
-              from nltk.tokenize import word_tokenize
-              from nltk.corpus import stopwords
-              tokens = word_tokenize(${JSON.stringify(text)})
-              tokens = [word for word in tokens if word.isalpha()]
-              stop_words = set(stopwords.words('spanish'))
-              tokens = [word for word in tokens if not word in stop_words]
-              tokens
-          `);
+        return pyodide.runPython(`
+          from nltk.tokenize import word_tokenize
+          from nltk.corpus import stopwords
+          tokens = word_tokenize(text)
+          tokens = [word for word in tokens if word.isalpha()]
+          stop_words = set(stopwords.words('spanish'))
+          tokens = [word for word in tokens if not word in stop_words]
+          return tokens
+        `);
       }
 
       function processText(tokens, pyodide) {
