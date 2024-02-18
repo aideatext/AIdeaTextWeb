@@ -30,8 +30,10 @@
 
     <script type="text/javascript">
       async function loadPyodide() {
-          // Cargar Pyodide directamente sin usar window.languagePluginLoader
-          const pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/' });
+          // Cargar Pyodide
+          const pyodide = await globalThis.loadPyodide({
+              indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
+          });
           await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
           await pyodide.runPythonAsync(`
               import nltk
@@ -43,6 +45,13 @@
           `);
           return pyodide;
       }
+      
+      async function main() {
+          let pyodide = await loadPyodide();
+          // el resto de tu código sigue aquí
+      }
+      
+      main();
 
       async function loadNLTKAndResources(pyodide) {
          const micropip = pyodide.pyimport("micropip");
