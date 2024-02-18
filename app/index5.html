@@ -87,13 +87,34 @@
 
       loadPyodide({ indexURL: PYODIDE_BASE_URL }).then((loadedPyodide) => {
         pyodide = loadedPyodide;
-        pyodide.loadPackage(['numpy', 'matplotlib', 'networkx']).then(() => {
+	await pyodide.loadPackage(['numpy', 'micropip', 'matplotlib', 'networkx']).then(() => {
           pyodide.runPython(`
             import io
             import matplotlib.pyplot as plt
             import networkx as nx
             import base64
 
+     	    const micropip = pyodide.pyimport("micropip");
+            await micropip.install("nltk");
+
+            // Descargar y descomprimir archivos de NLTK
+            await pyodide.runPythonAsync(`
+                import nltk
+                from pyodide.http import pyfetch
+
+                async def download_and_unzip(url, target_path):
+                    response = await pyfetch(url)
+                    await response.unpack_archive(target_path)
+
+                await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip", "/nltk_data/tokenizers/")
+                await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip", "/nltk_data/corpora/")
+                
+                nltk.data.path.append("/nltk_data/")
+            `);
+
+            console.log("NLTK and its models loaded successfully");
+        });
+	
             def process_text(text):
                 plt.close('all')  # Cierra todas las figuras anteriores
                 tokens = text.split()
