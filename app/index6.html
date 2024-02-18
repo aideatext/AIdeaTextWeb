@@ -150,15 +150,15 @@
                         return img_base64
 
                     img_base64 = process_text('${formattedInputText}')
-                `).then(() => {
-                    let imgBase64 = pyodide.globals.get('img_base64');
-                    document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
-                }).catch(console.error);
-            } else {
-                console.error("Pyodide has not loaded correctly");
-            }
-        }
-    </script>
+	      `).then(() => {
+	        let imgBase64 = pyodide.globals.get('img_base64');
+	        outputDiv.innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+	      }).catch(console.error);
+	    } else {
+	      console.error("Pyodide has not loaded correctly");
+	    }
+	  }
+  </script>
 	
 <!-- //////////////////////////////////////////////////-->
   </body>
