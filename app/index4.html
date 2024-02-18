@@ -88,36 +88,36 @@
       loadPyodide({ indexURL: PYODIDE_BASE_URL }).then((loadedPyodide) => {
         pyodide = loadedPyodide;
         pyodide.loadPackage(['numpy', 'nltk', 'ssl', 'matplotlib', 'networkx']).then(() => {
-	        pyodide.runPython(`
-	            import io
-	            import nltk
-		    from nltk.tokenize import word_tokenize
-		    from nltk.tag import pos_tag
-		    import ssl
-	            import matplotlib.pyplot as plt
-	            import networkx as nx
-	            import base64
+		pyodide.runPython(`
+	 		import io
+	            	import nltk
+		    	from nltk.tokenize import word_tokenize
+		    	from nltk.tag import pos_tag
+		    	import ssl
+	            	import matplotlib.pyplot as plt
+	            	import networkx as nx
+	            	import base64
 	
-		    ssl._create_default_https_context = ssl._create_unverified_context
-		    # Download NLTK data (only need to run this once)
-		    nltk.download('punkt')
-	            nltk.download('averaged_perceptron_tagger')
+			    ssl._create_default_https_context = ssl._create_unverified_context
+			    # Download NLTK data (only need to run this once)
+			    nltk.download('punkt')
+		            nltk.download('averaged_perceptron_tagger')
 
-		    def process_text(tokens):
-			plt.close('all')  # Cierra todas las figuras anteriores
-			graph = nx.Graph()
-   			for i in range(len(tokens) - 1):
-      				graph.add_edge(tokens[i], tokens[i + 1])
+		    	def process_text(tokens):
+				plt.close('all')  # Cierra todas las figuras anteriores
+				graph = nx.Graph()
+   				for i in range(len(tokens) - 1):
+      					graph.add_edge(tokens[i], tokens[i + 1])
 			
-			plt.rcParams["figure.figsize"] = (21,17)
-			nx.draw(graph, with_labels = True)
+				plt.rcParams["figure.figsize"] = (21,17)
+				nx.draw(graph, with_labels = True)
 			
-			img = io.BytesIO()
-			plt.savefig(img, format='png')
-			img.seek(0)
+				img = io.BytesIO()
+				plt.savefig(img, format='png')
+				img.seek(0)
 			
-			img_base64 = base64.b64encode(img.read()).decode('utf-8')
-			return img_base64
+				img_base64 = base64.b64encode(img.read()).decode('utf-8')
+				return img_base64
 		`);
 		console.log("Python code loaded successfully");
 	   });
