@@ -135,6 +135,7 @@
               tokens = word_tokenize(text, language='spanish')
               stop_words = set(stopwords.words('spanish'))
               tokens = [word for word in tokens if word not in stop_words and word.isalpha()]
+	      print(tokens)  # Depuración: imprimir tokens
 
               # Crear el gráfico
               graph = nx.Graph()
