@@ -30,21 +30,18 @@
 
     <script type="text/javascript">
       async function loadPyodide() {
-        // Load Pyodide
-        const pyodideUrl = 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/';
-        const pyodide = await window.languagePluginLoader;
-        await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
-        await pyodide.runPythonAsync(`
-          import nltk
-          from nltk.data import path
-
-          # Configura las rutas de NLTK para usar archivos locales
-          path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/tokenizers/punkt.zip?raw=true')
-          path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/corpora/stopwords.zip?raw=true')
-
-          # Omitir nltk.download ya que los archivos se cargan manualmente
-        `);
-        return pyodide;
+          // Cargar Pyodide directamente sin usar window.languagePluginLoader
+          const pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/' });
+          await pyodide.loadPackage(['micropip', 'numpy', 'matplotlib', 'networkx']);
+          await pyodide.runPythonAsync(`
+              import nltk
+              from nltk.data import path
+      
+              # Configura las rutas de NLTK para usar archivos locales
+              path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/tokenizers/punkt.zip?raw=true')
+              path.append('https://raw.githubusercontent.com/aideatext/AIdeaTextWeb/main/app/nltk_data/corpora/stopwords.zip?raw=true')
+          `);
+          return pyodide;
       }
 
       async function loadNLTKAndResources(pyodide) {
