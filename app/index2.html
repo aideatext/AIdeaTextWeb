@@ -60,15 +60,16 @@
       }
 
       function cleanText(text, pyodide) {
-        return pyodide.runPython(`
-          from nltk.tokenize import word_tokenize
-          from nltk.corpus import stopwords
-          tokens = word_tokenize(text)
-          tokens = [word for word in tokens if word.isalpha()]
-          stop_words = set(stopwords.words('spanish'))
-          tokens = [word for word in tokens if not word in stop_words]
-          return tokens
-        `);
+          // Utiliza pyodide.runPython para ejecutar el código Python
+          return pyodide.runPython(`
+              from nltk.tokenize import word_tokenize
+              from nltk.corpus import stopwords
+              tokens = word_tokenize(${JSON.stringify(text)})
+              tokens = [word for word in tokens if word.isalpha()]
+              stop_words = set(stopwords.words('spanish'))
+              tokens = [word for word in tokens if not word in stop_words]
+              tokens
+          `);
       }
 
       function processText(tokens, pyodide) {
