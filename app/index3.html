@@ -44,9 +44,12 @@
           from nltk.data import path
         
           # Configura las rutas de NLTK para usar archivos locales
-          path.append('/app/nltk_data/tokenizers/punkt.zip')
-          path.append('/app/nltk_data/tokenizers/PY3/spanish.pickle')
-          path.append('/app/nltk_data/corpora/stopwords.zip')      
+          path.append('/app/nltk_data/tokenizers/')
+          path.append('/app/nltk_data/corpora/')
+        
+          # Cargar manualmente los recursos
+          nltk.data.load('tokenizers/punkt/spanish.pickle')
+          nltk.data.load('corpora/stopwords/spanish')
         `);
       }
 
