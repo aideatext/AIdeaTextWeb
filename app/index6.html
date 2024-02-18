@@ -117,7 +117,7 @@
         console.log("NLTK and its models loaded successfully");
     }
 
-    function submitText() {
+     function submitText() {
       let inputText = document.getElementById('inputText').value;
 
       if (pyodide) {
@@ -131,11 +131,14 @@
               from nltk.tokenize import word_tokenize
               from nltk.corpus import stopwords
 
+              nltk.download('punkt')
+              nltk.download('stopwords')
+
               # Tokenizar y filtrar stopwords
               tokens = word_tokenize(text, language='spanish')
               stop_words = set(stopwords.words('spanish'))
               tokens = [word for word in tokens if word not in stop_words and word.isalpha()]
-	      print(tokens)  # Depuración: imprimir tokens
+              print(tokens)  # Depuración: imprimir tokens
 
               # Crear el gráfico
               graph = nx.Graph()
@@ -161,7 +164,12 @@
         console.error("Pyodide has not loaded correctly");
       }
     }
-  </script>	
+
+    window.onload = function() {
+      document.getElementById('submitButton').addEventListener('click', submitText);
+      loadPyodideAndPackages();
+    }
+  </script>
 <!-- //////////////////////////////////////////////////-->
   </body>
   </html>
