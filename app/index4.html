@@ -135,13 +135,13 @@ function submitText() {
     let inputText = document.getElementById('inputText').value;
 
     if(pyodide) {
-        cleanText(inputText, pyodide).then(cleanedTokens => {
+            cleanText(inputText, pyodide).then(cleanedTokens => {
             processText(cleanedTokens, pyodide).then(imgBase64 => {
                 document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
             }).catch(console.error);
         }).catch(console.error);
-    } else {
-        console.error("Pyodide has not loaded correctly");
+    } 	else {
+        	console.error("Pyodide has not loaded correctly");
     }
 }
 
