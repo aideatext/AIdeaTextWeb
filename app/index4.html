@@ -88,22 +88,22 @@
       loadPyodide({ indexURL: PYODIDE_BASE_URL }).then((loadedPyodide) => {
         pyodide = loadedPyodide;
         pyodide.loadPackage(['numpy', 'nltk', 'ssl', 'matplotlib', 'networkx']).then(() => {
-		    pyodide.runPython(`
-	 		    import io
-	            import nltk
+		pyodide.runPython(`
+  			import io
+	            	import nltk
 		    	from nltk.tokenize import word_tokenize
 		    	from nltk.tag import pos_tag
 		    	import ssl
-	            import matplotlib.pyplot as plt
-	            import networkx as nx
-	            import base64
+	            	import matplotlib.pyplot as plt
+	            	import networkx as nx
+	            	import base64
 
 			    ssl._create_default_https_context = ssl._create_unverified_context
 			    # Download NLTK data (only need to run this once)
 			    nltk.download('punkt')
 		            nltk.download('averaged_perceptron_tagger')
 
-		    def process_text(tokens):
+		    	def process_text(tokens):
 				plt.close('all')  # Cierra todas las figuras anteriores
 				graph = nx.Graph()
    				for i in range(len(tokens) - 1):
