@@ -28,7 +28,7 @@
         await pyodide.runPythonAsync(`
           import nltk
           # Configura las rutas de NLTK para usar archivos locales
-          nltk_path.append('/nltk_data/tokenizers/')
+          nltk_path.append('https://github.com/aideatext/AIdeaTextWeb/blob/main/app/nltk_data/tokenizers')
           # nltk.download('punkt')
           # nltk.download('stopwords')
         `);
