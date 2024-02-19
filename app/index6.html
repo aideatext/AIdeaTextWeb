@@ -107,8 +107,8 @@
             await response.unpack_archive(target_path)
 
         # Reemplaza estas URL con las URL donde has alojado los archivos
-        await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip", "/nltk_data/tokenizers/")
-        await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip", "/nltk_data/corpora/")
+        await download_and_unzip("https://drive.google.com/file/d/1N4iJyI7Z_6lkwlEdIxXjaKOgh_jURJgS/view?file=punkt.zip", "/nltk_data/tokenizers/")
+        await download_and_unzip("https://drive.google.com/file/d/1yY2BKm7d_Z8ZFi1CNEu3kZgHuJWYBIFH/view?file=stopwords.zip", "/nltk_data/corpora/")
 
         nltk.data.path.append("/nltk_data/tokenizers/")
         nltk.data.path.append("/nltk_data/corpora/")
