@@ -97,25 +97,25 @@
         const micropip = pyodide.pyimport("micropip");
         await micropip.install("nltk");
 
-        // Descargar y descomprimir archivos de NLTK
-        await pyodide.runPythonAsync(`
-            import nltk
-            from pyodide.http import pyfetch
+    // Descargar y descomprimir archivos de NLTK desde tus URLs personalizadas
+    await pyodide.runPythonAsync(`
+        import nltk
+        from pyodide.http import pyfetch
 
-            async def download_and_unzip(url, target_path):
-                response = await pyfetch(url)
-                await response.unpack_archive(target_path)
+        async def download_and_unzip(url, target_path):
+            response = await pyfetch(url)
+            await response.unpack_archive(target_path)
 
-            nltk_data_url = "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/"
-            await download_and_unzip(nltk_data_url + "tokenizers/punkt.zip", "/nltk_data/tokenizers/")
-            await download_and_unzip(nltk_data_url + "corpora/stopwords.zip", "/nltk_data/corpora/")
+        # Reemplaza estas URL con las URL donde has alojado los archivos
+        await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip", "/nltk_data/tokenizers/")
+        await download_and_unzip("https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip", "/nltk_data/corpora/")
 
-            nltk.data.path.append("/nltk_data/tokenizers/")
-            nltk.data.path.append("/nltk_data/corpora/")
-        `);
+        nltk.data.path.append("/nltk_data/tokenizers/")
+        nltk.data.path.append("/nltk_data/corpora/")
+    `);
 
-        console.log("NLTK and its models loaded successfully");
-    }
+    console.log("NLTK and its models loaded successfully");
+}
 
      function submitText() {
       let inputText = document.getElementById('inputText').value;
