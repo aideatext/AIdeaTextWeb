@@ -103,8 +103,9 @@
         from pyodide.http import pyfetch
 
         async def download_and_unzip(url, target_path):
-            response = await pyfetch(url)
-            await response.unpack_archive(target_path)
+            response = await pyfetch(url) 
+	    if response.status==200:
+            	await response.unpack_archive(target_path)
 
         # Reemplaza estas URL con las URL donde has alojado los archivos
         await download_and_unzip("https://drive.google.com/file/d/1N4iJyI7Z_6lkwlEdIxXjaKOgh_jURJgS/view?file=punkt.zip", "/nltk_data/tokenizers/")
