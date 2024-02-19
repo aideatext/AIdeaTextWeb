@@ -83,8 +83,7 @@
 
 <!-- //////////////////////////////////////////////////-->
 <script type="text/javascript">
-    var pyodide = null;
-
+var pyodide = null;
     async function loadPyodideAndPackages() {
         // Cargar Pyodide
         const PYODIDE_BASE_URL = "https://cdn.jsdelivr.net/pyodide/v0.23.2/full/";
@@ -118,54 +117,54 @@
     console.log("NLTK and its models loaded successfully");
 }
 
-     function submitText() {
-      let inputText = document.getElementById('inputText').value;
-
-      if (pyodide) {
+function submitText() {
+	let inputText = document.getElementById('inputText').value;
+	
+	if (pyodide) {
         var formattedInputText = inputText.replace(/[\r\n]+/g, ' ');
-        pyodide.runPythonAsync(`
-          def process_text(text):
-              import matplotlib.pyplot as plt
-              import networkx as nx
-              import io, base64
-              import nltk
-              from nltk.tokenize import word_tokenize
-              from nltk.corpus import stopwords
-
-              nltk.download('punkt')
-              nltk.download('stopwords')
-
-              # Tokenizar y filtrar stopwords
-              tokens = word_tokenize(text, language='spanish')
-              stop_words = set(stopwords.words('spanish'))
-              tokens = [word for word in tokens if word not in stop_words and word.isalpha()]
-              print(tokens)  # Depuración: imprimir tokens
-
-              # Crear el gráfico
-              graph = nx.Graph()
-              for i in range(len(tokens) - 1):
-                  graph.add_edge(tokens[i], tokens[i + 1])
-
-              plt.rcParams["figure.figsize"] = (21,17)
-              nx.draw(graph, with_labels=True)
-
-              img = io.BytesIO()
-              plt.savefig(img, format='png')
-              img.seek(0)
-
-              img_base64 = base64.b64encode(img.read()).decode('utf-8')
-              return img_base64
-
-          img_base64 = process_text('${formattedInputText}')
-        `).then(() => {
-          let imgBase64 = pyodide.globals.get('img_base64');
-          document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
-        }).catch(console.error);
-      } else {
-        console.error("Pyodide has not loaded correctly");
-      }
-    }
-
+	pyodide.runPythonAsync(`
+ 		def process_text(text):
+			import matplotlib.pyplot as plt
+	              	import networkx as nx
+	              	import io, base64
+	              	import nltk
+	              	from nltk.tokenize import word_tokenize
+	              	from nltk.corpus import stopwords
+	
+	              	nltk.download('punkt')
+	              	nltk.download('stopwords')
+	
+		        # Tokenizar y filtrar stopwords
+		        tokens = word_tokenize(text, language='spanish')
+		        stop_words = set(stopwords.words('spanish'))
+		        tokens = [word for word in tokens if word not in stop_words and word.isalpha()]
+		        print(tokens)  # Depuración: imprimir tokens
+		
+		        # Crear el gráfico
+		        graph = nx.Graph()
+		        for i in range(len(tokens) - 1):
+		        	graph.add_edge(tokens[i], tokens[i + 1])
+		
+		        plt.rcParams["figure.figsize"] = (21,17)
+		        nx.draw(graph, with_labels=True)
+		
+		        img = io.BytesIO()
+		        plt.savefig(img, format='png')
+		        img.seek(0)
+		
+		        img_base64 = base64.b64encode(img.read()).decode('utf-8')
+		        return img_base64
+		
+			img_base64 = process_text('${formattedInputText}')
+	             `).then(() => {
+	          	let imgBase64 = pyodide.globals.get('img_base64');
+	          	document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+	           }).catch(console.error);
+	      } else {
+	        console.error("Pyodide has not loaded correctly");
+	      }
+	    }
+	
     window.onload = function() {
       document.getElementById('submitButton').addEventListener('click', submitText);
       loadPyodideAndPackages();
