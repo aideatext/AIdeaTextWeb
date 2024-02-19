@@ -53,7 +53,7 @@ y distintos aprendizajes para estudiantes y profesionales en espacios colectivos
 <link rel="stylesheet" href="/pyscript/pyscript.css">
 <script src="/pyodide/pyodide.js"></script> -->
 <!-- Script -->
-<script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 <script defer onload="console.log(`${pyscript.version}`)" src="https://pyscript.net/latest/pyscript.js"></script>
 
 <!-- ========== Start Stylesheet ========== -->
@@ -86,7 +86,7 @@ y distintos aprendizajes para estudiantes y profesionales en espacios colectivos
 
         async function loadPyodideAndPackages() {
             // Cargar Pyodide
-            const PYODIDE_BASE_URL = "https://cdn.jsdelivr.net/pyodide/v0.23.2/full/";
+            const PYODIDE_BASE_URL = "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/";
             pyodide = await loadPyodide({ indexURL: PYODIDE_BASE_URL });
 
             // Cargar los paquetes necesarios
