@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+<!-- ========== Meta Tags ========== -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="Content-Type" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="AIdeaText" />
+<meta name="author" content="ManuelVarZen" />
+<meta name="generator" content="NLP" />
+<!-- ========== Title ========== -->
+<title>AIdeaText</title>
+<!-- ========== Favicon Icon ========== -->
+<link rel="icon" type="image/x-icon" href="" />
+<!-- ========== Google tag start (gtag.js) ========== -->
+<!-- Google tag end (gtag.js) -->
+<!-- ========== MetaData ========== -->
+<meta name="description" content="AIdeaText" />
+<link rel="canonical" href="https://aideatext.ai" />
+<meta charset="UTF-8" />
+<title>AIdeaText</title>
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="Content-Type" />
+<meta name="viewport" content= "width=device-width, initial-scale=1" />
+<meta name="description" content= "AIdeaText es crear, analizar sintetizar y visualizar textos escritos con la cooperación de una IA para
+extender y amplificar las posibilidades de descubrir, experimentar y probar, nuevos, diversos
+y distintos aprendizajes para estudiantes y profesionales en espacios colectivos y personales." />
+<meta name="author" content= "ManuelVarZen" />
+<meta name="generator" content= "AIdeaText es crear, analizar sintetizar y visualizar textos escritos con la cooperación de una IA para
+extender y amplificar las posibilidades de descubrir, experimentar y probar, nuevos, diversos
+y distintos aprendizajes para estudiantes y profesionales en espacios colectivos y personales." />
+
+<!-- Twitter Card -->
+<meta name = "twitter:card" content = "summary_large_image" />
+<meta name = "twitter:site" content = "https://aideatext.ai" />
+<meta name = "twitter:creator" content = "@ManuelVarZen">
+<meta name = "twitter:title" content = "AIdeaText" />
+<meta name = "twitter:description" content = "AIdeaText es crear, analizar, sintetizar y visualizar textos escritos para extender, modificar y amplificar las posibilidades de descubrir, experimentar y probar; nuevos, diversos y distintos aprendizajes; para estudiantes y maestros en diferentes espacios, colectivos y personales." />
+<meta name = "twitter:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg"/>
+
+<!-- Open Graph -->
+<meta property="og:title" content = "AIdeaText" />
+<meta property="og:type" content = "website" />
+<meta property="og:url" content = "https://aideatext.ai" />
+<meta property="og:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+<meta property="og:image:secure_url" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+<meta property="og:description" content = "AIdeaText es crear, analizar, sintetizar y visualizar textos escritos para extender, modificar y amplificar las posibilidades de descubrir, experimentar y probar; nuevos, diversos y distintos aprendizajes; para estudiantes y maestros en diferentes espacios, colectivos y personales." />
+<meta property="og:image:alt" content="AIdeaText screenshot." />
+
+<!-- <script src="/pyscript/pyscript.js"></script>
+<link rel="stylesheet" href="/pyscript/pyscript.css">
+<script src="/pyodide/pyodide.js"></script> -->
+<!-- Script -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+<script defer onload="console.log(`${pyscript.version}`)" src="https://pyscript.net/latest/pyscript.js"></script>
+
+<!-- ========== Start Stylesheet ========== -->
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="icon" type="image/png" href="favicon.png">
+<!-- ========== End Stylesheet ========== -->
+
+<body>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<header>AIdeaText - Web </header>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<div class="container">
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<div class="left">
+<button id="submitButton">Visualiza</button>
+<textarea id="inputText"></textarea>
+</div>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<div class="right">
+<div id="outputDiv"></div>
+</div>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+</div>
+<!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
+<!-- //////////////////////////////////////////////////-->
+<script type="text/javascript">
+var pyodide = null;
+async function loadPyodideAndPackages() {
+// Cargar Pyodide
+const PYODIDE_BASE_URL = "https://cdn.jsdelivr.net/pyodide/v0.23.2/full/";
+pyodide = await loadPyodide({ indexURL: PYODIDE_BASE_URL });
+
+// Cargar los paquetes necesarios
+await pyodide.loadPackage(['numpy', 'micropip', 'matplotlib', 'networkx']);
+
+// Instalar NLTK
+const micropip = pyodide.pyimport("micropip");
+await micropip.install("nltk");
+
+// Descargar y descomprimir archivos de NLTK desde tus URLs personalizadas
+await pyodide.runPythonAsync(`
+import nltk
+from pyodide.http import pyfetch
+
+async def download_and_unzip(url, target_path):
+response = await pyfetch(url)
+if response.status==200:
+await response.unpack_archive(target_path)
+
+# Reemplaza estas URL con las URL donde has alojado los archivos
+await download_and_unzip("https://drive.google.com/file/d/1N4iJyI7Z_6lkwlEdIxXjaKOgh_jURJgS/view?file=punkt.zip", "/nltk_data/tokenizers/")
+await download_and_unzip("https://drive.google.com/file/d/1yY2BKm7d_Z8ZFi1CNEu3kZgHuJWYBIFH/view?file=stopwords.zip", "/nltk_data/corpora/")
+
+nltk.data.path.append("/nltk_data/tokenizers/")
+nltk.data.path.append("/nltk_data/corpora/")
+`);
+
+console.log("NLTK and its models loaded successfully");
+}
+
+function submitText() {
+let inputText = document.getElementById('inputText').value;
+
+if (pyodide) {
+var formattedInputText = inputText.replace(/[\r\n]+/g, ' ');
+pyodide.runPythonAsync(`
+def process_text(text):
+import matplotlib.pyplot as plt
+import networkx as nx
+import io, base64
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Tokenizar y filtrar stopwords
+tokens = word_tokenize(text, language='spanish')
+stop_words = set(stopwords.words('spanish'))
+tokens = [word for word in tokens if word not in stop_words and word.isalpha()]
+print(tokens)  # Depuración: imprimir tokens
+
+# Crear el gráfico
+graph = nx.Graph()
+for i in range(len(tokens) - 1):
+graph.add_edge(tokens[i], tokens[i + 1])
+
+plt.rcParams["figure.figsize"] = (21,17)
+nx.draw(graph, with_labels=True)
+
+img = io.BytesIO()
+plt.savefig(img, format='png')
+img.seek(0)
+
+img_base64 = base64.b64encode(img.read()).decode('utf-8')
+return img_base64
+img_base64 = process_text('${formattedInputText}')
+`).then(() => {
+let imgBase64 = pyodide.globals.get('img_base64');
+document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+}).catch(console.error);
+} else {
+console.error("Pyodide has not loaded correctly");
+}
+}
+
+window.onload = function() {
+document.getElementById('submitButton').addEventListener('click', submitText);
+loadPyodideAndPackages();
+}
+</script>
+<!-- //////////////////////////////////////////////////-->
+</body>
+</html>
