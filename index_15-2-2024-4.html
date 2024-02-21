@@ -79,62 +79,64 @@ si es posible pensar en una escritura de carácter efímero." />
   <!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### --><!-- ##### -->
 
     <script type="text/javascript">
-      var pyodide = null;
-      var PYODIDE_BASE_URL = "https://cdn.jsdelivr.net/pyodide/v0.23.2/full/";
+    var pyodide = null;
+    var PYODIDE_BASE_URL = "https://cdn.jsdelivr.net/pyodide/v0.23.2/full/";
 
-      loadPyodide({ indexURL: PYODIDE_BASE_URL }).then((loadedPyodide) => {
-        pyodide = loadedPyodide;
-        pyodide.loadPackage(['numpy', 'matplotlib', 'networkx']).then(() => {
-          pyodide.runPython(`
-            import io
-            import matplotlib.pyplot as plt
-            import networkx as nx
-            import base64
-
-            def process_text(text):
-                plt.close('all')  # Cierra todas las figuras anteriores
-                tokens = text.split()
-                graph = nx.Graph()
-
-                for i in range(len(tokens) - 1):
-                    graph.add_edge(tokens[i], tokens[i + 1])
-
-                plt.rcParams["figure.figsize"] = (21,17)
-                nx.draw(graph, with_labels = True)
-
-                img = io.BytesIO()
-                plt.savefig(img, format='png')
-                img.seek(0)
-
-                img_base64 = base64.b64encode(img.read()).decode('utf-8')
-                return img_base64
-          `);
-          console.log("Python code loaded successfully");
-        });
+    loadPyodide({ indexURL: PYODIDE_BASE_URL }).then((loadedPyodide) => {
+      pyodide = loadedPyodide;
+      pyodide.loadPackage(['nltk', 'networkx']).then(() => {
+        console.log("Python code loaded successfully");
       });
-    </script>
+    });
 
-   <!-- //////////////////////////////////////////////////-->
-    <script type="text/javascript">
-      window.onload = function() {
-        document.getElementById('submitButton').addEventListener('click', submitText);
+    window.onload = function() {
+      document.getElementById('submitButton').addEventListener('click', submitText);
+    };
+
+    function submitText() {
+      let inputText = document.getElementById('inputText').value;
+
+      if(pyodide) {
+        var formattedInputText = inputText.replace(/[\r\n]+/g, ' ');
+        pyodide.runPythonAsync(`
+          import nltk
+          from nltk.tokenize import word_tokenize
+          from nltk import pos_tag
+          import networkx as nx
+          import matplotlib.pyplot as plt
+          import io
+          import base64
+
+          nltk.download('punkt')
+          nltk.download('averaged_perceptron_tagger')
+
+          tokens = word_tokenize("${formattedInputText}")
+          tags = pos_tag(tokens)
+          noun_phrases = [word for word, pos in tags if pos in ['NN', 'NNS']]
+
+          G = nx.Graph()
+          G.add_nodes_from(noun_phrases)
+          for i in range(len(noun_phrases) - 1):
+              G.add_edge(noun_phrases[i], noun_phrases[i + 1])
+
+          centralidad = nx.degree_centrality(G)
+          sorted_centralidad = sorted(centralidad.items(), key=lambda x: x[1], reverse=True)
+
+          plt.figure(figsize=(10, 8))
+          nx.draw(G, with_labels=True, node_color='skyblue', font_size=10)
+          img = io.BytesIO()
+          plt.savefig(img, format='png')
+          img.seek(0)
+          img_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
+          plt.close()
+          img_base64
+        `).then((imgBase64) => {
+          document.getElementById('outputDiv').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+        }).catch(console.error);
+      } else {
+        console.error("Pyodide has not loaded correctly");
       }
-      function submitText() {
-    let inputText = document.getElementById('inputText').value;
-
-    if(pyodide) {
-      var formattedInputText = inputText.replace(/[\r\n]+/g, ' ');
-      pyodide.runPythonAsync(`
-          text = '${formattedInputText}'
-          img_base64 = process_text(text)
-      `).then(() => {
-        let imgBase64 = pyodide.globals.get('img_base64');
-        outputDiv.innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
-      }).catch(console.error);
-    } else {
-      console.error("Pyodide has not loaded correctly");
     }
-  }
   </script>
 <!-- //////////////////////////////////////////////////-->
   </body>
