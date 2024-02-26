@@ -1,6 +1,6 @@
 import micropip
 
-PACKAGES_PATH = "test_0/packages"
+PACKAGES_PATH = "/test_0/packages"
 CUSTOM_BUILT_PKG_NAMES = [
     f"{PACKAGES_PATH}/{name}-cp310-cp310-emscripten_3_1_14_wasm32.whl"
     for name in [
