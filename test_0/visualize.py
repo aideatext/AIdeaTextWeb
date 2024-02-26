@@ -8,7 +8,7 @@ CUSTOM_BUILT_PKG_NAMES = [
         "srsly-2.4.3", "thinc-8.1.0", "spacy-3.4.0",
     ]
 ]
-SPACY_MODEL_NAME = "es_core_news_sm"
+SPACY_MODEL_NAME = "en_core_web_sm"
 SPACY_MODEL_VERSION = "3.4.0"
 
 await micropip.install(
