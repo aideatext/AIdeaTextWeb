@@ -3,17 +3,17 @@ async function loadPackages(pyodide) {
 }
 
 async function loadVisualize(pyodide) {
-  let python_script = await fetch("/test_0/visualize.py")
-    .then((r) => r.text())
-    .then((python_script) => {
-      console.log(python_script); // Para verificar que se carga el script correcto
-      return pyodide.runPythonAsync(python_script);
-    })
-    .catch((error) => {
-      console.error("Error loading visualize.py:", error);
-    });
-
-  return await pyodide.runPythonAsync(python_script);
+  try {
+    let response = await fetch("/test_0/visualize.py");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    let python_script = await response.text();
+    await pyodide.runPythonAsync(python_script);
+    return pyodide.globals.get("visualize");
+  } catch (error) {
+    console.error("Error loading visualize.py:", error);
+  }
 }
 
 async function main() {
@@ -33,11 +33,11 @@ async function main() {
   document.getElementById("submit").innerHTML = "Visualize";
 
   // Add event listener to form
-  document.getElementById("form").addEventListener("submit", (e) => {
+  document.getElementById("form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     let input = document.getElementById("input").value;
-    let html = vis_fn(input);
+    let html = await vis_fn(input);
 
     document.getElementById("output").innerHTML = html;
   });
