@@ -4,7 +4,7 @@ async function loadPackages(pyodide) {
 
 async function loadVisualize(pyodide) {
   try {
-    let response = await fetch("visualize.py");
+    let response = await fetch("test_0/visualize.py");
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
