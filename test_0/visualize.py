@@ -11,6 +11,7 @@ CUSTOM_BUILT_PKG_NAMES = [
 SPACY_MODEL_NAME = "en_core_web_sm"
 SPACY_MODEL_VERSION = "3.4.0"
 
+# Asegurarse que las rutas a los archivos WHL son correctas
 await micropip.install(
     [f"{PACKAGES_PATH}/{SPACY_MODEL_NAME}-{SPACY_MODEL_VERSION}-py3-none-any.whl"]
     + CUSTOM_BUILT_PKG_NAMES
