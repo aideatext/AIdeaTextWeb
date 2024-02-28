@@ -1,1 +1,1 @@
-# AIdeaTextWeb
+# AIdeaText - Web
