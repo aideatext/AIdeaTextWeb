@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es" class="h-100">
+    <head>
+
+	<meta charset="UTF-8" />
+	<title>AIdeaText</title>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="Content-Type" />
+    <meta name="viewport" content= "width=device-width, initial-scale=1" />
+    <meta name="description" content= "AIdeaText
+    AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+    <meta name="author" content= "ManuelVarZen" />
+    <meta name="generator" content= "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+
+	<!-- Twitter Card -->
+	<meta name = "twitter:card" content = "summary_large_image" />
+    <meta name = "twitter:site" content = "https://aideatext.ai" />
+    <meta name = "twitter:creator" content = "@ManuelVarZen">
+    <meta name = "twitter:title" content = "AIdeaText" />
+    <meta name = "twitter:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta name = "twitter:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg"/>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content = "AIdeaText" />
+	<meta property="og:type" content = "website" />
+	<meta property="og:url" content = "https://aideatext.ai" />
+    <meta property="og:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:image:secure_url" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta property="og:image:alt" content="AIdeaText screenshot." />
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"
+    ></script>
+
+    <!-- Aquí puedes agregar tus estilos CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+  </head>
+
+  <body>
+    <div class="upper-section">
+        <h1>AIdeaText - Web</h1>
+    </div>
+
+    <div class="file-operations">
+      <!-- <div class="section-title">Setup</div> -->
+      <!-- Botones de Descarga -->
+      <div class="download-buttons">
+          <button onclick="location.href='https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip'">[1] Download Stopwords zip file</button>
+          <button onclick="location.href='https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip'">[2] Download Tokenizer Punkt zip file</button>
+          <button onclick="location.href='https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/taggers/averaged_perceptron_tagger.zip'">[3] Download Taggers zip file</button>
+      </div>
+
+      <!-- Botones de Carga -->
+      <div class="upload-buttons">
+          <input type="file" id="stopwordsFile" class="upload-file" accept=".zip">
+          <label for="stopwordsFile" class="upload-label">[4] Select Stopwords zip file</label>
+
+          <input type="file" id="punktFile" class="upload-file" accept=".zip">
+          <label for="punktFile" class="upload-label">[5] Select Tokenizer Punkt zip file</label>
+
+          <input type="file" id="taggersFile" class="upload-file" accept=".zip">
+          <label for="taggersFile" class="upload-label">[6] Select Upload Taggers zip file</label>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- <div class="section-title">Analyze</div> -->
+         <div class="left-section">
+          <!-- <div class="section-title">Input Text</div> -->
+            <!-- Área de texto y botón Procesar -->
+            <div class="text-input-section"><textarea id="text" name="text" placeholder=" Read: If you have downloaded and selected all
+                3 files then you can enter your text here and press the Process Text button. In the section
+                on the right you will see the graph of the semantic relationships of your text. For now
+                it only works with texts in English but you can try with texts in Spanish.
+                You can edit your text and press the Process Text button again to see how the semantic
+                relationships of your text change."></textarea>
+                <button type="button" id="procesarButton" onclick="processText()">[7] Procesar</button>
+            </div>
+        </div>
+        <div class="right-section">
+         <!-- <div class="section-titlle">Visualize graph</div> -->
+            <div id="network" style="width: 100%; height: 600px"></div>
+        </div>
+    </div>
+
+    <div class="lower-section">
+        <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai</p>      </a></p>
+        <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
+    </div>
+
+    <script type="text/javascript">
+      let pyodideReady = loadPyodide({
+        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/",
+      });
+
+      document
+        .getElementById("stopwordsFile")
+        .addEventListener("change", function (event) {
+          handleZipFile(event, "/nltk_data/corpora");
+        });
+
+      document
+        .getElementById("punktFile")
+        .addEventListener("change", function (event) {
+          handleZipFile(event, "/nltk_data/tokenizers");
+        });
+
+      document
+        .getElementById("taggersFile")
+        .addEventListener("change", function (event) {
+          handleZipFile(event, "/nltk_data/taggers");
+        });
+
+      async function handleZipFile(event, extractPath) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const zipContent = new Uint8Array(e.target.result);
+          const pyodide = await pyodideReady;
+
+          pyodide.FS.writeFile("/temp.zip", zipContent);
+          await pyodide.runPythonAsync(`
+          import io
+          import zipfile
+          import pyodide
+
+          with open('/temp.zip', 'rb') as f:
+            zip_stream = io.BytesIO(f.read())
+          with zipfile.ZipFile(zip_stream) as zip_ref:
+            zip_ref.extractall("${extractPath}")
+        `);
+          pyodide.FS.unlink("/temp.zip");
+        };
+        reader.readAsArrayBuffer(event.target.files[0]);
+      }
+
+      async function processText() {
+        const pyodide = await pyodideReady;
+        await pyodide.loadPackage(["matplotlib", "networkx", "nltk"]);
+
+        let inputText = document.getElementById("text").value;
+        let formattedInputText = inputText.replace(/[\r\n]+/g, ' ');
+
+        try {
+            let result = await pyodide.runPythonAsync(`
+                import base64
+                import io
+                import matplotlib.pyplot as plt
+                import networkx as nx
+                import nltk
+                from nltk.corpus import stopwords
+                from nltk.tokenize import word_tokenize
+                from nltk import pos_tag
+                import re
+                import itertools as it
+
+                nltk.data.path.append('/nltk_data')
+
+                # Tokenizar y etiquetar
+                tokens = word_tokenize('''${formattedInputText}'''.lower())
+                tagged_tokens = pos_tag(tokens)
+
+                # Filtrar por tags y crear frases nominales
+                noun_phrases = [[token for token, tag in sent if re.match(r'NN*|JJ*', tag)]
+                                for sent in [tagged_tokens]]
+                edgelist = [edge for phrase in noun_phrases for edge in it.combinations(phrase, 2)]
+
+                # Crear y centrar el grafo
+                graph = nx.Graph()
+                for edge in set(edgelist):
+                    graph.add_edge(*edge, frequency=edgelist.count(edge))
+
+                betweenness = nx.betweenness_centrality(graph)
+                for n in graph:
+                    graph.nodes[n]['betweenness'] = betweenness[n]
+
+                # Visualización
+                plt.figure(figsize=(12, 8))
+                node_size = [graph.nodes[n]['betweenness'] * 10000 for n in graph]
+                pos = nx.spring_layout(graph)
+                nx.draw_networkx(graph, pos, node_size=node_size, edge_color='y', alpha=0.4, linewidths=0)
+
+                img = io.BytesIO()
+                plt.savefig(img, format='png')
+                img.seek(0)
+                img_base64 = base64.b64encode(img.read()).decode('utf-8')
+                plt.close()
+                img_base64
+            `);
+
+          console.log("Imagen en base64:", result); // Imprimir el resultado en la consola
+          document.getElementById("network").innerHTML =
+            '<img src="data:image/png;base64,' + result + '">';
+        } catch (error) {
+          console.error("Error processing text: ", error);
+        }
+      }
+    </script>
+  </body>
+</html>
