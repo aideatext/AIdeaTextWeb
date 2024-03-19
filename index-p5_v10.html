@@ -70,38 +70,7 @@
         <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai</p>      </a></p>
         <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
     </div>
-
-<script type="text/javascript">
-  function processText() {
-    // Define nodos y aristas de ejemplo
-    var nodes = new vis.DataSet([
-      { id: 1, label: 'Nodo 1' },
-      { id: 2, label: 'Nodo 2' },
-      { id: 3, label: 'Nodo 3' },
-      { id: 4, label: 'Nodo 4' },
-      { id: 5, label: 'Nodo 5' }
-    ]);
-
-    var edges = new vis.DataSet([
-      { from: 1, to: 3 },
-      { from: 1, to: 2 },
-      { from: 2, to: 4 },
-      { from: 2, to: 5 }
-    ]);
-
-    // Crea una red
-    var container = document.getElementById('network');
-    var data = {
-      nodes: nodes,
-      edges: edges
-    };
-    var options = {};
-    var network = new vis.Network(container, data, options);
-  }
-</script>
-
-
-	  <!-- API Script  
+	  
     <script type="text/javascript">
 	function processText() {
 	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
@@ -120,6 +89,6 @@
 	  .catch(error => console.error('Error al llamar a la API:', error));
 	}
     </script>
-	  -->
+	  
   </body>
-</html>
+</html> 
