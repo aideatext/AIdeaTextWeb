@@ -68,28 +68,22 @@
     </div>
 
     <script type="text/javascript">
-        function processText() {
-          var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
-          fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ body: textInput }), // Envía el texto como el cuerpo de la solicitud
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json(); // Transforma la respuesta en JSON
-          })
-          .then(data => {
-            console.log(data);
-            document.getElementById("network").innerText = data.body; // Muestra la respuesta en el elemento con id 'network'
-          })
-          .catch(error => console.error('Error al llamar a la API:', error));
-        }
-
+	function processText() {
+	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
+	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
+	    method: 'POST',
+	    headers: {
+	      'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify({ text: textInput }), // Envía el texto como el cuerpo de la solicitud
+	  })
+	  .then(response => response.json()) // Transforma la respuesta en JSON
+	  .then(data => {
+	    console.log(data);
+	    document.getElementById("network").innerText = JSON.stringify(data, null, 2); // Muestra la respuesta JSON formateada
+	  })
+	  .catch(error => console.error('Error al llamar a la API:', error));
+	}
     </script>
   </body>
 </html>
