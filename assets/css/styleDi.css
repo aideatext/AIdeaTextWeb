@@ -1,1 +1,104 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: "Montserrat", sans-serif;
+    overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
+}
 
+.upper-section {
+    text-align: center;
+}
+
+.file-operations {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0; /* Ajusta el margen según sea necesario */
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.download-buttons, .upload-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.download-buttons button, .upload-buttons input {
+    width: 30%;
+    padding: 10px;
+    margin: 0 5px;
+}
+
+.upload-file {
+    display: none; /* Oculta el input de tipo file */
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+    width: 29%;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Cambiado a column para apilar verticalmente */
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden; /* Ajuste opcional para evitar desbordamiento */
+}
+
+.left-section, .right-section {
+    width: 100%; /* Ajuste para ocupar todo el ancho */
+    padding: 20px; /* Ajuste del padding según sea necesario */
+    box-sizing: border-box;
+}
+
+#text, #network {
+    width: 100%; /* Se asegura que ocupen todo el ancho del contenedor */
+    margin-bottom: 20px; /* Espaciado entre las secciones */
+}
+
+#text {
+    height: 300px; /* Altura ajustada */
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+#network {
+    height: 400px; /* Altura ajustada para visualización */
+    border: 1px solid #ccc;
+}
+
+#procesarButton {
+    padding: 10px 20px;
+    font-size: 14px;
+    margin-top: 20px; /* Ajuste para espacio sobre el botón */
+}
+
+.lower-section {
+    text-align: center;
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .left-section, .right-section {
+        width: 100%;
+        padding: 10px; /* Ajuste para dispositivos más pequeños */
+    }
+
+    #text, #network {
+        height: auto; /* Altura automática para adaptarse al contenido */
+    }
+}
