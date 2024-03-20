@@ -33,11 +33,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="favicon.png">
-
-<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-
-	    
-
   </head>
 
   <body>
@@ -57,7 +52,7 @@
                 it only works with texts in English but you can try with texts in Spanish.
                 You can edit your text and press the Process Text button again to see how the semantic
                 relationships of your text change."></textarea>
-                <button type="button" id="procesarButton" onclick="processText()">[7] Procesar</button>
+                <button type="button" id="procesarButton">Procesar</button>
             </div>
         </div>
         <div class="right-section">
@@ -72,6 +67,8 @@
     </div>
 
 <script type="text/javascript">
+
+// Definición de la función processText
 function processText() {
   var textInput = document.getElementById("text").value;
   fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
@@ -84,6 +81,12 @@ function processText() {
     document.getElementById("network").innerHTML = html;  // Inserta el HTML en el elemento
   })
   .catch(error => console.error('Error al llamar a la API:', error));
-}  
+}
+
+// Agregar el event listener al botón una vez que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('procesarButton').addEventListener('click', processText);
+});
+
   </body>
 </html> 
