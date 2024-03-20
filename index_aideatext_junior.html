@@ -31,65 +31,64 @@
 
     <!-- Aquí puedes agregar tus estilos CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
-    <link rel="stylesheet" type="text/css" href="assets/css/styleDi.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="icon" type="image/png" href="favicon.png">
+
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+	    
 
   </head>
 
   <body>
-  <div class="upper-section">
-      <h1>AIdeaText - Web</h1>
-  </div>
+    <div class="upper-section">
+        <h1>AIdeaText - Web</h1>
+    </div>
 
-  <div class="container">
-      <div class="text-input-section">
-          <textarea id="text" name="text" placeholder="Enter your text here..."></textarea>
-          <button type="button" id="procesarButton" onclick="processText()">Process Text</button>
-      </div>
-      <div id="network">
-          <!-- Aquí se mostrará el gráfico -->
-      </div>
-  </div>
 
-  <div class="lower-section">
-      <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai</p>
-      <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
-  </div>
+    <div class="container">
+      <!-- <div class="section-title">Analyze</div> -->
+         <div class="left-section">
+          <!-- <div class="section-title">Input Text</div> -->
+            <!-- Área de texto y botón Procesar -->
+            <div class="text-input-section"><textarea id="text" name="text" placeholder=" Read: If you have downloaded and selected all
+                3 files then you can enter your text here and press the Process Text button. In the section
+                on the right you will see the graph of the semantic relationships of your text. For now
+                it only works with texts in English but you can try with texts in Spanish.
+                You can edit your text and press the Process Text button again to see how the semantic
+                relationships of your text change."></textarea>
+                <button type="button" id="procesarButton" onclick="processText()">[7] Procesar</button>
+            </div>
+        </div>
+        <div class="right-section">
+         <!-- <div class="section-titlle">Visualize graph</div> -->
+            <div id="network"></div>
+        </div>
+    </div>
 
     <div class="lower-section">
         <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai</p>      </a></p>
         <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
     </div>
 	  
-<script type="text/javascript">
-function processText() {
-  var textInput = document.getElementById("text").value;
-  if (textInput.trim() === "") {
-    console.error('Por favor, ingresa texto para procesar.');
-    return;
-  }
-  var data = { text: textInput };
-
-  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.text();
-  })
-  .then(html => {
-    document.getElementById("network").innerHTML = html;
-  })
-  .catch(error => console.error('Error al llamar a la API:', error));
-}
-</script>
-
+    <script type="text/javascript">
+	function processText() {
+	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
+	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
+	    method: 'POST',
+	    headers: {
+	      'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify({ text: textInput }), // Envía el texto como el cuerpo de la solicitud
+	  })
+	  .then(response => response.json()) // Transforma la respuesta en JSON
+	  .then(data => {
+	    console.log(data);
+	    document.getElementById("network").innerText = JSON.stringify(data, null, 2); // Muestra la respuesta JSON formateada
+	  })
+	  .catch(error => console.error('Error al llamar a la API:', error));
+	}
+    </script>
 	  
   </body>
 </html> 
