@@ -75,6 +75,7 @@ function processText() {
   })
   .then(response => response.text())  // Cambia aquí para esperar texto en lugar de JSON
   .then(html => {
+    console.log(html)
     document.getElementById("network").innerHTML = html;  // Inserta el HTML en el elemento
   })
   .catch(error => console.error('Error al llamar a la API:', error));
