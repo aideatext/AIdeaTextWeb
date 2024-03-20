@@ -79,7 +79,7 @@
 	    headers: {
 	      'Content-Type': 'application/json',
 	    },
-	    body: JSON.stringify({ text: textInput }), // Envía el texto como el cuerpo de la solicitud
+	    body: JSON.stringify({ text: "Este es el texto enviado desde el front end para ser procesado." }), // Envía el texto como el cuerpo de la solicitud
 	  })
 	  .then(response => response.json()) // Transforma la respuesta en JSON
 	  .then(data => {
