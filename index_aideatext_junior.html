@@ -63,24 +63,25 @@
 	  
 <script type="text/javascript">
 function processText() {
-  var textInput = document.getElementById("text").value;
-  var data = { text: textInput };
-
+  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
+  var data = { text: textInput }; // Crea el objeto de datos con la clave "text"
+  
   fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data) // Aseguramos que data ya es { text: textInput }, no necesitamos envolverlo nuevamente
+    body: JSON.stringify(data) // Convierte el objeto de datos a un string JSON
   })
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return response.text(); // Cambiamos a .text() porque esperamos HTML
+    return response.text(); // Cambia de .json() a .text() porque esperamos HTML
   })
   .then(html => {
-    document.getElementById("network").innerHTML = html; // Usamos .innerHTML para insertar el HTML
+    // Inserta el HTML en el elemento del DOM donde quieres mostrar la visualización
+    document.getElementById("network").innerHTML = html;
   })
   .catch(error => console.error('Error al llamar a la API:', error));
 }
