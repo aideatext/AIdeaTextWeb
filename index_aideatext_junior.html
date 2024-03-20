@@ -70,9 +70,9 @@
         <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai</p>      </a></p>
         <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
     </div>
-	<script type="text/javascript">
 
-		function processText() {
+<script type="text/javascript">
+function processText() {
   var textInput = document.getElementById("text").value;
   fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
     method: 'POST',
@@ -84,9 +84,6 @@
     document.getElementById("network").innerHTML = html;  // Inserta el HTML en el elemento
   })
   .catch(error => console.error('Error al llamar a la API:', error));
-}
-	  
-
-	  
+}  
   </body>
 </html> 
