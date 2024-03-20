@@ -17,8 +17,8 @@ function processText() {
 
 function visualizeGraph(data) {
     d3.select("#network").html(""); // Limpia el contenedor antes de añadir un nuevo SVG
-    const width = 800;
-    const height = 400;
+    const width = 1200;
+    const height = 800;
     
     const svg = d3.select("#network").append("svg")
         .attr("width", width)
