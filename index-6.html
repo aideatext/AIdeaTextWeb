@@ -83,6 +83,7 @@
   .then(response => response.json())
   .then(data => {
     // Asumiendo que data ya es el objeto JSON como se describió anteriormente
+    console.log("Datos recibidos del backend:", data); // Imprime los datos en la consola
     visualizeGraph(data); // Llama a una nueva función para visualizar el grafo
   })
   .catch(error => console.error('Error al llamar a la API:', error));
