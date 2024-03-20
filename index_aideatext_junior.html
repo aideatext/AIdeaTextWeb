@@ -34,10 +34,6 @@
     <link rel="stylesheet" type="text/css" href="assets/css/styleDi.css">
     <link rel="icon" type="image/png" href="favicon.png">
 
-<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-
-	    
-
   </head>
 
   <body>
@@ -65,28 +61,31 @@
         <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
     </div>
 	  
-    <script type="text/javascript">
-	function processText() {
-  var textInput = document.getElementById("text").value; // Asegúrate de que este ID sea correcto y esté obteniendo el valor adecuado
-  var data = { text: textInput }; // Crea el objeto de datos con la clave "text"
-  
+<script type="text/javascript">
+function processText() {
+  var textInput = document.getElementById("text").value;
+  var data = { text: textInput };
+
   fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data), // Convierte el objeto de datos a un string JSON
+    body: JSON.stringify(data),
   })
-  .then(response => response.json()) // Transforma la respuesta en JSON
-  .then(data => {
-    console.log(data); // Muestra los datos de respuesta en la consola
-    // Actualiza el DOM según sea necesario, por ejemplo:
-    document.getElementById("network").innerText = JSON.stringify(data, null, 2);
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.text(); // Aquí cambias `.json()` por `.text()` ya que esperamos HTML
+  })
+  .then(html => {
+    document.getElementById("network").innerHTML = html; // Utiliza `.innerHTML` para insertar el HTML
   })
   .catch(error => console.error('Error al llamar a la API:', error));
 }
+</script>
 
-    </script>
 	  
   </body>
 </html> 
