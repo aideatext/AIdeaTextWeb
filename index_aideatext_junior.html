@@ -71,26 +71,20 @@
         <footer>&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </footer>
     </div>
 	<script type="text/javascript">
-  function processText() {
-    var textInput = document.getElementById("text").value;
-    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ text: textInput })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      // Aquí debes utilizar DisplaCy para visualizar los datos
-      displacy.render(data.tokens, data.arcs, {
-        container: '#network',  // Asegúrate de tener un contenedor con este ID
-        format: 'spacy', // Asegúrate de que los datos están en el formato correcto
-        distance: 100, // Configuraciones adicionales de DisplaCy según necesites
-      });
-    })
-    .catch(error => console.error('Error al llamar a la API:', error));
-  }
-</script>
+
+		function processText() {
+  var textInput = document.getElementById("text").value;
+  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ text: textInput })
+  })
+  .then(response => response.text())  // Cambia aquí para esperar texto en lugar de JSON
+  .then(html => {
+    document.getElementById("network").innerHTML = html;  // Inserta el HTML en el elemento
+  })
+  .catch(error => console.error('Error al llamar a la API:', error));
+}
 	  
 
 	  
