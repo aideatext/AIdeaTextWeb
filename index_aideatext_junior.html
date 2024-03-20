@@ -73,21 +73,25 @@
 	  
     <script type="text/javascript">
 	function processText() {
-	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
-	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-	    method: 'POST',
-	    headers: {
-	      'Content-Type': 'application/json',
-	    },
-	    body: JSON.stringify({ text: "Este es el texto enviado desde el front end para ser procesado." }), // Envía el texto como el cuerpo de la solicitud
-	  })
-	  .then(response => response.json()) // Transforma la respuesta en JSON
-	  .then(data => {
-	    console.log(data);
-	    document.getElementById("network").innerText = JSON.stringify(data, null, 2); // Muestra la respuesta JSON formateada
-	  })
-	  .catch(error => console.error('Error al llamar a la API:', error));
-	}
+  var textInput = document.getElementById("text").value; // Asegúrate de que este ID sea correcto y esté obteniendo el valor adecuado
+  var data = { text: textInput }; // Crea el objeto de datos con la clave "text"
+  
+  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data), // Convierte el objeto de datos a un string JSON
+  })
+  .then(response => response.json()) // Transforma la respuesta en JSON
+  .then(data => {
+    console.log(data); // Muestra los datos de respuesta en la consola
+    // Actualiza el DOM según sea necesario, por ejemplo:
+    document.getElementById("network").innerText = JSON.stringify(data, null, 2);
+  })
+  .catch(error => console.error('Error al llamar a la API:', error));
+}
+
     </script>
 	  
   </body>
