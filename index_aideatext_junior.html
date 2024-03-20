@@ -71,16 +71,16 @@ function processText() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({text: textInput})
+    body: JSON.stringify(data) // Aseguramos que data ya es { text: textInput }, no necesitamos envolverlo nuevamente
   })
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return response.text(); // Aquí cambias `.json()` por `.text()` ya que esperamos HTML
+    return response.text(); // Cambiamos a .text() porque esperamos HTML
   })
   .then(html => {
-    document.getElementById("network").innerHTML = html; // Utiliza `.innerHTML` para insertar el HTML
+    document.getElementById("network").innerHTML = html; // Usamos .innerHTML para insertar el HTML
   })
   .catch(error => console.error('Error al llamar a la API:', error));
 }
