@@ -89,17 +89,19 @@
 }
 
 function visualizeGraph(data) {
+  d3.select("#network").html("");
   const width = 800;
   const height = 400;
-  const svg = d3.select("#network").append("svg")
+  
+ const svg = d3.select("#network").append("svg")
       .attr("width", width)
       .attr("height", height);
   
   // Crear los nodos
-  const nodes = data.tokens.map(d => ({...d, id: d.index}));
+  const nodes = data.nodes.map(d => ({...d, id: d.id}));
   
   // Crear los enlaces
-  const links = data.arcs.map(d => ({source: d.start, target: d.end, label: d.label}));
+  const links = data.edges.map(d => ({source: d.source, target: d.target, label: d.relation}));
   
   // Simulación de fuerzas para posicionar nodos y enlaces
   const simulation = d3.forceSimulation(nodes)
@@ -160,8 +162,16 @@ function visualizeGraph(data) {
       event.subject.fy = event.subject.y;
     }
 
-    function dragged(event) {
-      event.subject.fx = event.x
+	function dragged(event) {
+	    event.subject.fx = event.x;
+	    event.subject.fy = event.y;
+	}
+
+	function dragended(event) {
+	    if (!event.active) simulation.alphaTarget(0);
+	    event.subject.fx = null;
+	    event.subject.fy = null;
+	}
 
     </script>
 	  
