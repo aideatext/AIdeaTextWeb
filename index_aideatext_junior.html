@@ -67,27 +67,41 @@
     </div>
 
 // Definición de la función processText	  
-<script type="text/javascript">
-	function processText() {
-	  var textInput = document.getElementById("text").value;
-	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-	    method: 'POST',
-	    headers: {'Content-Type': 'application/json'},
-	    body: JSON.stringify({ text: textInput })
-	  })
-	  .then(response => response.text())  // Cambia aquí para esperar texto en lugar de JSON
-	  .then(html => {
-	    console.log(html)
-	    document.getElementById("network").innerHTML = html;  // Inserta el HTML en el elemento
-	  })
-	  .catch(error => console.error('Error al llamar a la API:', error));
-	}
-	
-	// Agregar el event listener al botón una vez que el DOM esté completamente cargado
-	document.addEventListener('DOMContentLoaded', function() {
-	  document.getElementById('procesarButton').addEventListener('click', processText);
-	});
-<script>
+    <script type="text/javascript">
+        // Inicializa displaCy con la configuración deseada
+        const displacy = new displaCyAPI('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+            container: '#network',
+            format: 'spacy',
+            distance: 100,
+            offsetX: 50,
+            arrowSpacing: 10,
+            arrowWidth: 8,
+            arrowStroke: 2,
+            wordSpacing: 35,
+            font: 'inherit'
+        });
+
+        function processText() {
+            var textInput = document.getElementById("text").value;
+            fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ text: textInput })
+            })
+            .then(response => response.json()) // Asegúrate de procesar la respuesta como JSON
+            .then(data => {
+                displacy.render(data.words, data.arcs, {
+                    container: '#network',
+                    format: 'spacy'
+                });
+            })
+            .catch(error => console.error('Error al llamar a la API:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('procesarButton').addEventListener('click', processText);
+        });
+    </script>
 	
   </body>
 </html> 
