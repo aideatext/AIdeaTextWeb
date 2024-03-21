@@ -16,9 +16,19 @@ function processText() {
 }
 
 function visualizeEntitiesAndPhrases(data) {
-    // Limpia el contenedor antes de añadir nuevos elementos
     const networkContainer = document.getElementById("network");
     networkContainer.innerHTML = '';
+
+    // Verifica si data.entities existe y tiene elementos
+    if (data.entities && data.entities.length > 0) {
+        // El resto del código para visualizar entidades
+    }
+
+    // Verifica si data.key_phrases existe y tiene elementos
+    if (data.key_phrases && data.key_phrases.length > 0) {
+        // El resto del código para visualizar frases clave
+    }
+}
 
     // Crea y añade las entidades al contenedor
     if (data.entities.length > 0) {
