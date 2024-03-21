@@ -59,7 +59,6 @@ function visualizeEntitiesAndPhrases(data) {
         });
         networkContainer.appendChild(phrasesList);
     }
-}
 
 function visualizeGraph(data) {
     d3.select("#network").html(""); // Limpia el contenedor antes de añadir un nuevo SVG
