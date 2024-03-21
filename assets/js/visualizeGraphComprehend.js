@@ -1,5 +1,10 @@
 function processText() {
     var textInput = document.getElementById("text").value;
+    if (!textInput.trim()) {
+        console.error("El texto para analizar no puede estar vacío.");
+        return; // Detener la ejecución si el texto está vacío
+    }
+
     fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
         method: 'POST',
         headers: {
@@ -9,9 +14,11 @@ function processText() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend:", data); // Imprime los datos en la consola
-        visualizeEntitiesAndPhrases(data); // Llama a una nueva función para visualizar entidades y frases clave
+        console.log("Datos recibidos del backend:", data);
+        // Procesamiento adicional aquí...
     })
     .catch(error => console.error('Error al llamar a la API:', error));
 }
+
+
 
