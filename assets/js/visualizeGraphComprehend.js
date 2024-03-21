@@ -10,9 +10,45 @@ function processText() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data); // Imprime los datos en la consola
-        visualizeGraph(data); // Llama a una nueva función para visualizar el grafo
+        visualizeEntitiesAndPhrases(data); // Llama a una nueva función para visualizar entidades y frases clave
     })
     .catch(error => console.error('Error al llamar a la API:', error));
+}
+
+function visualizeEntitiesAndPhrases(data) {
+    // Limpia el contenedor antes de añadir nuevos elementos
+    const networkContainer = document.getElementById("network");
+    networkContainer.innerHTML = '';
+
+    // Crea y añade las entidades al contenedor
+    if (data.entities.length > 0) {
+        const entitiesTitle = document.createElement('h3');
+        entitiesTitle.textContent = 'Entidades identificadas:';
+        networkContainer.appendChild(entitiesTitle);
+
+        const entitiesList = document.createElement('ul');
+        data.entities.forEach(entity => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${entity.Text} (${entity.Type})`;
+            entitiesList.appendChild(listItem);
+        });
+        networkContainer.appendChild(entitiesList);
+    }
+
+    // Crea y añade las frases clave al contenedor
+    if (data.key_phrases.length > 0) {
+        const phrasesTitle = document.createElement('h3');
+        phrasesTitle.textContent = 'Frases clave identificadas:';
+        networkContainer.appendChild(phrasesTitle);
+
+        const phrasesList = document.createElement('ul');
+        data.key_phrases.forEach(phrase => {
+            const listItem = document.createElement('li');
+            listItem.textContent = phrase.Text;
+            phrasesList.appendChild(listItem);
+        });
+        networkContainer.appendChild(phrasesList);
+    }
 }
 
 function visualizeGraph(data) {
