@@ -104,11 +104,12 @@ function visualizeGraph(data) {
 
     // Dibujar enlaces
     const link = svg.append("g")
-        .attr("stroke", "#999")
+        .attr("class", "links")
         .selectAll("line")
-        .data(links)
-        .join("line")
-        .attr("stroke-width", d => Math.sqrt(d.value));
+        .data(links) // Asegúrate de que 'links' contiene tus datos de aristas
+        .enter().append("line")
+        .attr("stroke-width", 2)
+        .attr("stroke", "#999");
 
     // Dibujar nodos
     const node = svg.append("g")
