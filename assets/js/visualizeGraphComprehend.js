@@ -16,6 +16,7 @@ function processText() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
         // Procesamiento adicional aquí...
+        visualizeGraph(data); // Asegúrate de que esta línea esté presente
     })
     .catch(error => console.error('Error al llamar a la API:', error));
 }
