@@ -25,6 +25,21 @@ function visualizeEntitiesAndPhrases(data) {
     const networkContainer = document.getElementById("network");
     networkContainer.innerHTML = '';
 
+    // Considerando que ahora `data` tiene una propiedad `nodes` en lugar de `entities`
+    if (data.nodes && data.nodes.length > 0) {
+        const entitiesTitle = document.createElement('h3');
+        entitiesTitle.textContent = 'Entidades identificadas:';
+        networkContainer.appendChild(entitiesTitle);
+
+        const entitiesList = document.createElement('ul');
+        data.nodes.forEach(node => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${node.text} (${node.type})`;
+            entitiesList.appendChild(listItem);
+        });
+        networkContainer.appendChild(entitiesList);
+    }
+
     // Verifica si data.entities existe y tiene elementos
     if (data.entities && data.entities.length > 0) {
         // El resto del código para visualizar entidades
