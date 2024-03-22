@@ -37,11 +37,6 @@ function visualizeGraph(data) {
         .attr("width", width)
         .attr("height", height);
 
-    const nodes = data.nodes.map(d => ({
-        ...d,
-        color: getColor(d.type) // Asegúrate de que esta línea esté trabajando como esperas
-    }));
-
     // Función para asignar colores
     const getColor = (type) => {
         switch(type) {
