@@ -78,5 +78,3 @@ function visualizeSintax(data) {
             d.fx = null;
             d.fy = null;
         }
-        // Visualiza la sintaxis del texto en la página web
-        visualizeSintax(data); // Asegúrate de que esta línea esté presente
