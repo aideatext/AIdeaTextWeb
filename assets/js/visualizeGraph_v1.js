@@ -24,7 +24,8 @@ function processText() {
     }
 /////////////////////////////////////////////////////////////////////////////////////
 //Visualizar la sintaxis del texto en un grafo en el div id "network" <script src="src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js""></script>
-function visualizeSintax(data) {
+
+function visualizeGraph(data) {
     // Asegúrate de que este elemento exista en tu HTML
     const networkContainer = document.getElementById("network");
     networkContainer.innerHTML = ''; // Limpia el contenedor antes de añadir un nuevo SVG
