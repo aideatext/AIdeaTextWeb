@@ -16,7 +16,7 @@ function processText() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
         // Visualiza la sintaxis del texto en la página web
-        visualizeSintax(data); // Asegúrate de que esta línea esté presente
+        visualizeGraph(data); // Asegúrate de que esta línea esté presente
     })
     .catch(error => {
         console.error("Error al procesar el texto:", error)
