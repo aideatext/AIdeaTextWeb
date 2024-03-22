@@ -1,21 +1,21 @@
-function processText() {
-    var textInput = document.getElementById("text").value;
-    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: textInput }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Datos recibidos del backend:", data); // Imprime los datos en la consola
-        // Visualize syntax on web page
-        visualizeGraph(data); // Llama a una nueva función para visualizar el grafo
-    })
-    .catch(error => console.error('Error al llamar a la API:', error)
-          });
-}
+    <script type="text/javascript">
+	function processText() {
+	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
+	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
+	    method: 'POST',
+	    headers: {
+	      'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify({ text: textInput }), // Envía el texto como el cuerpo de la solicitud
+	  })
+	  .then(response => response.json()) // Transforma la respuesta en JSON
+	  .then(data => {
+	    console.log(data);
+	    document.getElementById("network").innerText = JSON.stringify(data, null, 2); // Muestra la respuesta JSON formateada
+	  })
+	  .catch(error => console.error('Error al llamar a la API:', error));
+	}
+    </script>
 
 /////////////////////////////////////////////////////////////////////////////////////
 //Visualizar la sintaxis del texto en un grafo en el div id "network" <script src="https://d3js.org/d3.v6.min.js"></script>
