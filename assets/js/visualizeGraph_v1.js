@@ -36,9 +36,20 @@ function visualizeGraph(data) {
     const svg = d3.select(networkContainer).append("svg")
         .attr("width", width)
         .attr("height", height);
+
+        // Función para asignar colores
+    const getColor = (type) => {
+        switch(type) {
+            case "VERB": return "#ff0000"; // Rojo para verbos
+            case "NOUN": return "#00ff00"; // Verde para sustantivos
+            case "ADJ": return "#0000ff"; // Azul para adjetivos
+            default: return "#cccccc"; // Gris para otros tipos
+        }
+    };
+
     
     // Usar 'nodes' y 'edges' de 'data' para crear nodos y enlaces
-    const nodes = data.nodes;
+    const nodes = data.nodes.map(d => ({...d, color: getColor(d.type)}));
     const links = data.edges;
 
     // Simulación de fuerzas para posicionar nodos y enlaces
