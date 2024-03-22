@@ -1,11 +1,6 @@
 function processText() {
     var textInput = document.getElementById("text").value;
-    if (!textInput.trim()) {
-        console.error("El texto para analizar no puede estar vacío.");
-        return; // Detener la ejecución si el texto está vacío
-    }
-
-    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -14,13 +9,12 @@ function processText() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend:", data);
-        // Visualiza la sintaxis del texto en la página web
-        visualizeSintax(data); // Asegúrate de que esta línea esté presente
+        console.log("Datos recibidos del backend:", data); // Imprime los datos en la consola
+        visualizeGraph(data); // Llama a una nueva función para visualizar el grafo
     })
-    .catch(error => {
-        console.error("Error al procesar el texto:", error)});
-    }
+    .catch(error => console.error('Error al llamar a la API:', error));
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 //Visualizar la sintaxis del texto en un grafo en el div id "network" <script src="https://d3js.org/d3.v6.min.js"></script>
 function visualizeSintax(data) {
