@@ -1,5 +1,5 @@
-	function processText() {
-	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
+function processText() {
+	var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
 	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
 	    method: 'POST',
 	    headers: {
