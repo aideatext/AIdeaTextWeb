@@ -10,9 +10,11 @@ function processText() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data); // Imprime los datos en la consola
+        // Visualize syntax on web page
         visualizeGraph(data); // Llama a una nueva función para visualizar el grafo
     })
-    .catch(error => console.error('Error al llamar a la API:', error));
+    .catch(error => console.error('Error al llamar a la API:', error)
+          });
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
