@@ -1,7 +1,6 @@
-    <script type="text/javascript">
 	function processText() {
 	  var textInput = document.getElementById("text").value; // Obtén el texto ingresado por el usuario
-	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
+	  fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
 	    method: 'POST',
 	    headers: {
 	      'Content-Type': 'application/json',
@@ -15,8 +14,6 @@
 	  })
 	  .catch(error => console.error('Error al llamar a la API:', error));
 	}
-    </script>
-
 /////////////////////////////////////////////////////////////////////////////////////
 //Visualizar la sintaxis del texto en un grafo en el div id "network" <script src="https://d3js.org/d3.v6.min.js"></script>
 function visualizeSintax(data) {
