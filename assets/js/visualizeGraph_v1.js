@@ -47,8 +47,6 @@ function visualizeGraph(data) {
         }
     };
 
-    console.log(nodes);
-
     const zoomHandler = d3.zoom()
         .on("zoom", (event) => {
             svg.attr("transform", event.transform);
