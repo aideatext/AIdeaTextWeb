@@ -37,7 +37,12 @@ function visualizeGraph(data) {
         .attr("width", width)
         .attr("height", height);
 
-        // Función para asignar colores
+    const nodes = data.nodes.map(d => ({
+        ...d,
+        color: getColor(d.type) // Asegúrate de que esta línea esté trabajando como esperas
+    }));
+
+    // Función para asignar colores
     const getColor = (type) => {
         switch(type) {
             case "VERB": return "#ff0000"; // Rojo para verbos
@@ -47,6 +52,13 @@ function visualizeGraph(data) {
         }
     };
 
+    console.log(nodes);
+
+    const zoomHandler = d3.zoom()
+        .on("zoom", (event) => {
+            svg.attr("transform", event.transform);
+        });    
+        svg.call(zoomHandler);
     
     // Usar 'nodes' y 'edges' de 'data' para crear nodos y enlaces
     const nodes = data.nodes.map(d => ({...d, color: getColor(d.type)}));
@@ -69,10 +81,10 @@ function visualizeGraph(data) {
     // Dibujar nodos
     const node = svg.append("g")
         .selectAll("circle")
-        .data(nodes)
+        .data(nodes) // Asegúrate de que 'nodes' ya tiene la propiedad 'color' asignada
         .enter().append("circle")
         .attr("r", 5)
-        .attr("fill", "#69b3a2")
+        .attr("fill", d => d.color) // Usa la propiedad 'color' para el llenado
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
