@@ -119,8 +119,8 @@ body, html {
 } */
 
 #network {
-    width: 50%;
-    height: 50%; /* o ajustar según sea necesario */
+    width: 75%;
+    height: 75%; /* o ajustar según sea necesario */
     overflow: hidden; /* Oculta cualquier contenido que se desborde */
     border: 1px solid #ccc;
     display: flex;
@@ -129,8 +129,8 @@ body, html {
 }
 
 #count-section {
-    width: 50%;
-    height: 50%; /* o ajustar según sea necesario */
+    width: 25%;
+    height: 25%; /* o ajustar según sea necesario */
     overflow: hidden; /* Oculta cualquier contenido que se desborde */
     border: 1px solid #ccc;
     display: flex;
