@@ -29,6 +29,12 @@ function visualizeGraph(data) {
     const graphData = data.graph;
     const partsOfSpeechCount = data.parts_of_speech_count;
 
+     // Verifica si 'nodes' está definido en 'graphData'
+    if (!graphData || !graphData.nodes) {
+        console.error("Los datos del grafo recibidos son incorrectos.");
+        return;
+    }
+
 ///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
     const countSection = document.getElementById("count-section");
     countSection.innerHTML = ''; // Limpiar contenido existente
