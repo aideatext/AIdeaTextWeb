@@ -1,29 +1,3 @@
-function processText() {
-    var textInput = document.getElementById("text").value;
-    if (!textInput.trim()) {
-        console.error("El texto para analizar no puede estar vacío.");
-        return; // Detener la ejecución si el texto está vacío
-    }
-
-    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: textInput }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Datos recibidos del backend:", data);
-        // Visualiza la sintaxis del texto en la página web
-        visualizeGraph(data); // Asegúrate de que esta línea esté presente
-    })
-    .catch(error => {
-        console.error("Error al procesar el texto:", error)
-    });
-    }
-/////////////////////////////////////////////////////////////////////////////////////
-
 function visualizeGraph(data) {
     // Asegúrate de que este elemento exista en tu HTML
     const graphData = data.graph;
@@ -34,9 +8,8 @@ function visualizeGraph(data) {
         console.error("Los datos del grafo recibidos son incorrectos.");
         return;
     }
-    }
 
-///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
+    ///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
     const countSection = document.getElementById("count-section");
     countSection.innerHTML = ''; // Limpiar contenido existente
     for (const [part, count] of Object.entries(partsOfSpeechCount)) {
@@ -45,7 +18,7 @@ function visualizeGraph(data) {
         countSection.appendChild(partCountElement);
     }
 
-///////////////////////////////////////SEMANTIC GRAPH ////////////////////////////////////////    
+    ///////////////////////////////////////SEMANTIC GRAPH ////////////////////////////////////////    
     const networkContainer = document.getElementById("network");
     networkContainer.innerHTML = ''; // Limpia el contenedor antes de añadir un nuevo SVG
 
@@ -70,7 +43,7 @@ function visualizeGraph(data) {
         .on("zoom", (event) => {
             svg.attr("transform", event.transform);
         });    
-        svg.call(zoomHandler);
+    svg.call(zoomHandler);
     
     // Usar 'nodes' y 'edges' de 'data' para crear nodos y enlaces
     const nodes = data.nodes.map(d => ({...d, color: getColor(d.type)}));
@@ -143,3 +116,4 @@ function visualizeGraph(data) {
         d.fx = null;
         d.fy = null;
     }
+}
