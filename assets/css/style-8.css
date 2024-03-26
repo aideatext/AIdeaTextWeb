@@ -64,20 +64,19 @@ body, html {
 /* Contenedor */
 
 .container {
-    display: flex;
-    width: 100%; /* Ancho del contenedor */
-    height: 68%; /* Altura fija para el contenedor */
-    margin: 0 auto; /* Centrar el contenedor */
+    display: flex; /* Utiliza flexbox para organizar los elementos en fila */
 }
 
 .left-section {
-    flex: 1;
-    overflow-y: auto; /* Permite desplazamiento vertical */
-    overflow-x: hidden; /* Evita el desplazamiento horizontal */
-    padding: 50px;
-    box-sizing: border-box; /* Asegura que el padding se incluya en el ancho/altura total */
-    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
-    height: calc(100vh - 220px); /* Ajusta según la altura total de las secciones superiores e inferiores */
+    flex: 1; /* Ocupa el 50% del espacio disponible */
+}
+
+.right-section {
+    flex: 1; /* Ocupa el 50% del espacio disponible */
+    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
+    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
+    justify-content: center; /* Centra verticalmente los elementos */
+    align-items: center; /* Centra horizontalmente los elementos */
 }
 
 /* Área de texto fija */
@@ -128,6 +127,9 @@ body, html {
     justify-content: center; /* Centrar contenido horizontalmente */
     align-items: center; /* Centrar contenido verticalmente */
 }
+
+#count-section {
+    border-top: none; /* Elimina el borde superior para separarlo del contenedor de la red */
 
 #procesarButton {
     padding: 10px 20px;
