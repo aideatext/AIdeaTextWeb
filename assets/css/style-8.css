@@ -1,6 +1,6 @@
 body, html {
     height: 100%;
-    margin: 0;
+    margin: 10px;
     background-color: #f0f0f0;
     font-family: "Monserrat", sans-serif;
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
