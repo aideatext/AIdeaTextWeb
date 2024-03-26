@@ -1,12 +1,12 @@
 body, html {
     height: 100%;
-    margin: 10px;
+    margin: 0;
     background-color: #f0f0f0;
     font-family: "Monserrat", sans-serif;
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
-/* Upper section Upper section Upper section Upper section Upper section Upper section Upper section */
+/* Upper section */
 .upper-section {
     text-align: center;
 }
@@ -60,38 +60,32 @@ body, html {
     text-align: center;
 }
 
-/* Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor */
+
+/* Contenedor */
 
 .container {
-    display: flex; /* Utiliza flexbox para organizar los elementos en fila */
+    display: flex;
+    width: 100%; /* Ancho del contenedor */
+    height: 68%; /* Altura fija para el contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
 }
 
 .left-section {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
-    border: 1px solid #ccc; /* Agrega borde a la sección izquierda */
-    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
-}
-
-.right-section {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
-    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
-    justify-content: center; /* Centra verticalmente los elementos */
-    align-items: center; /* Centra horizontalmente los elementos */
+    flex: 1;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 50px;
+    box-sizing: border-box; /* Asegura que el padding se incluya en el ancho/altura total */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+    height: calc(100vh - 220px); /* Ajusta según la altura total de las secciones superiores e inferiores */
 }
 
 /* Área de texto fija */
-
-/* Estilo para la parte superior de la sección izquierda */
-
 #text {
-    flex: 3; /* Ocupa el 75% del espacio disponible */
-    border: 1px solid #ccc; /* Agrega borde al área de texto */
-    margin: 0; /* Elimina el margen */
-    padding: 10px; /* Agrega espacio interno */
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
-    overflow-y: auto; /* Agrega desplazamiento vertical si el contenido es demasiado largo */
 }
 
 #text::placeholder {
@@ -105,32 +99,14 @@ body, html {
     /* Otros estilos que quieras aplicar */
 }
 
-.text-input-section {
-    /* flex: 1;  Ocupa el 25% del espacio disponible */
-    border-bottom: 1px solid #ccc; /* Agrega borde inferior */
-    padding: 10px; /* Agrega un espacio interno */
-}
-
-
 /* Estilos para la sección derecha (Visualización del Grafo) */
 .right-section {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
-    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
-    justify-content: center; /* Centra verticalmente los elementos */
-    align-items: center; /* Centra horizontalmente los elementos */
-    border: 1px solid #ccc; /* Agrega borde a la sección derecha */
-    margin-left: 10px; /* Agrega un espacio entre las secciones izquierda y derecha */
-}
-
-.count-section {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
-    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
-    justify-content: center; /* Centra verticalmente los elementos */
-    align-items: center; /* Centra horizontalmente los elementos */
-    border: 1px solid #ccc; /* Agrega borde a la sección derecha */
-    margin-left: 10px; /* Agrega un espacio entre las secciones izquierda y derecha */
+    flex: 1;
+    overflow: hidden; /* Evita cualquier desplazamiento */
+    padding: 50px;
+    box-sizing: border-box;
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+    height: calc(100vh - 220px); /* Ajusta según la altura total de las secciones superiores e inferiores */
 }
 
 /* Contenedor del grafo */
@@ -145,24 +121,13 @@ body, html {
 
 #network {
     width: 100%;
-    height: 75%; /* o ajustar según sea necesario */
+    height: 100%; /* o ajustar según sea necesario */
     overflow: hidden; /* Oculta cualquier contenido que se desborde */
     border: 1px solid #ccc;
     display: flex;
     justify-content: center; /* Centrar contenido horizontalmente */
     align-items: center; /* Centrar contenido verticalmente */
 }
-
-#count-section {
-    width: 100%;
-    height: 25%; /* o ajustar según sea necesario */
-    overflow: hidden; /* Oculta cualquier contenido que se desborde */
-    border: 1px solid #ccc;
-    display: flex;
-    justify-content: center; /* Centrar contenido horizontalmente */
-    align-items: center; /* Centrar contenido verticalmente */
-    /* border-top: none;  Elimina el borde superior para separarlo del contenedor de la red */
-    }
 
 #procesarButton {
     padding: 10px 20px;
