@@ -143,4 +143,3 @@ function visualizeGraph(data) {
         d.fx = null;
         d.fy = null;
     }
-}
