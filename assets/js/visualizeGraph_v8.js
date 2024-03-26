@@ -28,11 +28,12 @@ function visualizeGraph(data) {
     // Asegúrate de que este elemento exista en tu HTML
     const graphData = data.graph;
     const partsOfSpeechCount = data.parts_of_speech_count;
-
-     // Verifica si 'nodes' está definido en 'graphData'
+    
+    // Verifica si 'nodes' está definido en 'graphData'
     if (!graphData || !graphData.nodes) {
         console.error("Los datos del grafo recibidos son incorrectos.");
         return;
+    }
     }
 
 ///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
