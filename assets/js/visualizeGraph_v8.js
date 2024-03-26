@@ -24,10 +24,10 @@ function processText() {
     }
 /////////////////////////////////////////////////////////////////////////////////////
 
-function visualizeGraph(data) {
+ function visualizeGraph(data) {
     // Asegúrate de que este elemento exista en tu HTML
     const graphData = data.graph;
-    const partsOfSpeechCount = data.parts_of_speech_count;
+//    const partsOfSpeechCount = data.parts_of_speech_count;
     
     // Verifica si 'nodes' está definido en 'graphData'
     if (!graphData || !graphData.nodes) {
@@ -36,13 +36,13 @@ function visualizeGraph(data) {
     }
 
     ///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
-    const countSection = document.getElementById("count-section");
-    countSection.innerHTML = ''; // Limpiar contenido existente
-    for (const [part, count] of Object.entries(partsOfSpeechCount)) {
-        const partCountElement = document.createElement("p");
-        partCountElement.textContent = `${part}: ${count}`;
-        countSection.appendChild(partCountElement);
-    }
+//    const countSection = document.getElementById("count-section");
+//    countSection.innerHTML = ''; // Limpiar contenido existente
+//    for (const [part, count] of Object.entries(partsOfSpeechCount)) {
+ //       const partCountElement = document.createElement("p");
+//        partCountElement.textContent = `${part}: ${count}`;
+//        countSection.appendChild(partCountElement);
+//    }
 
     ///////////////////////////////////////SEMANTIC GRAPH ////////////////////////////////////////    
     const networkContainer = document.getElementById("network");
