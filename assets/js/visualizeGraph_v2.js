@@ -23,10 +23,22 @@ function processText() {
     });
     }
 /////////////////////////////////////////////////////////////////////////////////////
-//Visualizar la sintaxis del texto en un grafo en el div id "network" <script src="src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js""></script>
 
 function visualizeGraph(data) {
     // Asegúrate de que este elemento exista en tu HTML
+    const graphData = data.graph;
+    const partsOfSpeechCount = data.parts_of_speech_count;
+
+///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
+    const countSection = document.getElementById("count-section");
+    countSection.innerHTML = ''; // Limpiar contenido existente
+    for (const [part, count] of Object.entries(partsOfSpeechCount)) {
+        const partCountElement = document.createElement("p");
+        partCountElement.textContent = `${part}: ${count}`;
+        countSection.appendChild(partCountElement);
+    }
+
+///////////////////////////////////////SEMANTIC GRAPH ////////////////////////////////////////    
     const networkContainer = document.getElementById("network");
     networkContainer.innerHTML = ''; // Limpia el contenedor antes de añadir un nuevo SVG
 
