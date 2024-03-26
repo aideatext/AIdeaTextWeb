@@ -6,7 +6,7 @@ body, html {
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
-/* Upper section */
+/* Upper section Upper section Upper section Upper section Upper section Upper section Upper section */
 .upper-section {
     text-align: center;
 }
@@ -60,8 +60,7 @@ body, html {
     text-align: center;
 }
 
-
-/* Contenedor */
+/* Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor Contenedor */
 
 .container {
     display: flex; /* Utiliza flexbox para organizar los elementos en fila */
@@ -82,16 +81,16 @@ body, html {
     align-items: center; /* Centra horizontalmente los elementos */
 }
 
-.right-section {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
-    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
-    justify-content: center; /* Centra verticalmente los elementos */
-    align-items: center; /* Centra horizontalmente los elementos */
+/* Área de texto fija */
+
+/* Estilo para la parte superior de la sección izquierda */
+
+.text-input-section {
+    flex: 1; /* Ocupa el 25% del espacio disponible */
+    border-bottom: 1px solid #ccc; /* Agrega borde inferior */
+    padding: 10px; /* Agrega un espacio interno */
 }
 
-/* Área de texto fija */
-/* Estilo para la parte inferior de la sección izquierda */
 #text {
     flex: 3; /* Ocupa el 75% del espacio disponible */
     border: 1px solid #ccc; /* Agrega borde al área de texto */
@@ -114,6 +113,16 @@ body, html {
 
 /* Estilos para la sección derecha (Visualización del Grafo) */
 .right-section {
+    flex: 1; /* Ocupa el 50% del espacio disponible */
+    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
+    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
+    justify-content: center; /* Centra verticalmente los elementos */
+    align-items: center; /* Centra horizontalmente los elementos */
+    border: 1px solid #ccc; /* Agrega borde a la sección derecha */
+    margin-left: 10px; /* Agrega un espacio entre las secciones izquierda y derecha */
+}
+
+.count-section {
     flex: 1; /* Ocupa el 50% del espacio disponible */
     display: flex; /* Utiliza flexbox para organizar los elementos en columna */
     flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
