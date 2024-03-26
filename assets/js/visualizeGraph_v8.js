@@ -15,36 +15,74 @@ function processText() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data);
-        // Visualiza la sintaxis del texto en la página web
+        // Procesamiento adicional aquí...
         visualizeGraph(data); // Asegúrate de que esta línea esté presente
     })
-    .catch(error => {
-        console.error("Error al procesar el texto:", error)
-    });
-    }
+    .catch(error => console.error('Error al llamar a la API:', error));
+}
 /////////////////////////////////////////////////////////////////////////////////////
+function visualizeEntitiesAndPhrases(data) {
+    const networkContainer = document.getElementById("network");
+    networkContainer.innerHTML = '';
 
- function visualizeGraph(data) {
-    // Asegúrate de que este elemento exista en tu HTML
-    const graphData = data.graph;
-//    const partsOfSpeechCount = data.parts_of_speech_count;
-    
-    // Verifica si 'nodes' está definido en 'graphData'
-    if (!graphData || !graphData.nodes) {
-        console.error("Los datos del grafo recibidos son incorrectos.");
-        return;
+    // Considerando que ahora `data` tiene una propiedad `nodes` en lugar de `entities`
+    if (data.nodes && data.nodes.length > 0) {
+        const entitiesTitle = document.createElement('h3');
+        entitiesTitle.textContent = 'Entidades identificadas:';
+        networkContainer.appendChild(entitiesTitle);
+
+        const entitiesList = document.createElement('ul');
+        data.nodes.forEach(node => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${node.text} (${node.type})`;
+            entitiesList.appendChild(listItem);
+        });
+        networkContainer.appendChild(entitiesList);
     }
 
-    ///////////////////////////////////////SINTAXIS COUNT ////////////////////////////////////////
-//    const countSection = document.getElementById("count-section");
-//    countSection.innerHTML = ''; // Limpiar contenido existente
-//    for (const [part, count] of Object.entries(partsOfSpeechCount)) {
- //       const partCountElement = document.createElement("p");
-//        partCountElement.textContent = `${part}: ${count}`;
-//        countSection.appendChild(partCountElement);
-//    }
+    // Verifica si data.entities existe y tiene elementos
+    if (data.entities && data.entities.length > 0) {
+        // El resto del código para visualizar entidades
+    }
 
-    ///////////////////////////////////////SEMANTIC GRAPH ////////////////////////////////////////    
+    // Verifica si data.key_phrases existe y tiene elementos
+    if (data.key_phrases && data.key_phrases.length > 0) {
+        // El resto del código para visualizar frases clave
+    }
+}
+
+    // Crea y añade las entidades al contenedor
+    if (data.entities.length > 0) {
+        const entitiesTitle = document.createElement('h3');
+        entitiesTitle.textContent = 'Entidades identificadas:';
+        networkContainer.appendChild(entitiesTitle);
+
+        const entitiesList = document.createElement('ul');
+        data.entities.forEach(entity => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${entity.Text} (${entity.Type})`;
+            entitiesList.appendChild(listItem);
+        });
+        networkContainer.appendChild(entitiesList);
+    }
+
+    // Crea y añade las frases clave al contenedor
+    if (data.key_phrases.length > 0) {
+        const phrasesTitle = document.createElement('h3');
+        phrasesTitle.textContent = 'Frases clave identificadas:';
+        networkContainer.appendChild(phrasesTitle);
+
+        const phrasesList = document.createElement('ul');
+        data.key_phrases.forEach(phrase => {
+            const listItem = document.createElement('li');
+            listItem.textContent = phrase.Text;
+            phrasesList.appendChild(listItem);
+        });
+        networkContainer.appendChild(phrasesList);
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+function visualizeGraph(data) {
+    // Asegúrate de que este elemento exista en tu HTML
     const networkContainer = document.getElementById("network");
     networkContainer.innerHTML = ''; // Limpia el contenedor antes de añadir un nuevo SVG
 
@@ -54,25 +92,9 @@ function processText() {
     const svg = d3.select(networkContainer).append("svg")
         .attr("width", width)
         .attr("height", height);
-
-    // Función para asignar colores
-    const getColor = (type) => {
-        switch(type) {
-            case "VERB": return "#ff0000"; // Rojo para verbos
-            case "NOUN": return "#00ff00"; // Verde para sustantivos
-            case "ADJ": return "#0000ff"; // Azul para adjetivos
-            default: return "#cccccc"; // Gris para otros tipos
-        }
-    };
-
-    const zoomHandler = d3.zoom()
-        .on("zoom", (event) => {
-            svg.attr("transform", event.transform);
-        });    
-    svg.call(zoomHandler);
     
     // Usar 'nodes' y 'edges' de 'data' para crear nodos y enlaces
-    const nodes = data.nodes.map(d => ({...d, color: getColor(d.type)}));
+    const nodes = data.nodes;
     const links = data.edges;
 
     // Simulación de fuerzas para posicionar nodos y enlaces
@@ -92,10 +114,10 @@ function processText() {
     // Dibujar nodos
     const node = svg.append("g")
         .selectAll("circle")
-        .data(nodes) // Asegúrate de que 'nodes' ya tiene la propiedad 'color' asignada
+        .data(nodes)
         .enter().append("circle")
         .attr("r", 5)
-        .attr("fill", d => d.color) // Usa la propiedad 'color' para el llenado
+        .attr("fill", "#69b3a2")
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
@@ -126,19 +148,19 @@ function processText() {
             .attr("y", d => d.y);
     });
 
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
     }
-    
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
     }
-    
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
         d.fx = null;
         d.fy = null;
     }
