@@ -1,0 +1,162 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: "Monserrat", sans-serif;
+    overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
+}
+
+/* Upper section */
+.upper-section {
+    text-align: center;
+}
+
+/* File Operation section */
+.file-operations {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin: 0px 0;
+    margin: 20px 0; /* Ajusta el margen según sea necesario */
+}
+
+/* Estilos para las etiquetas de las secciones */
+.section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    padding-left: 0cqmax;
+    padding-top: 0cqmax;
+    padding-right: 0cqmax;
+    padding-bottom: 0cqmax;
+    text-align: left;
+}
+
+
+.download-buttons, .upload-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.download-buttons button, .upload-buttons input {
+    width: 30%;
+    padding: 10px;
+    margin: 0 5px;
+}
+
+.upload-file {
+    display: none; /* Oculta el input de tipo file */
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+    width: 29%;
+    text-align: center;
+}
+
+
+/* Contenedor */
+
+.container {
+    display: flex;
+    width: 100%; /* Ancho del contenedor */
+    height: 68%; /* Altura fija para el contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+.left-section {
+    flex: 1;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 50px;
+    box-sizing: border-box; /* Asegura que el padding se incluya en el ancho/altura total */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+    height: calc(100vh - 220px); /* Ajusta según la altura total de las secciones superiores e inferiores */
+}
+
+/* Área de texto fija */
+#text {
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#text::placeholder {
+    color: #000000; /* Cambia el color del texto del placeholder */
+    font-style: italic; /* Estilo de fuente para el placeholder */
+    font-size: 14px; /* Tamaño de fuente específico para el placeholder */
+    text-align: justify; /* Alinea el texto del placeholder */
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0
+    /* Otros estilos que quieras aplicar */
+}
+
+/* Estilos para la sección derecha (Visualización del Grafo) */
+.right-section {
+    flex: 1;
+    overflow: hidden; /* Evita cualquier desplazamiento */
+    padding: 50px;
+    box-sizing: border-box;
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+    height: calc(100vh - 220px); /* Ajusta según la altura total de las secciones superiores e inferiores */
+}
+
+/* Contenedor del grafo */
+/* #network {
+    width: 100%;
+    height: 600px; /* Asegura una altura fija
+    border: 1px solid #ccc;
+    padding-left: 0%;
+    padding-top: 0%;
+    padding-right: 0%
+} */
+
+#network {
+    width: 100%;
+    height: 100%; /* o ajustar según sea necesario */
+    overflow: hidden; /* Oculta cualquier contenido que se desborde */
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Centrar contenido verticalmente */
+}
+
+#procesarButton {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+/* Estilos para el pie de página */
+.lower-section {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 10px;
+}
+
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-section, .right-section {
+        width: 100%;
+        height: auto;
+    }
+
+    #text {
+        height: 200px;
+    }
+
+    #network {
+        height: 400px; /* Altura más pequeña para dispositivos móviles */
+    }
+}
