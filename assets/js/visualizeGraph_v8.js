@@ -15,72 +15,16 @@ function processText() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data);
-        // Procesamiento adicional aquí...
+        // Visualiza la sintaxis del texto en la página web
         visualizeGraph(data); // Asegúrate de que esta línea esté presente
     })
-    .catch(error => console.error('Error al llamar a la API:', error));
-}
+    .catch(error => {
+        console.error("Error al procesar el texto:", error)
+    });
+    }
 /////////////////////////////////////////////////////////////////////////////////////
-function visualizeEntitiesAndPhrases(data) {
-    const networkContainer = document.getElementById("network");
-    networkContainer.innerHTML = '';
+//Visualizar la sintaxis del texto en un grafo en el div id "network" <script src="src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js""></script>
 
-    // Considerando que ahora `data` tiene una propiedad `nodes` en lugar de `entities`
-    if (data.nodes && data.nodes.length > 0) {
-        const entitiesTitle = document.createElement('h3');
-        entitiesTitle.textContent = 'Entidades identificadas:';
-        networkContainer.appendChild(entitiesTitle);
-
-        const entitiesList = document.createElement('ul');
-        data.nodes.forEach(node => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${node.text} (${node.type})`;
-            entitiesList.appendChild(listItem);
-        });
-        networkContainer.appendChild(entitiesList);
-    }
-
-    // Verifica si data.entities existe y tiene elementos
-    if (data.entities && data.entities.length > 0) {
-        // El resto del código para visualizar entidades
-    }
-
-    // Verifica si data.key_phrases existe y tiene elementos
-    if (data.key_phrases && data.key_phrases.length > 0) {
-        // El resto del código para visualizar frases clave
-    }
-}
-
-    // Crea y añade las entidades al contenedor
-    if (data.entities.length > 0) {
-        const entitiesTitle = document.createElement('h3');
-        entitiesTitle.textContent = 'Entidades identificadas:';
-        networkContainer.appendChild(entitiesTitle);
-
-        const entitiesList = document.createElement('ul');
-        data.entities.forEach(entity => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${entity.Text} (${entity.Type})`;
-            entitiesList.appendChild(listItem);
-        });
-        networkContainer.appendChild(entitiesList);
-    }
-
-    // Crea y añade las frases clave al contenedor
-    if (data.key_phrases.length > 0) {
-        const phrasesTitle = document.createElement('h3');
-        phrasesTitle.textContent = 'Frases clave identificadas:';
-        networkContainer.appendChild(phrasesTitle);
-
-        const phrasesList = document.createElement('ul');
-        data.key_phrases.forEach(phrase => {
-            const listItem = document.createElement('li');
-            listItem.textContent = phrase.Text;
-            phrasesList.appendChild(listItem);
-        });
-        networkContainer.appendChild(phrasesList);
-    }
-///////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeGraph(data) {
     // Asegúrate de que este elemento exista en tu HTML
     const networkContainer = document.getElementById("network");
@@ -92,9 +36,25 @@ function visualizeGraph(data) {
     const svg = d3.select(networkContainer).append("svg")
         .attr("width", width)
         .attr("height", height);
+
+    // Función para asignar colores
+    const getColor = (type) => {
+        switch(type) {
+            case "VERB": return "#ff0000"; // Rojo para verbos
+            case "NOUN": return "#00ff00"; // Verde para sustantivos
+            case "ADJ": return "#0000ff"; // Azul para adjetivos
+            default: return "#cccccc"; // Gris para otros tipos
+        }
+    };
+
+    const zoomHandler = d3.zoom()
+        .on("zoom", (event) => {
+            svg.attr("transform", event.transform);
+        });    
+        svg.call(zoomHandler);
     
     // Usar 'nodes' y 'edges' de 'data' para crear nodos y enlaces
-    const nodes = data.nodes;
+    const nodes = data.nodes.map(d => ({...d, color: getColor(d.type)}));
     const links = data.edges;
 
     // Simulación de fuerzas para posicionar nodos y enlaces
@@ -114,10 +74,10 @@ function visualizeGraph(data) {
     // Dibujar nodos
     const node = svg.append("g")
         .selectAll("circle")
-        .data(nodes)
+        .data(nodes) // Asegúrate de que 'nodes' ya tiene la propiedad 'color' asignada
         .enter().append("circle")
         .attr("r", 5)
-        .attr("fill", "#69b3a2")
+        .attr("fill", d => d.color) // Usa la propiedad 'color' para el llenado
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
@@ -148,19 +108,19 @@ function visualizeGraph(data) {
             .attr("y", d => d.y);
     });
 
-    function dragstarted(d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
     }
-
-    function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+    
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
     }
-
-    function dragended(d) {
-        if (!d3.event.active) simulation.alphaTarget(0);
+    
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
         d.fx = null;
         d.fy = null;
     }
