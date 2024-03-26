@@ -129,18 +129,6 @@ body, html {
     align-items: center; /* Centrar contenido verticalmente */
 }
 
-
-#count-section {
-    width: 100%;
-    height: 100%; /* o ajustar según sea necesario */
-    overflow: hidden; /* Oculta cualquier contenido que se desborde */
-    border: 1px solid #ccc;
-    display: flex;
-    justify-content: center; /* Centrar contenido horizontalmente */
-    align-items: center; /* Centrar contenido verticalmente */
-}
-
-
 #procesarButton {
     padding: 10px 20px;
     font-size: 14px;
