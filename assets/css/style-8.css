@@ -85,12 +85,6 @@ body, html {
 
 /* Estilo para la parte superior de la sección izquierda */
 
-.text-input-section {
-    flex: 1; /* Ocupa el 25% del espacio disponible */
-    border-bottom: 1px solid #ccc; /* Agrega borde inferior */
-    padding: 10px; /* Agrega un espacio interno */
-}
-
 #text {
     flex: 3; /* Ocupa el 75% del espacio disponible */
     border: 1px solid #ccc; /* Agrega borde al área de texto */
@@ -110,6 +104,13 @@ body, html {
     margin-left: 0
     /* Otros estilos que quieras aplicar */
 }
+
+.text-input-section {
+    /* flex: 1;  Ocupa el 25% del espacio disponible */
+    border-bottom: 1px solid #ccc; /* Agrega borde inferior */
+    padding: 10px; /* Agrega un espacio interno */
+}
+
 
 /* Estilos para la sección derecha (Visualización del Grafo) */
 .right-section {
