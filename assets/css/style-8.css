@@ -134,22 +134,27 @@ body, html {
     font-size: 14px;
 }
 
+/* Footer */
 /* Estilos para el pie de página */
-.lower-section {
-    text-align: center;
-    font-family: 'Courier New', Courier, monospace;
-    margin-top: 10px;
-} */
 
-.lower-section {
- flex: 1; /* Ocupa el 50% del espacio disponible */
-    display: flex; /* Utiliza flexbox para organizar los elementos en columna */
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
-    justify-content: center; /* Centra verticalmente los elementos */
-    align-items: center; /* Centra horizontalmente los elementos */
-    border: 1px solid #ccc; /* Agrega borde a la sección derecha */
-    margin-left: 10px; /* Agrega un espacio entre las secciones izquierda y derecha */
-}
+.footer {
+    position:fixed;
+    bottom:30px;
+    margin-left: 1%;
+    margin-right: 1%;
+    left:10px;
+    right: 10px;
+    height: 90px;
+    background-color:;
+    text-align: center;
+    font-family: "Monserrat", sans-serif;
+
+  .footer-text {
+    font-size:25px;
+    padding-left:40px;
+    float:center;
+    word-spacing:20px;
+  }
 
 /* Estilos para dispositivos móviles */
 @media screen and (max-width: 768px) {
