@@ -23,7 +23,6 @@ function processText() {
     });
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
 function visualizeGraph(data) {
     const networkContainer = document.getElementById("network");
     const countContainer = document.getElementById("count-section");
@@ -40,7 +39,7 @@ function visualizeGraph(data) {
         visualizeSemantic(data.entities, data.cra, networkContainer);
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
@@ -59,7 +58,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Agregamos la lista al contenedor
     countContainer.appendChild(wordList);
 }
-///////////////////////////////////////////////////////////////////////////////////////////////
+
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
@@ -75,19 +74,13 @@ function visualizeSemantic(entities, craData, networkContainer) {
         entityList.appendChild(listItem);
     });
 
-// Agregamos la lista al contenedor
-countContainer.appendChild(wordList);
+    // Agregamos la lista al contenedor
+    networkContainer.appendChild(entityList);
 
-// Visualizamos los resultados del CRA
-visualizeCRA(craData, networkContainer);
+    // Visualizamos los resultados del CRA
+    visualizeCRA(craData, networkContainer);
 }
 
-// Podemos también mostrar los resultados del CRA, por ejemplo:
-// Aquí puedes implementar la lógica para mostrar los resultados del CRA en el networkContainer
-// Por ejemplo, podrías mostrar las palabras más empleadas y sus relaciones
-// Recuerda que esto dependerá de cómo estructures los datos de salida del CRA en el backend
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
@@ -153,4 +146,3 @@ function visualizeCRA(craData, networkContainer) {
             .attr("y", d => d.y);
     });
 }
-
