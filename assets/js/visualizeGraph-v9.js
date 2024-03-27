@@ -105,6 +105,10 @@ function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
 
+    // Crear contenedor para visualización del análisis semántico
+    const semanticContainer = document.createElement('div');
+    networkContainer.appendChild(semanticContainer);
+
     // Creamos un elemento de lista para mostrar las entidades nombradas
     const entityList = document.createElement('ul');
 
@@ -116,6 +120,9 @@ function visualizeSemantic(entities, craData, networkContainer) {
         entityList.appendChild(listItem);
     });
 
+    // Agregamos la lista al contenedor de análisis semántico
+    semanticContainer.appendChild(entityList);
+    
     // Agregamos la lista al contenedor
     networkContainer.appendChild(entityList);
 
