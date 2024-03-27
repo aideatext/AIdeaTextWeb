@@ -107,6 +107,9 @@ function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
 
+    // Crear contenedor para visualización del análisis semántico
+    const semanticContainer = document.createElement('div');
+
     // Creamos un elemento de lista para mostrar las entidades nombradas
     const entityList = document.createElement('ul');
 
@@ -118,17 +121,17 @@ function visualizeSemantic(entities, craData, networkContainer) {
         entityList.appendChild(listItem);
     });
 
-    // Agregamos la lista al contenedor
-    networkContainer.appendChild(entityList);
+    // Agregamos la lista al contenedor de análisis semántico
+    semanticContainer.appendChild(entityList);
+
+    // Agregamos el contenedor de análisis semántico al contenedor principal
+    networkContainer.appendChild(semanticContainer);
 
     // Visualizamos los resultados del CRA
     visualizeCRA(craData, networkContainer);
 }
 
 function visualizeCRA(craData, networkContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    networkContainer.innerHTML = '';
-
     // Configuración del contenedor SVG
     const width = 1200;
     const height = 800;
