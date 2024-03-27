@@ -59,20 +59,6 @@ function visualizeSyntax(syntaxData, countContainer) {
     const sentenceTypesElement = document.createElement('p');
     sentenceTypesElement.textContent = `Oraciones compuestas con 2 o más verbos: ${sentenceTypes.compound}, Oraciones simples: ${sentenceTypes.simple}, Oraciones subordinadas: ${sentenceTypes.subordinate}`;
     countContainer.appendChild(sentenceTypesElement);
-
-    // Creamos una lista ordenada para mostrar las palabras y su tipo gramatical
-    const wordList = document.createElement('ol');
-
-    // Recorremos los nodos del análisis sintáctico
-    syntaxData.nodes.forEach(node => {
-        // Creamos un elemento de lista para cada palabra
-        const listItem = document.createElement('li');
-        listItem.textContent = `${node.text} (${node.type})`; // Mostramos la palabra y su tipo gramatical
-        wordList.appendChild(listItem);
-    });
-
-    // Agregamos la lista al contenedor
-    countContainer.appendChild(wordList);
 }
 
 function findMostCommonWord(nodes) {
