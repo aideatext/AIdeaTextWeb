@@ -44,7 +44,23 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
 
-    // Creamos una lista ordenada para mostrar las palabras más empleadas
+    // Recuento de palabras
+    const wordCount = syntaxData.nodes.length;
+    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
+    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
+
+    // Crear un elemento para mostrar el recuento de palabras
+    const wordCountElement = document.createElement('p');
+    wordCountElement.textContent = `El texto tiene ${wordCount} palabras. La palabra más común es "${mostCommonWord.text}" y la menos común es "${leastCommonWord.text}".`;
+    countContainer.appendChild(wordCountElement);
+
+    // Identificación de tipos de oraciones
+    const sentenceTypes = identifySentenceTypes(syntaxData);
+    const sentenceTypesElement = document.createElement('p');
+    sentenceTypesElement.textContent = `Oraciones compuestas con 2 o más verbos: ${sentenceTypes.compound}, Oraciones simples: ${sentenceTypes.simple}, Oraciones subordinadas: ${sentenceTypes.subordinate}`;
+    countContainer.appendChild(sentenceTypesElement);
+
+    // Creamos una lista ordenada para mostrar las palabras y su tipo gramatical
     const wordList = document.createElement('ol');
 
     // Recorremos los nodos del análisis sintáctico
@@ -57,6 +73,48 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Agregamos la lista al contenedor
     countContainer.appendChild(wordList);
+}
+
+function findMostCommonWord(nodes) {
+    let mostCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency > mostCommon.frequency) {
+            mostCommon = node;
+        }
+    });
+    return mostCommon;
+}
+
+function findLeastCommonWord(nodes) {
+    let leastCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency < leastCommon.frequency) {
+            leastCommon = node;
+        }
+    });
+    return leastCommon;
+}
+
+function identifySentenceTypes(syntaxData) {
+    let compoundCount = 0;
+    let simpleCount = 0;
+    let subordinateCount = 0;
+
+    // Recorrer los bordes para identificar el tipo de oraciones
+    syntaxData.edges.forEach(edge => {
+        if (edge.relation === "noun_verb") {
+            // Contar las oraciones compuestas con 2 o más verbos
+            compoundCount++;
+        } else if (edge.relation === "nouns_sequence") {
+            // Contar las oraciones simples
+            simpleCount++;
+        } else {
+            // Contar las oraciones subordinadas
+            subordinateCount++;
+        }
+    });
+
+    return { compound: compoundCount, simple: simpleCount, subordinate: subordinateCount };
 }
 
 function visualizeSemantic(entities, craData, networkContainer) {
