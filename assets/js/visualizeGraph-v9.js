@@ -120,5 +120,5 @@ function visualizeSemantic(entities, craData, networkContainer) {
             .attr("x", d => d.x + 10)
             .attr("y", d => d.y);
     });
-}
+    }
 }
