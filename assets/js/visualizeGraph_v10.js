@@ -39,7 +39,7 @@ function visualizeGraph(data) {
         visualizeSemantic(data.entities, data.cra, networkContainer);
     }
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSyntax(word_count, most_common_word, least_common_word, compound_sentences, simple_sentences, subordinate_sentences, countContainer) {
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
@@ -49,7 +49,7 @@ function visualizeSyntax(word_count, most_common_word, least_common_word, compou
     `;
     countContainer.appendChild(syntaxInfoElement);
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
@@ -71,10 +71,22 @@ function visualizeSemantic(entities, craData, networkContainer) {
     // Visualizamos los resultados del CRA
     visualizeCRA(craData, networkContainer);
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
+
+    // Estructura de datos de craData esperada por visualizeCRA
+    const craData = {
+    nodes: [
+        { id: "palabra1", weight: 5 },
+        { id: "palabra2", weight: 8 },
+        // Agrega más nodos si es necesario
+    ],
+    edges: [
+        { source: "palabra1", target: "palabra2" },
+        // Agrega más enlaces si es necesario
+    ]
 
     // Configuración del contenedor SVG
     const width = 1200;
