@@ -81,13 +81,15 @@ function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
 
+    const craData = {
       nodes: [
-    {id: 'node1', weight: 5},
-    {id: 'node2', weight: 3} 
-    ],
-      edges: [
+        {id: 'node1', weight: 5},
+        {id: 'node2', weight: 3} 
+      ],
+      links: [
         {source: 'node1', target: 'node2'}
-    ]
+      ]
+    }
     
     // Configuración del contenedor SVG
     const width = 1200;
