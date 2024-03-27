@@ -26,8 +26,6 @@ function processText() {
 function visualizeGraph(data) {
     const networkContainer = document.getElementById("network");
     const countContainer = document.getElementById("count-section");
-    networkContainer.innerHTML = '';
-    countContainer.innerHTML = '';
 
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
