@@ -46,8 +46,11 @@ function visualizeSyntax(word_count, most_common_word, least_common_word, compou
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <p>El texto tiene ${word_count} palabras. La palabra más común es "${most_common_word}" y la menos común es "${least_common_word}".</p>
-        <p>Oraciones compuestas con 2 o más verbos: ${compound_sentences}, Oraciones simples: ${simple_sentences}, Oraciones subordinadas: ${subordinate_sentences}</p>
+        <p> El texto tiene ${word_count} palabras.</p> 
+        <p> La palabra que más se repite es: "${most_common_word}" y la que menos aparece es:  "${least_common_word}".</p>
+        <p> Oraciones simples: ${simple_sentences} </p>
+        <p> Oraciones compuestas con 2 o más verbos: ${compound_sentences} </p> 
+        <p> Oraciones subordinadas: ${subordinate_sentences} </p>
     `;
     countContainer.appendChild(syntaxInfoElement);
 }
@@ -77,25 +80,6 @@ function visualizeSemantic(entities, craData, networkContainer) {
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
-
-    craData = {
-        nodes: [
-          {
-            id: 'palabra1', 
-            weight: 5 // importance value
-          },
-          {
-            id: 'palabra2',
-            weight: 3
-          }
-        ],
-        edges: [
-          {
-            source: 'palabra1', 
-            target: 'palabra2'
-          }
-        ]
-      }
     
     // Configuración del contenedor SVG
     const width = 1200;
