@@ -100,7 +100,7 @@ function identifySentenceTypes(syntaxData) {
 }
 
 /////////////////////////////////////////////////////////////////////////////
-function visualizeSemantic(entities, craData, networkContainer) {
+function visualizeSemantic(entities, craResults, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
 
@@ -119,7 +119,7 @@ function visualizeSemantic(entities, craData, networkContainer) {
     networkContainer.appendChild(entityList);
 
     // Visualizamos los resultados del CRA
-    visualizeCRA(craData, networkContainer);
+    visualizeCRA(craResults, networkContainer);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ function visualizeCRA(craData, networkContainer) {
 
     // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
     const scaleNodeSize = d3.scaleLinear()
-        .domain([0, d3.max(craData.nodes.map(node => node.weight))])
+        .domain([0, d3.max(craResults.nodes.map(node => node.weight))])
         .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
 
     // Creamos los nodos y los enlaces basados en los datos del CRA
