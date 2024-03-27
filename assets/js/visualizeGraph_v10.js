@@ -95,7 +95,7 @@ function visualizeCRA(craData, networkContainer) {
             target: 'palabra2'
           }
         ]
-      };
+      }
     
     // Configuración del contenedor SVG
     const width = 1200;
