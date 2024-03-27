@@ -87,9 +87,9 @@ function visualizeCRA(craData, networkContainer) {
         {id: 'node2', weight: 3} 
       ],
       edges: [
-        {source: 'node1', target: 'node2'}
+        {source: 'node1', target: 'node2'},
       ]
-    }
+    };
     
     // Configuración del contenedor SVG
     const width = 1200;
