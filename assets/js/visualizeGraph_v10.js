@@ -29,6 +29,8 @@ function visualizeGraph(data) {
     networkContainer.innerHTML = '';
     countContainer.innerHTML = '';
 
+     console.log("Datos recibidos del backend:", data); // Agrega esta línea para depurar    
+
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
         visualizeSyntax(data.word_count, data.most_common_word, data.least_common_word, data.compound_sentences, data.simple_sentences, data.subordinate_sentences, countContainer);
