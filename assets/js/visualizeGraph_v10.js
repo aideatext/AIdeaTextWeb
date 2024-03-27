@@ -22,7 +22,7 @@ function processText() {
         console.error("Error al procesar el texto:", error)
     });
 }
-
+/////////////////////////////////////////////////////////////////////////////
 function visualizeGraph(data) {
     const networkContainer = document.getElementById("network");
     const countContainer = document.getElementById("count-section");
@@ -40,27 +40,21 @@ function visualizeGraph(data) {
     }
 }
 
-function visualizeSyntax(syntaxData, countContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    countContainer.innerHTML = '';
-
-    // Recuento de palabras
-    const wordCount = syntaxData.nodes.length;
-    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
-    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
-
-    // Crear un elemento para mostrar el recuento de palabras
-    const wordCountElement = document.createElement('p');
-    wordCountElement.textContent = `El texto tiene ${wordCount} palabras. La palabra más común es "${mostCommonWord.text}" y la menos común es "${leastCommonWord.text}".`;
-    countContainer.appendChild(wordCountElement);
-
-    // Identificación de tipos de oraciones
-    const sentenceTypes = identifySentenceTypes(syntaxData);
-    const sentenceTypesElement = document.createElement('p');
-    sentenceTypesElement.textContent = `Oraciones compuestas con 2 o más verbos: ${sentenceTypes.compound}, Oraciones simples: ${sentenceTypes.simple}, Oraciones subordinadas: ${sentenceTypes.subordinate}`;
-    countContainer.appendChild(sentenceTypesElement);
+/////////////////////////////////////////////////////////////////////////////
+function visualizeSyntax(word_count, most_common_word, least_common_word, compound_sentences, simple_sentences, subordinate_sentences, countContainer) {
+    // Crear un elemento para mostrar la información de sintaxis
+    const syntaxInfoElement = document.createElement('div');
+    syntaxInfoElement.innerHTML = `
+        <p> El texto tiene ${word_count} palabras.</p>
+        <p> La palabra que más se repite es: "${most_common_word}" y la que menos aparece es:  "${least_common_word}".</p>
+        <p> Oraciones simples: ${simple_sentences} </p>
+        <p> Oraciones compuestas con 2 o más verbos: ${compound_sentences} </p>
+        <p> Oraciones subordinadas: ${subordinate_sentences} </p>
+    `;
+    countContainer.appendChild(syntaxInfoElement);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 function findMostCommonWord(nodes) {
     let mostCommon = nodes[0];
     nodes.forEach(node => {
@@ -71,6 +65,7 @@ function findMostCommonWord(nodes) {
     return mostCommon;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 function findLeastCommonWord(nodes) {
     let leastCommon = nodes[0];
     nodes.forEach(node => {
@@ -81,6 +76,7 @@ function findLeastCommonWord(nodes) {
     return leastCommon;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 function identifySentenceTypes(syntaxData) {
     let compoundCount = 0;
     let simpleCount = 0;
@@ -103,6 +99,7 @@ function identifySentenceTypes(syntaxData) {
     return { compound: compoundCount, simple: simpleCount, subordinate: subordinateCount };
 }
 
+/////////////////////////////////////////////////////////////////////////////
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
@@ -125,6 +122,7 @@ function visualizeSemantic(entities, craData, networkContainer) {
     visualizeCRA(craData, networkContainer);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
