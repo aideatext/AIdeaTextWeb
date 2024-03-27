@@ -80,15 +80,22 @@ function visualizeCRA(craData, networkContainer) {
 
     const craData = {
         nodes: [
-            { id: "palabra1", weight: 5 },
-            { id: "palabra2", weight: 8 },
-            // Agrega más nodos si es necesario
+          {
+            id: 'palabra1', 
+            weight: 5 // importance value
+          },
+          {
+            id: 'palabra2',
+            weight: 3
+          }
         ],
-        edges: [
-            { source: "palabra1", target: "palabra2" },
-            // Agrega más enlaces si es necesario
+        links: [
+          {
+            source: 'palabra1', 
+            target: 'palabra2'
+          }
         ]
-    };
+      };
     
     // Configuración del contenedor SVG
     const width = 1200;
