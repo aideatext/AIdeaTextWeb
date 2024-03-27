@@ -78,7 +78,7 @@ function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
 
-    const craData = {
+    craData = {
         nodes: [
           {
             id: 'palabra1', 
@@ -89,7 +89,7 @@ function visualizeCRA(craData, networkContainer) {
             weight: 3
           }
         ],
-        links: [
+        edges: [
           {
             source: 'palabra1', 
             target: 'palabra2'
