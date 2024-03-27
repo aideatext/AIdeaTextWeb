@@ -73,6 +73,19 @@ function visualizeSemantic(entities, craData, networkContainer) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeCRA(craData, networkContainer) {
+        // Estructura de datos de craData esperada por visualizeCRA
+    const craData = {
+        nodes: [
+            { id: "palabra1", weight: 5 },
+            { id: "palabra2", weight: 8 },
+            // Agrega más nodos si es necesario
+        ],
+        edges: [
+            { source: "palabra1", target: "palabra2" },
+            // Agrega más enlaces si es necesario
+        ]
+    };
+    
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
 
