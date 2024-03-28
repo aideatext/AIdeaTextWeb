@@ -46,8 +46,8 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
-    const mostCommonWord = findMost_Common_Word(syntaxData.nodes);
-    const leastCommonWord = findLeast_Common_Word(syntaxData.nodes);
+    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
+    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
 
     // Crear un elemento para mostrar el recuento de palabras
     const wordCountElement = document.createElement('p');
