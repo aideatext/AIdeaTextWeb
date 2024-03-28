@@ -1,3 +1,23 @@
+function findMostCommonWord(nodes) {
+    let mostCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency > mostCommon.frequency) {
+            mostCommon = node;
+        }
+    });
+    return mostCommon;
+}
+
+function findLeastCommonWord(nodes) {
+    let leastCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency < leastCommon.frequency) {
+            leastCommon = node;
+        }
+    });
+    return leastCommon;
+}
+
 function processText() {
     var textInput = document.getElementById("text").value;
     if (!textInput.trim()) {
@@ -38,26 +58,6 @@ function visualizeGraph(data) {
         // Visualización del Análisis Semántico (Grafo)
         visualizeSemantic(data.entities, data.cra, networkContainer);
     }
-}
-
-function findMostCommonWord(nodes) {
-    let mostCommon = nodes[0];
-    nodes.forEach(node => {
-        if (node.frequency > mostCommon.frequency) {
-            mostCommon = node;
-        }
-    });
-    return mostCommon;
-}
-
-function findLeastCommonWord(nodes) {
-    let leastCommon = nodes[0];
-    nodes.forEach(node => {
-        if (node.frequency < leastCommon.frequency) {
-            leastCommon = node;
-        }
-    });
-    return leastCommon;
 }
 
 function visualizeSyntax(syntaxData, countContainer) {
