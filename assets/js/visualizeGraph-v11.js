@@ -55,13 +55,13 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span> 
-        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span>
-        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span>
-        <span>El texto tiene ${wordCount} oraciones. De las cuales:</span>
-        <span>${sentenceTypes.simple} son oraciones simples.</span>
-        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span>
-        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span>
+        <span>El texto tiene ${wordCount} palabras.</span></br> 
+        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
+        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
+        <span>El texto tiene ${wordCount} oraciones. De las cuales:</span></br>
+        <span>${sentenceTypes.simple} son oraciones simples.</span></br>
+        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
+        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
     `;
     countContainer.appendChild(syntaxInfoElement);
 }
