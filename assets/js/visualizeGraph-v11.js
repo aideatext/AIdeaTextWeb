@@ -69,6 +69,8 @@ function visualizeSyntax(syntaxData, countContainer) {
     return;
     }
 
+    console.log("Datos de análisis sintáctico recibidos:", syntaxData);
+
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
     const mostCommonWord = findMostCommonWord(syntaxData.nodes);
