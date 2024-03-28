@@ -64,6 +64,11 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
 
+    if (!syntaxData || !syntaxData.pos_count) {
+    console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+    return;
+    }
+
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
     const mostCommonWord = findMostCommonWord(syntaxData.nodes);
