@@ -50,7 +50,11 @@ function visualizeSyntax(syntaxData, countContainer) {
     const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
 
     // Identificación de tipos de oraciones
-    const sentenceTypes = identifySentenceTypes(syntaxData);
+    const sentenceTypes = {
+     simple: syntaxData.sentence_count - (syntaxData.pos_count.match(/\d+/g).reduce((a, b) => a + parseInt(b), 0) - syntaxData.pos_count.match(/\d+ simple/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0)),
+     compound: syntaxData.pos_count.match(/\d+ compound/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0),
+     subordinate: syntaxData.pos_count.match(/\d+ subordinate/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0)
+    };
     
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
