@@ -138,8 +138,7 @@ function visualizeCRA(craData, networkContainer) {
         node
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
-
-        text
+        edges
             .attr("x", d => d.x + 10)
             .attr("y", d => d.y);
     });
