@@ -143,25 +143,16 @@ function visualizeCRA(craData, networkContainer) {
 
     // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
     const scaleNodeSize = d3.scaleLinear()
-        .domain([0, d3.max(craData.nodes.map(node => node.weight))])
+        .domain([0, d3.max(craData.map(node => node.weight))])
         .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
 
     // Creamos los nodos y los enlaces basados en los datos del CRA
-    const nodes = craData.nodes.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
-    const links = craData.edges.map(edge => ({ source: edge.source, target: edge.target }));
+    const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
 
     // Creamos la simulación de fuerzas
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
-
-    // Dibujamos los enlaces
-    const link = svg.selectAll("line")
-        .data(links)
-        .enter().append("line")
-        .attr("stroke", "#999")
-        .attr("stroke-width", 2);
 
     // Dibujamos los nodos
     const node = svg.selectAll("circle")
@@ -180,12 +171,6 @@ function visualizeCRA(craData, networkContainer) {
 
     // Actualizamos la posición de los elementos en cada paso de la simulación
     simulation.on("tick", () => {
-        link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
-
         node
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
