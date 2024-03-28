@@ -43,21 +43,16 @@
     </div>
 
 
-    <div class="container">
-      <!-- <div class="section-title">Analyze</div> -->
-         <div class="left-section">
-          <!-- <div class="section-title">Input Text</div> -->
-            <!-- Área de texto y botón Procesar -->
-            <div class="text-input-section"><textarea id="text" name="text" placeholder=" Escribe aquí"></textarea>
-                <button type="button" id="procesarButton" onclick="processText()">Procesar</button>
-            </div>
-        </div>
-        <div class="right-section">
-         <!-- <div class="section-titlle">Visualize graph</div> -->
-	    <div id="count-section"></div>
-            <div id="network"></div>
+<div class="container">
+    <div class="left-section">
+        <div class="text-input-section">
+            <textarea id="text" name="text" placeholder="Escribe aquí"></textarea>
+            <button type="button" id="procesarButton" onclick="processText()">Procesar</button>
         </div>
     </div>
+    <div class="center-section" id="count-section"></div>
+    <div class="right-section" id="network"></div>
+</div>
 	  
   <div class="footer">
         <p>AIdeaText is a project aimed at learning writing through the visualization
