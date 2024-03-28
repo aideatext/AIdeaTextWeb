@@ -49,18 +49,30 @@ function visualizeSyntax(syntaxData, countContainer) {
     const mostCommonWord = findMostCommonWord(syntaxData.nodes);
     const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
 
-    // Crear un elemento para mostrar el recuento de palabras
-    const wordCountElement = document.createElement('p');
-    wordCountElement.textContent = `El texto tiene ${wordCount} palabras. La palabra más común es "${mostCommonWord.text}" y la menos común es "${leastCommonWord.text}".`;
-    countContainer.appendChild(wordCountElement);
-
     // Identificación de tipos de oraciones
     const sentenceTypes = identifySentenceTypes(syntaxData);
-    const sentenceTypesElement = document.createElement('p');
-    sentenceTypesElement.textContent = `Oraciones compuestas con 2 o más verbos: ${sentenceTypes.compound}, Oraciones simples: ${sentenceTypes.simple}, Oraciones subordinadas: ${sentenceTypes.subordinate}`;
+    
+    // Crear un elemento para mostrar el recuento de palabras
+    // const wordCountElement = document.createElement('p');
+    // wordCountElement.textContent = `El texto tiene ${wordCount} palabras. La palabra más común es "${mostCommonWord.text}" y la menos común es "${leastCommonWord.text}".`;
+    //countContainer.appendChild(wordCountElement);
+    // const sentenceTypesElement = document.createElement('p');
+    // sentenceTypesElement.textContent = `Oraciones compuestas con 2 o más verbos: ${sentenceTypes.compound}, Oraciones simples: ${sentenceTypes.simple}, Oraciones subordinadas: ${sentenceTypes.subordinate}`;
+
+     // Crear un elemento para mostrar la información de sintaxis
+    const syntaxInfoElement = document.createElement('div');
+    syntaxInfoElement.innerHTML = `
+        <p>El texto tiene ${wordCount} palabras.</p> 
+        <p>La palabra que más se repite es: "${mostCommonWord.text}".</p>
+        <p>La palabra que menos se repite es: "${leastCommonWord.text}".</p>
+        <p>El texto tiene ${wordCount} oraciones. De las cuales:</p>
+        <p>${sentenceTypes.simple} son oraciones simples.</p>
+        <p>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</p>
+        <p>${sentenceTypes.subordinate} son oraciones subordinadas.</p>
+    `;
     countContainer.appendChild(sentenceTypesElement);
 }
-
+///////////////////////////////////////////////////////////////////////////////
 function findMostCommonWord(nodes) {
     let mostCommon = nodes[0];
     nodes.forEach(node => {
