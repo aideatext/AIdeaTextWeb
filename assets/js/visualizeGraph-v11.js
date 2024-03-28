@@ -70,7 +70,25 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(syntaxInfoElement);
 }
 
+function findMostCommonWord(nodes) {
+    let mostCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency > mostCommon.frequency) {
+            mostCommon = node;
+        }
+    });
+    return mostCommon;
+}
 
+function findLeastCommonWord(nodes) {
+    let leastCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency < leastCommon.frequency) {
+            leastCommon = node;
+        }
+    });
+    return leastCommon;
+}
 
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
