@@ -94,6 +94,14 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
     `;
+    
+    // Mostrar el recuento de palabras por función gramatical
+    syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
+    Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
+        pos = pos.toLowerCase().replace('_', ' '); // Convertir a minúsculas y reemplazar guiones bajos
+        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
+    });
+    
     countContainer.appendChild(syntaxInfoElement);
 }
 
