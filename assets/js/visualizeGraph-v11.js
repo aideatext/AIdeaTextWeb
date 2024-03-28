@@ -45,30 +45,31 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.innerHTML = '';
 
     // Recuento de palabras
-    const wordCount = syntaxData.nodes.length;
-    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
-    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
+    const wordCount = syntaxData.word_count;
+    const mostCommonWord = syntaxData.most_common_word;
+    const leastCommonWord = syntaxData.least_common_word;
 
     // Identificación de tipos de oraciones
     const sentenceTypes = {
-     simple: syntaxData.sentence_count - (syntaxData.pos_count.match(/\d+/g).reduce((a, b) => a + parseInt(b), 0) - syntaxData.pos_count.match(/\d+ simple/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0)),
-     compound: syntaxData.pos_count.match(/\d+ compound/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0),
-     subordinate: syntaxData.pos_count.match(/\d+ subordinate/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0)
+        simple: syntaxData.sentence_count - (syntaxData.pos_count.match(/\[\d+\]/g).reduce((a, b) => a + parseInt(b.match(/\d+/)[0]), 0) - syntaxData.pos_count.match(/\[\d+\] compound/g).reduce((a, b) => a + parseInt(b.match(/\d+/)[0]), 0)),
+        compound: syntaxData.pos_count.match(/\[\d+\] compound/g).reduce((a, b) => a + parseInt(b.match(/\d+/)[0]), 0),
+        subordinate: syntaxData.pos_count.match(/\[\d+\] subordinate/g).reduce((a, b) => a + parseInt(b.match(/\d+/)[0]), 0)
     };
-    
+
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
         <span>El texto tiene ${wordCount} palabras.</span></br> 
-        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        <span>El texto tiene ${wordCount} oraciones. De las cuales:</span></br>
+        <span>La palabra que más se repite es: "${mostCommonWord}".</span></br>
+        <span>La palabra que menos se repite es: "${leastCommonWord}".</span></br>
+        <span>El texto tiene ${syntaxData.sentence_count} oraciones. De las cuales:</span></br>
         <span>${sentenceTypes.simple} son oraciones simples.</span></br>
         <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
     `;
     countContainer.appendChild(syntaxInfoElement);
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //function findMostCommonWord(nodes) {
 //    let mostCommon = nodes[0];
