@@ -71,49 +71,7 @@ function visualizeSyntax(syntaxData, countContainer) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/* function findMostCommonWord(nodes) {
-//    let mostCommon = nodes[0];
-//    nodes.forEach(node => {
-//        if (node.frequency > mostCommon.frequency) {
-//            mostCommon = node;
-//        }
-//    });
-//    return mostCommon;
-//}
-//
-//function findLeastCommonWord(nodes) {
-//    let leastCommon = nodes[0];
-//    nodes.forEach(node => {
-//        if (node.frequency < leastCommon.frequency) {
-//            leastCommon = node;
-//        }
-//    });
-//    return leastCommon;
-}
-//
-//function identifySentenceTypes(syntaxData) {
-//    let compoundCount = 0;
- //   let simpleCount = 0;
- //   let subordinateCount = 0;
 
-    // Recorrer los bordes para identificar el tipo de oraciones//
-//    syntaxData.edges.forEach(edge => {
-//        if (edge.relation === "noun_verb") {
-            // Contar las oraciones compuestas con 2 o más verbos
-//            compoundCount++;
-//        } else if (edge.relation === "nouns_sequence") {
-//            // Contar las oraciones simples
-//            simpleCount++;
-//        } else {
-// Contar las oraciones subordinadas
- //           subordinateCount++;
- //       }
- //   });
-
-//    return { compound: compoundCount, simple: simpleCount, subordinate: subordinateCount };
-// } */
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = '';
