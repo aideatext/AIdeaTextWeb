@@ -78,9 +78,9 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Identificación de tipos de oraciones
     const sentenceTypes = {
-     simple: syntaxData.sentence_count - (syntaxData.pos_count.match(/\d+/g).reduce((a, b) => a + parseInt(b), 0) - syntaxData.pos_count.match(/\d+ simple/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0)),
-     compound: syntaxData.pos_count.match(/\d+ compound/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0),
-     subordinate: syntaxData.pos_count.match(/\d+ subordinate/g).reduce((a, b) => a + parseInt(b.split(' ')[0]), 0)
+        simple: syntaxData.pos_count['SIMPLE'] || 0,
+        compound: syntaxData.pos_count['COMPOUND'] || 0,
+        subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
     };
     
     // Crear un elemento para mostrar la información de sintaxis
