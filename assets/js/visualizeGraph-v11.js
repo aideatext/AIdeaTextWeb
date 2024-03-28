@@ -39,7 +39,27 @@ function visualizeGraph(data) {
         visualizeSemantic(data.entities, data.cra, networkContainer);
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function findMostCommonWord(nodes) {
+    let mostCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency > mostCommon.frequency) {
+            mostCommon = node;
+        }
+    });
+    return mostCommon;
+}
+
+function findLeastCommonWord(nodes) {
+    let leastCommon = nodes[0];
+    nodes.forEach(node => {
+        if (node.frequency < leastCommon.frequency) {
+            leastCommon = node;
+        }
+    });
+    return leastCommon;
+}
+
 function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
@@ -68,26 +88,6 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
     `;
     countContainer.appendChild(syntaxInfoElement);
-}
-
-function findMostCommonWord(nodes) {
-    let mostCommon = nodes[0];
-    nodes.forEach(node => {
-        if (node.frequency > mostCommon.frequency) {
-            mostCommon = node;
-        }
-    });
-    return mostCommon;
-}
-
-function findLeastCommonWord(nodes) {
-    let leastCommon = nodes[0];
-    nodes.forEach(node => {
-        if (node.frequency < leastCommon.frequency) {
-            leastCommon = node;
-        }
-    });
-    return leastCommon;
 }
 
 function visualizeSemantic(entities, craData, networkContainer) {
