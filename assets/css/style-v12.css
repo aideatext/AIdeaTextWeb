@@ -65,19 +65,25 @@ body, html {
 
 .container {
     display: flex;
-    width: 100%; /* Ancho del contenedor */
-    height: 68%; /* Altura fija para el contenedor */
-    margin: 0 auto; /* Centrar el contenedor */
+    height: 100%;
+}
+
+.left-section, .center-section, .right-section {
+    flex: 1;
+    overflow: hidden;
+    padding: 20px;
 }
 
 .left-section {
-    flex: 1;
-    overflow-y: auto; /* Permite desplazamiento vertical */
-    overflow-x: hidden; /* Evita el desplazamiento horizontal */
-    padding: 50px;
-    box-sizing: border-box; /* Asegura que el padding se incluya en el ancho/altura total */
-    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
-    height: calc(100vh - 220px); /* Ajusta según la altura total de las secciones superiores e inferiores */
+    height: 100%; /* Ocupa el 100% de la altura */
+}
+
+.center-section {
+    height: 25%; /* Ocupa el 25% de la altura */
+}
+
+.right-section {
+    height: 50%; /* Ocupa el 50% de la altura */
 }
 
 /* Área de texto fija */
