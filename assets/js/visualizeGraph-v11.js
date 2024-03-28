@@ -71,7 +71,7 @@ function visualizeSyntax(syntaxData, countContainer) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//function findMostCommonWord(nodes) {
+/* function findMostCommonWord(nodes) {
 //    let mostCommon = nodes[0];
 //    nodes.forEach(node => {
 //        if (node.frequency > mostCommon.frequency) {
@@ -111,7 +111,7 @@ function visualizeSyntax(syntaxData, countContainer) {
  //   });
 
 //    return { compound: compoundCount, simple: simpleCount, subordinate: subordinateCount };
-// }
+// } */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
