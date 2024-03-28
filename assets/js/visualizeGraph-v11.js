@@ -1,22 +1,14 @@
 function findMostCommonWord(nodes) {
-    let mostCommon = nodes[0];
-    nodes.forEach(node => {
-        if (node.frequency > mostCommon.frequency) {
-            mostCommon = node;
-        }
-    });
-    return mostCommon;
-}
-
-function findLeastCommonWord(nodes) {
-    let leastCommon = nodes[0];
-    nodes.forEach(node => {
-        if (node.frequency < leastCommon.frequency) {
-            leastCommon = node;
-        }
-    });
-    return leastCommon;
-}
+    return nodes.reduce((max, node) => {
+      return node.frequency > max.frequency ? node : max;
+    }, nodes[0]);
+  }
+  
+  function findLeastCommonWord(nodes) {
+    return nodes.reduce((min, node) => {
+      return node.frequency < min.frequency ? node : min;  
+    }, nodes[0]);
+  }
 
 function processText() {
     var textInput = document.getElementById("text").value;
@@ -82,11 +74,11 @@ function visualizeSyntax(syntaxData, countContainer) {
         compound: syntaxData.pos_count['COMPOUND'] || 0,
         subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
     };
-    
+
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span></br> 
+        <span>El texto tiene ${wordCount} palabras.</span></br>
         <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
         <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
         <span>El texto tiene ${wordCount} oraciones. De las cuales:</span></br>
@@ -94,14 +86,14 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
     `;
-    
+
     // Mostrar el recuento de palabras por función gramatical
     syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
     Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
         pos = pos.toLowerCase().replace('_', ' '); // Convertir a minúsculas y reemplazar guiones bajos
         syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
     });
-    
+
     countContainer.appendChild(syntaxInfoElement);
 }
 
