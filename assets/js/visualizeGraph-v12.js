@@ -116,7 +116,7 @@ function visualizeData(data) {
  * Visualiza el análisis sintáctico.
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
- */
+ 
 function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
@@ -128,16 +128,19 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
-    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
-    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
+    //const mostCommonWord = findMostCommonWord(syntaxData.nodes);
+    //const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
 
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span></br>
-        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        <span>Conteo de palabras por función gramatical:</span></br>
+        <h2>Análisis Sintáctico</h2>
+        <p>Este texto tiene un total de ${wordCount} palabras.</p>
+        <p>Conteo de palabras por función gramatical:</p>
+        // <span>El texto tiene ${wordCount} palabras.</span></br>
+        // <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
+        // <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
+        // <span>Conteo de palabras por función gramatical:</span></br>
     `;
 
     // Mostrar el recuento de palabras por función gramatical
@@ -167,6 +170,52 @@ function visualizeSyntax(syntaxData, countContainer) {
         const words = wordsByCategory[category].slice(0, 10).join(', ');
         syntaxInfoElement.innerHTML += `<span>Top 10 ${category}: ${words}</span></br>`;
     }
+
+    // Mostrar la información en el contenedor
+    countContainer.appendChild(syntaxInfoElement);
+}
+*/
+
+/**
+ * Visualiza el análisis sintáctico.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
+ */
+function visualizeSyntax(syntaxData, countContainer) {
+    // Limpiamos el contenedor antes de mostrar los resultados
+    countContainer.innerHTML = '';
+
+    if (!syntaxData || !syntaxData.SyntaxTokens) {
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
+    }
+
+    // Recuento de palabras
+    const wordCount = syntaxData.SyntaxTokens.length;
+
+    // Crear un elemento para mostrar la información de sintaxis
+    const syntaxInfoElement = document.createElement('div');
+    syntaxInfoElement.innerHTML = `
+        <h2>Análisis Sintáctico</h2>
+        <p>Este texto tiene un total de ${wordCount} palabras.</p>
+        <p>Conteo de palabras por función gramatical:</p>
+    `;
+
+    // Mostrar el recuento de palabras por función gramatical
+    const posCount = {};
+    syntaxData.SyntaxTokens.forEach(token => {
+        const pos = token.PartOfSpeech.Tag;
+        posCount[pos] = posCount[pos] ? posCount[pos] + 1 : 1;
+    });
+
+    const posList = document.createElement('ul');
+    for (const pos in posCount) {
+        const posName = pos.toLowerCase();
+        const listItem = document.createElement('li');
+        listItem.textContent = `[${posCount[pos]}] ${posName}: ${posCount[pos] > 0 ? 'Sí' : 'No'}`;
+        posList.appendChild(listItem);
+    }
+    syntaxInfoElement.appendChild(posList);
 
     // Mostrar la información en el contenedor
     countContainer.appendChild(syntaxInfoElement);
