@@ -1,7 +1,3 @@
-// Import the d3 library
-//import * as d3 from 'd3';
-import * as d3 from 'd3'; // Add the missing import statement for the d3 library
-
 /**
  * Obtiene un elemento del DOM por su ID.
  * @param {string} id - El ID del elemento.
