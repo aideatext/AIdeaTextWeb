@@ -158,7 +158,6 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Crear elementos HTML para mostrar la información
     const wordCountElement = document.createElement('p');
     wordCountElement.textContent = `Este texto tiene un total de ${wordCount} palabras`;
-    countContainer.appendChild(wordCountElement);
 
     const wordTypeListElement = document.createElement('ul');
     for (const [type, words] of Object.entries(topWordsByType)) {
@@ -168,9 +167,9 @@ function visualizeSyntax(syntaxData, countContainer) {
     }
 
     // Agregar la lista de palabras más comunes por tipo de parte del discurso al contenedor
+    countContainer.appendChild(wordCountElement);
     countContainer.appendChild(wordTypeListElement);
 }
-
 
 /**
  * Visualiza el análisis semántico.
