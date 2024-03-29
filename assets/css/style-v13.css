@@ -1,3 +1,10 @@
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    flex-direction: row; /* Los contenedores hijos se apilarán horizontal */
+    height: calc(100% - 120px); /* Altura total menos la altura del footer */
+}
+
 body, html {
     height: 100%;
     margin: 0;
