@@ -179,13 +179,11 @@ function visualizeSyntax(syntaxData, countContainer) {
             syntaxInfoElement.innerHTML += `<span> - Palabras: ${syntaxData.nodes.filter(node => node.pos === pos).slice(0, 10).map(node => node.text).join(', ')}</span><br>`;
         }
     }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Agregar el elemento de información de sintaxis al contenedor
         countContainer.appendChild(syntaxInfoElement);
-    }
-
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
      * @param {Array} entities - Las entidades detectadas en el texto.
