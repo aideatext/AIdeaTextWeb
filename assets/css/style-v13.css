@@ -77,7 +77,6 @@ body, html {
 /* Footer */
 .footer {
     position: fixed;
-    bottom: 30px;
     left: 10px;
     right: 10px;
     height: 90px;
