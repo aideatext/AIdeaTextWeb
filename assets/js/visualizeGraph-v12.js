@@ -8,6 +8,44 @@ function getContainerElement(id) {
 }
 
 /**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
+}
+
+/**
+ * Obtiene un elemento HTML para mostrar información sobre el análisis sintáctico.
+ * @param {number} wordCount - El número de palabras en el texto.
+ * @param {Object} mostCommonWord - La palabra más común.
+ * @param {Object} leastCommonWord - La palabra menos común.
+ * @param {Object} sentenceTypes - Tipos de oraciones encontradas.
+ * @param {Object} posCount - Conteo de partes del discurso.
+ * @returns {HTMLElement} - El elemento HTML creado.
+ */
+function getSyntaxElement(wordCount, mostCommonWord, leastCommonWord, sentenceTypes, posCount) {
+    const syntaxElement = document.createElement('div');
+
+    syntaxElement.innerHTML = `
+        <h2>Análisis Sintáctico</h2>
+        <p>Número de palabras: ${wordCount}</p>
+        <p>Palabra más común: ${mostCommonWord}</p>
+        <p>Palabra menos común: ${leastCommonWord}</p>
+        <p>Tipo de oraciones:</p>
+        <ul>
+            <li>Simple: ${sentenceTypes.simple}</li>
+            <li>Compuesta: ${sentenceTypes.compound}</li>
+            <li>Subordinada: ${sentenceTypes.subordinate}</li>
+        </ul>
+        <p>Conteo de partes del discurso:</p>
+        <pre>${JSON.stringify(posCount, null, 2)}</pre>
+    `;
+
+    return syntaxElement;
+}
+
+/**
  * Encuentra la palabra más común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
  * @returns {Object} - El nodo más común.
