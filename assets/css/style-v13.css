@@ -84,6 +84,8 @@ body, html {
     background-color: #ffffff; /* Ajusta el color de fondo según sea necesario */
     text-align: center;
     font-family: "Monserrat", sans-serif;
+    max-width: calc(100% - 20px); /* Ancho máximo igual al ancho de la pantalla menos el margen izquierdo y derecho */
+    overflow-x: auto; /* Habilitar desplazamiento horizontal si el contenido del footer es demasiado ancho */
 }
 
 .footer-text {
