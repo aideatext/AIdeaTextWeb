@@ -160,12 +160,19 @@ function visualizeSemantic(entities, craData, networkContainer) {
 
     console.log("Datos de CRA:", craData);
 
-    if (!Array.isArray(craData.word_frequency)) {
-        console.error("word_frequency debe ser un array");
+    // Se agrega una validación para asegurar que craData sea un array
+    if (!Array.isArray(craData)) {
+        console.error("craData debe ser un array");
         return;
     }
 
-    visualizeCRA(craData.word_frequency, networkContainer);
+    // Se verifica si craData está vacío antes de llamar a visualizeCRA
+    if (craData.length === 0) {
+        console.error("craData no puede estar vacío");
+        return;
+    }
+
+    visualizeCRA(craData, networkContainer);
 }
 
 /**
@@ -214,6 +221,7 @@ function visualizeCRA(craData, networkContainer) {
             .attr("y", d => d.y);
     });
 }
+
 
 /**
  * Llama a la API para procesar el texto.
