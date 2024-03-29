@@ -154,7 +154,7 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Contar el número de oraciones por tipo
     sentences.forEach(sentence => {
-        const type = sentence.split(':')[0];
+        const type = sentence.split(':')[0].trim(); // Asegúrate de eliminar espacios en blanco
         sentenceTypeCount[type]++;
     });
 
