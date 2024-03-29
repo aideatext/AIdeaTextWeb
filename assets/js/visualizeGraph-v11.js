@@ -184,6 +184,12 @@ function visualizeSyntax(syntaxData, countContainer) {
     `;
     
  // Mostrar el recuento de palabras por función gramatical y las primeras diez palabras de cada categoría
+        for (const pos in wordCountByPOS) {
+        if (wordCountByPOS.hasOwnProperty(pos)) {
+            syntaxInfoElement.innerHTML += `<span>${wordCountByPOS[pos]} ${POSLabels[pos]}.</span><br>`;
+        }
+    }
+ /**
     Object.entries(wordCountByPOS).forEach(([pos, count]) => {
         const posLabel = POSLabels[pos] || pos;
         syntaxInfoElement.innerHTML += `<span>[${count}] son ${posLabel}. `;
@@ -193,6 +199,7 @@ function visualizeSyntax(syntaxData, countContainer) {
             syntaxInfoElement.innerHTML += `No se encontraron palabras.</span><br>`;
         }
     });
+    */
 
     // Verificar si pos_words está presente en syntaxData
     if (syntaxData.pos_words) {
