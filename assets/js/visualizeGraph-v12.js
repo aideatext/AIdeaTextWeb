@@ -165,12 +165,12 @@ function visualizeSemantic(entities, craData, networkContainer) {
 
     console.log("Datos de CRA:", craData);
 
-    if (!Array.isArray(craData)) {
-        console.error("craData debe ser un array");
+    if (!Array.isArray(craData.word_frequency)) {
+        console.error("word_frequency debe ser un array");
         return;
     }
 
-    visualizeCRA(craData, networkContainer);
+    visualizeCRA(craData.word_frequency, networkContainer);
 }
 
 /**
