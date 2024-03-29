@@ -148,6 +148,16 @@ function visualizeSyntax(syntaxData, countContainer) {
         syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
     });
 
+        // Almacenar las palabras por categoría gramatical
+    const wordsByCategory = {};
+    syntaxData.nodes.forEach(node => {
+        const category = node.type.toLowerCase();
+        if (!wordsByCategory[category]) {
+            wordsByCategory[category] = [];
+        }
+        wordsByCategory[category].push(node.text);
+    });
+
     // Mostrar las 10 palabras más comunes en cada categoría
     syntaxInfoElement.innerHTML += "<span>Las 10 palabras más comunes en cada categoría son:</span></br>";
     Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
