@@ -52,7 +52,7 @@ function visualizeGraph(data) {
     }
 }
 
-unction visualizeSyntax(syntaxData, countContainer) {
+function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
 
