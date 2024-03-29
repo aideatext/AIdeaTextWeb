@@ -15,7 +15,6 @@ function clearContainer(container) {
     container.innerHTML = '';
 }
 
-
 /**
  * Encuentra la palabra más común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
@@ -26,7 +25,6 @@ function findMostCommonWord(nodes) {
         return node.frequency > max.frequency ? node : max;
     }, nodes[0]);
 }
-
 
 /**
  * Encuentra la palabra menos común en un conjunto de nodos.
@@ -42,7 +40,6 @@ function findLeastCommonWord(nodes) {
 /**
  * Procesa el texto ingresado.
  */
-
 function processText() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
@@ -119,23 +116,20 @@ function visualizeSyntax(syntaxData, countContainer) {
         return;
     }
 
-    // Conteo de palabras por función gramatical
-    const wordCountByPOS = syntaxData.pos_count;
-
     // Palabras por función gramatical
     const POSLabels = {
-        det: 'determinante',
-        noun: 'sustantivo',
-        verb: 'verbo',
-        adj: 'adjetivo',
-        adv: 'adverbio',
-        adp: 'preposición',
-        conj: 'conjunción',
-        num: 'número',
-        pron: 'pronombre',
-        propn: 'nombre propio',
-        punct: 'puntuación',
-        sconj: 'conjunción subordinante'
+        det: 'Determinante',
+        noun: 'Sustantivo',
+        verb: 'Verbo',
+        adj: 'Adjetivo',
+        adv: 'Adverbio',
+        adp: 'Preposición',
+        conj: 'Conjunción',
+        num: 'Número',
+        pron: 'Pronombre',
+        propn: 'Nombre propio',
+        punct: 'Puntuación',
+        sconj: 'Conjunción subordinante'
     };
 
     // Verificar si wordCountByPOS está definido correctamente
@@ -168,22 +162,26 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>El texto tiene ${wordCount} palabras.</span><br>
         <span>La palabra que más se repite es: "${mostCommonWord.text}".</span><br>
         <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span><br>
-        <span>Conteo de palabras por función gramatical:</span><br>`;
-
-    // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
-    for (const pos in syntaxData.pos_count) {
-        if (syntaxData.pos_count.hasOwnProperty(pos)) {
-            const count = syntaxData.pos_count[pos];
-            const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => node.text).join(', ');
-            syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos}: ${count}</span><br>`;
-            syntaxInfoElement.innerHTML += `<span> - Palabras: ${wordsOfPOS}</span><br>`;
-        }
-    }
+        <span>Conteo de palabras por función gramatical:</span><br>
+    `;
 
     // Agregar el elemento de información de sintaxis al contenedor
     countContainer.appendChild(syntaxInfoElement);
-}
 
+// Mostrar el conteo de palabras por función gramatical
+    Object.keys(syntaxData.pos_count).forEach(pos => {
+        const wordCount = syntaxData.pos_count[pos];
+        const label = POSLabels[pos.toLowerCase()] || pos;
+        const posInfoElement = document.createElement('span');
+        posInfoElement.textContent = `- ${label}: `;
+        const words = syntaxData.nodes.filter(node => node.type.toLowerCase() === pos);
+        words.forEach((word, index) => {
+            posInfoElement.textContent += `${word.text}${index === words.length - 1 ? '' : ', '}`;
+        });
+        posInfoElement.textContent += `\n`;
+        countContainer.appendChild(posInfoElement);
+    });
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
