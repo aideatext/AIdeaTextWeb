@@ -113,6 +113,12 @@ function visualizeData(data) {
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
  */
+/**
+ * Visualiza el análisis sintáctico.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} countContainer - El contenedor para mostrar la información de sintaxis.
+ */
+
 function visualizeSyntax(syntaxData, countContainer) {
     clearContainer(countContainer);
 
@@ -133,6 +139,7 @@ function visualizeSyntax(syntaxData, countContainer) {
         subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
     };
 
+    // Aquí se llama a la función getSyntaxElement para obtener el elemento HTML con la información sintáctica
     const syntaxInfoElement = getSyntaxElement(wordCount, mostCommonWord, leastCommonWord, sentenceTypes, syntaxData.pos_count);
     countContainer.appendChild(syntaxInfoElement);
 }
