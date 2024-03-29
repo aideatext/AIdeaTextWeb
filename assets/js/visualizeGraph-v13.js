@@ -1,24 +1,18 @@
 // Añade esta función para llamar a la API de Comprehend desde el frontend
-async function callComprehendAPI(textInput) {
-    try {
-        const response = await fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: textInput }),
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Error al llamar a la API de Comprehend: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return { syntax: data }; // Envuelve los datos del análisis sintáctico en una propiedad "syntax"
-    } catch (error) {
-        console.error('Error al llamar a la API de Comprehend:', error);
-        throw error;
-    }
+/**
+ * Llama a la API para procesar el texto.
+ * @param {string} textInput - El texto a procesar.
+ * @returns {Promise<Object>} - Una promesa que resuelve con los datos procesados.
+ */
+function callAPI(textInput) {
+    return fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: textInput }),
+    })
+    .then(response => response.json());
 }
 
 // Modifica la función processText para que llame a la nueva función de la API de Comprehend
