@@ -187,7 +187,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
 
-    if (!syntaxData || !syntaxData.SyntaxTokens) {
+    if (!syntaxData || !syntaxData.pos_count) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
         return;
     }
@@ -222,7 +222,6 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Mostrar la información en el contenedor
     countContainer.appendChild(syntaxInfoElement);
 }
-
 
 /**
  * Visualiza el análisis semántico.
