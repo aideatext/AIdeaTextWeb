@@ -22,21 +22,27 @@ function clearContainer(container) {
     container.innerHTML = '';
 }
 
-// Modifica la función processText para que llame a la nueva función de la API de Comprehend
-async function processText() {
+/**
+ * Procesa el texto ingresado.
+ */
+function processText() {
     const textInput = document.getElementById("text").value.trim();
     if (!textInput) {
         console.error("El texto para analizar no puede estar vacío.");
         return;
     }
 
-    try {
-        const data = await callComprehendAPI(textInput);
-        visualizeData(data);
-    } catch (error) {
-        console.error("Error al procesar el texto:", error);
-    }
+    // Realiza la llamada a la API para procesar el texto
+    callAPI(textInput)
+        .then(data => {
+            console.log("Datos recibidos del backend:", data);
+            visualizeData(data);
+        })
+        .catch(error => {
+            console.error("Error al procesar el texto:", error)
+        });
 }
+
 
 // Ajusta la función visualizeData para mostrar los resultados de Comprehend
 function visualizeData(data) {
