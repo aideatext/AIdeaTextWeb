@@ -169,20 +169,21 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>La palabra que más se repite es: "${mostCommonWord.text}".</span><br>
         <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span><br>
         <span>Conteo de palabras por función gramatical:</span><br>`;
-//////////////////////////////////////////////////////////////////////////////////////////////////////
- // Mostrar el recuento de palabras por función gramatical y mostrar las primeras diez palabras de cada
- //categoría
+
+    // Mostrar el recuento de palabras por función gramatical y las primeras diez palabras de cada categoría
     for (const pos in wordCountByPOS) {
         if (wordCountByPOS.hasOwnProperty(pos)) {
             const count = wordCountByPOS[pos];
+            const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => node.text).slice(0, 10).join(', ');
             syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos}: ${count}</span><br>`;
-            syntaxInfoElement.innerHTML += `<span> - Palabras: ${syntaxData.nodes.filter(node => node.pos === pos).slice(0, 10).map(node => node.text).join(', ')}</span><br>`;
+            syntaxInfoElement.innerHTML += `<span> - Palabras: ${wordsOfPOS}</span><br>`;
         }
     }
 
     // Agregar el elemento de información de sintaxis al contenedor
-        countContainer.appendChild(syntaxInfoElement);
+    countContainer.appendChild(syntaxInfoElement);
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
