@@ -3,15 +3,24 @@
  * @param {string} textInput - El texto a procesar.
  * @returns {Promise<Object>} - Una promesa que resuelve con los datos procesados.
  */
-function callAPI(textInput) {
-    return fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+async function callComprehendAPI(textInput) {
+    const response = await fetch('https://comprehend.amazonaws.com', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer YourAuthorizationTokenHere'
         },
-        body: JSON.stringify({ text: textInput }),
-    })
-    .then(response => response.json());
+        body: JSON.stringify({
+            LanguageCode: 'es',
+            Text: textInput
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error al llamar a la API de Comprehend: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
 }
 
 /**
@@ -25,22 +34,19 @@ function clearContainer(container) {
 /**
  * Procesa el texto ingresado.
  */
-function processText() {
+async function processText() {
     const textInput = document.getElementById("text").value.trim();
     if (!textInput) {
         console.error("El texto para analizar no puede estar vacío.");
         return;
     }
 
-    // Realiza la llamada a la API para procesar el texto
-    callAPI(textInput)
-        .then(data => {
-            console.log("Datos recibidos del backend:", data);
-            visualizeData(data);
-        })
-        .catch(error => {
-            console.error("Error al procesar el texto:", error)
-        });
+    try {
+        const data = await callComprehendAPI(textInput);
+        visualizeSyntax(data.SyntaxTokens);
+    } catch (error) {
+        console.error("Error al procesar el texto:", error);
+    }
 }
 
 
