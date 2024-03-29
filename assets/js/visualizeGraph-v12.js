@@ -88,6 +88,9 @@ function visualizeSemantic(entities, craData, networkContainer) {
     networkContainer.appendChild(entityList);
     visualizeCRA(craData, networkContainer);
 
+    // Agregar console.log para inspeccionar craData
+    console.log("Datos de CRA:", craData);
+
     // Verificar si craData es un array antes de llamar a visualizeCRA
     if (Array.isArray(craData)) {
         visualizeCRA(craData, networkContainer);
