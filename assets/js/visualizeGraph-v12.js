@@ -135,11 +135,14 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span></br>
-        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        // <span>El texto tiene ${wordSetence} oraciones.</span></br>
-    `;
+    <span>El texto tiene ${wordCount} palabras.</span></br>
+    <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
+    <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
+    <span>Conteo de palabras por función gramatical:</span></br>
+    ${posList}
+    <span>Las 10 palabras más comunes en cada categoría son:</span></br>
+    ${topWordsList}
+`;
 
     // Mostrar el recuento de palabras por función gramatical
     syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
