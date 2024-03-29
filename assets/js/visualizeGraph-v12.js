@@ -93,19 +93,19 @@ function processText() {
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeData(data) {
-    const networkContainer = getContainerElement("network");
+    // const networkContainer = getContainerElement("network");
     const countContainer = getContainerElement("count-section");
-    clearContainer(networkContainer);
+    // clearContainer(networkContainer);
     clearContainer(countContainer);
 
     if (data.syntax) {
         visualizeSyntax(data.syntax, countContainer);
     }
 
-    if (data.entities) {
-        visualizeSemantic(data.entities, data.cra, networkContainer);
-        console.log(data.cra); // Agregar esta línea para imprimir los datos de cra en la consola
-    }
+    //if (data.entities) {
+    //    visualizeSemantic(data.entities, data.cra, networkContainer);
+    //    console.log(data.cra); // Agregar esta línea para imprimir los datos de cra en la consola
+    //}
 }
 
 /**
