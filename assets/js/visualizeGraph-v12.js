@@ -161,7 +161,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     const wordTypeListElement = document.createElement('ul');
     for (const [type, words] of Object.entries(topWordsByType)) {
         const listItem = document.createElement('li');
-        const topTenWords = words.slice(0, 10).join(', ');
+        const topTenWords = words.join(', '); // Concatenamos todas las palabras con una coma
         listItem.textContent = `${words.length} ${type}: ${topTenWords}`;
         wordTypeListElement.appendChild(listItem);
     }
@@ -170,7 +170,6 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(wordCountElement);
     countContainer.appendChild(wordTypeListElement);
 }
-
 
 /**
  * Visualiza el análisis semántico.
