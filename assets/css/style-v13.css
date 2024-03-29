@@ -95,19 +95,17 @@ body, html {
 
 /* Contenedor del grafo */
 #count-section {
-    height: 100%; /* Altura del 25% */
-    border: 1px solid #ccc;
-    display: flex;
-    justify-content: center; /* Centrar contenido horizontalmente */
-    align-items: center; /* Centrar contenido verticalmente */
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
 }
 
 #network {
-    height: 100%; /* Altura del 100% */
-    border: 1px solid #ccc;
-    display: flex;
-    justify-content: center; /* Centrar contenido horizontalmente */
-    align-items: center; /* Centrar contenido verticalmente */
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
 }
 
 #procesarButton {
