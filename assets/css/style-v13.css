@@ -1,1 +1,155 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: "Monserrat", sans-serif;
+    overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
+}
 
+/* Upper section */
+.upper-section {
+    text-align: center;
+}
+
+/* File Operation section */
+.file-operations {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin: 20px 0; /* Ajusta el margen según sea necesario */
+}
+
+/* Estilos para las etiquetas de las secciones */
+.section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.download-buttons, .upload-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.download-buttons button, .upload-buttons input {
+    width: 30%;
+    padding: 10px;
+    margin: 0 5px;
+}
+
+.upload-file {
+    display: none; /* Oculta el input de tipo file */
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+    width: 29%;
+    text-align: center;
+}
+
+/* Contenedor */
+.container {
+    display: flex;
+    width: 100%; /* Ancho del contenedor */
+    height: 100%; /* Altura del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+.left-section, .center-section, .right-section {
+    flex: 1;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+}
+
+/* Área de texto fija */
+#text {
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#text::placeholder {
+    color: #000000; /* Cambia el color del texto del placeholder */
+    font-style: italic; /* Estilo de fuente para el placeholder */
+    font-size: 14px; /* Tamaño de fuente específico para el placeholder */
+    text-align: justify; /* Alinea el texto del placeholder */
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0;
+    /* Otros estilos que quieras aplicar */
+}
+
+/* Estilos para la sección derecha (Visualización del Grafo) */
+.right-section {
+    height: 100%; /* Altura del 100% */
+}
+
+/* Contenedor del grafo */
+#count-section {
+    height: 25%; /* Altura del 25% */
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Centrar contenido verticalmente */
+}
+
+#network {
+    height: 100%; /* Altura del 100% */
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Centrar contenido verticalmente */
+}
+
+#procesarButton {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 30px;
+    left: 10px;
+    right: 10px;
+    height: 90px;
+    background-color: #ffffff; /* Ajusta el color de fondo según sea necesario */
+    text-align: center;
+    font-family: "Monserrat", sans-serif;
+}
+
+.footer-text {
+    font-size: 25px;
+    padding-left: 40px;
+    float: center;
+    word-spacing: 20px;
+}
+
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-section, .right-section {
+        width: 100%;
+        height: auto;
+    }
+
+    #text {
+        height: 200px;
+    }
+
+    #network {
+        height: 400px; /* Altura más pequeña para dispositivos móviles */
+    }
+}
