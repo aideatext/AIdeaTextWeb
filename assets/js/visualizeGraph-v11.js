@@ -2,13 +2,13 @@ function findMostCommonWord(nodes) {
     return nodes.reduce((max, node) => {
       return node.frequency > max.frequency ? node : max;
     }, nodes[0]);
-  }
+}
   
-  function findLeastCommonWord(nodes) {
+function findLeastCommonWord(nodes) {
     return nodes.reduce((min, node) => {
       return node.frequency < min.frequency ? node : min;  
     }, nodes[0]);
-  }
+}
 
 function processText() {
     var textInput = document.getElementById("text-1").value;
@@ -38,17 +38,17 @@ function processText() {
 function visualizeGraph(data) {
     const networkContainer = document.getElementById("network-1");
     const countContainer = document.getElementById("count-section-1");
-    network-1Container.innerHTML = '';
-    count-1Container.innerHTML = '';
+    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+    countContainer.innerHTML = ''; // Corregido de count-1Container a countContainer
 
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSyntax(data.syntax, count-1Container);
+        visualizeSyntax(data.syntax, countContainer);
     }
 
     if (data.entities) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, data.cra, network-1Container);
+        visualizeSemantic(data.entities, data.cra, networkContainer);
     }
 }
 
@@ -99,7 +99,7 @@ function visualizeSyntax(syntaxData, countContainer) {
 
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
-    network-1Container.innerHTML = '';
+    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
 
     // Creamos un elemento de lista para mostrar las entidades nombradas
     const entityList = document.createElement('ul');
@@ -113,7 +113,7 @@ function visualizeSemantic(entities, craData, networkContainer) {
     });
 
     // Agregamos la lista al contenedor
-    network-1Container.appendChild(entityList);
+    networkContainer.appendChild(entityList);
 
     // Visualizamos los resultados del CRA
     visualizeCRA(craData, networkContainer);
@@ -121,12 +121,12 @@ function visualizeSemantic(entities, craData, networkContainer) {
 
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
-    network-1Container.innerHTML = '';
+    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
 
     // Configuración del contenedor SVG
     const width = 1200;
     const height = 800;
-    const svg = d3.select(network-1Container).append("svg")
+    const svg = d3.select(networkContainer).append("svg") // Corregido de network-1Container a networkContainer
         .attr("width", width)
         .attr("height", height);
 
