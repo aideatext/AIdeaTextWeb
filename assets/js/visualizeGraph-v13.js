@@ -154,6 +154,9 @@ function visualizeSyntax(syntaxData, countContainer) {
 }
 
 
+
+
+
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
