@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es" class="h-100">
+    <head>
+
+	<meta charset="UTF-8" />
+	<title>AIdeaText</title>
+
+    <meta name="Content-Type" />
+    <meta name="viewport" content= "width=device-width, initial-scale=1" />
+    <meta name="description" content= "AIdeaText
+    AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+    <meta name="author" content= "ManuelVarZen" />
+    <meta name="generator" content= "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+
+	<!-- Twitter Card -->
+	<meta name = "twitter:card" content = "summary_large_image" />
+    <meta name = "twitter:site" content = "https://aideatext.ai" />
+    <meta name = "twitter:creator" content = "@ManuelVarZen">
+    <meta name = "twitter:title" content = "AIdeaText" />
+    <meta name = "twitter:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta name = "twitter:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg"/>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content = "AIdeaText" />
+	<meta property="og:type" content = "website" />
+	<meta property="og:url" content = "https://aideatext.ai" />
+    <meta property="og:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:image:secure_url" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta property="og:image:alt" content="AIdeaText screenshot." />
+
+    <!-- Aquí puedes agregar tus estilos CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="assets/css/style-v13.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+ <script src="https://d3js.org/d3.v6.min.js"></script> 
+  </head>
+
+  <body>
+    <div class="upper-section">
+        <h1>AIdeaText - Web</h1>
+    </div>
+
+<div class="main-container">
+<div class="container-1">
+    <div class="left-section-top">
+        <div class="text-input-section-1">
+            <textarea id="text-1" name="text-1" placeholder="Copia un texto existente"></textarea>
+            <button type="button" id="procesarButton-1" onclick="processText()">Procesar texto</button>
+        </div>
+    </div>
+    <div class="center-section-1" id="count-section-1"></div>
+    <div class="right-section-1" id="network-1"></div>
+</div>
+
+<div class="container-2">
+    <div class="left-section-bottom">
+        <textarea id="text-2" name="text-2" placeholder="Escribe la nueva versión de tu texto"></textarea>
+        <button type="button" id="procesarButton-2" onclick="processTextUpdate()">Procesar texto</button>
+    </div>
+    <div class="center-section-2" id="count-section-2"></div>
+    <div class="right-section-2" id="network-2"></div>
+</div>
+</div>
+	  
+  <div class="footer">
+        <p>AIdeaText is a project aimed at learning writing through the visualization
+        of semantic maps. Contact: hello [at] aideatext [dot] ai 
+        &copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </p>
+  </div>
+	<script src="assets/js/visualizeGraph-v11.js"></script>
+  </body>
+</html> 
