@@ -146,33 +146,33 @@ function visualizeSyntax(syntaxData, countContainer) {
  * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
  */
 function visualizeSemantic(entities, craData, networkContainer) {
-    clearContainer(networkContainer);
+   // clearContainer(networkContainer);
 
-    const entityList = document.createElement('ul');
+   // const entityList = document.createElement('ul');
 
-    entities.forEach(entity => {
-        const listItem = document.createElement('li');
-        listItem.textContent = entity;
-        entityList.appendChild(listItem);
-    });
+    // entities.forEach(entity => {
+    //    const listItem = document.createElement('li');
+    //    listItem.textContent = entity;
+    //    entityList.appendChild(listItem);
+    // });
 
-    networkContainer.appendChild(entityList);
+    // networkContainer.appendChild(entityList);
 
-    console.log("Datos de CRA:", craData);
+    // console.log("Datos de CRA:", craData);
 
     // Se agrega una validación para asegurar que craData sea un array
-    if (!Array.isArray(craData)) {
-        console.error("craData debe ser un array");
-        return;
-    }
+    //if (!Array.isArray(craData)) {
+    //    console.error("craData debe ser un array");
+    //    return;
+   // }
 
     // Se verifica si craData está vacío antes de llamar a visualizeCRA
-    if (craData.length === 0) {
-        console.error("craData no puede estar vacío");
-        return;
-    }
+    //if (craData.length === 0) {
+    //    console.error("craData no puede estar vacío");
+    //    return;
+    //}
 
-    visualizeCRA(craData, networkContainer);
+    //visualizeCRA(craData, networkContainer);
 }
 
 /**
@@ -181,45 +181,45 @@ function visualizeSemantic(entities, craData, networkContainer) {
  * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
  */
 function visualizeCRA(craData, networkContainer) {
-    clearContainer(networkContainer);
+    //clearContainer(networkContainer);
 
-    const width = 1200;
-    const height = 800;
-    const svg = d3.select(networkContainer).append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    //const width = 1200;
+    //const height = 800;
+    //const svg = d3.select(networkContainer).append("svg")
+    //    .attr("width", width)
+    //    .attr("height", height);
 
-    const scaleNodeSize = d3.scaleLinear()
-        .domain([0, d3.max(craData.map(node => node.weight))])
-        .range([5, 30]);
+    //const scaleNodeSize = d3.scaleLinear()
+    //    .domain([0, d3.max(craData.map(node => node.weight))])
+    //    .range([5, 30]);
 
-    const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
+    //const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
 
-    const simulation = d3.forceSimulation(nodes)
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+    //const simulation = d3.forceSimulation(nodes)
+    //    .force("charge", d3.forceManyBody())
+    //    .force("center", d3.forceCenter(width / 2, height / 2));
 
-    const node = svg.selectAll("circle")
-        .data(nodes)
-        .enter().append("circle")
-        .attr("r", d => d.size)
-        .attr("fill", "#66ccff");
+    //const node = svg.selectAll("circle")
+    //    .data(nodes)
+    //    .enter().append("circle")
+    //    .attr("r", d => d.size)
+    //    .attr("fill", "#66ccff");
 
-    const text = svg.selectAll("text")
-        .data(nodes)
-        .enter().append("text")
-        .text(d => d.id)
-        .attr("x", 8)
-        .attr("y", "0.31em");
+    //const text = svg.selectAll("text")
+    //    .data(nodes)
+    //    .enter().append("text")
+    //    .text(d => d.id)
+    //    .attr("x", 8)
+    //    .attr("y", "0.31em");
 
-    simulation.on("tick", () => {
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-        text
-            .attr("x", d => d.x + 10)
-            .attr("y", d => d.y);
-    });
+    //simulation.on("tick", () => {
+    //    node
+    //        .attr("cx", d => d.x)
+    //        .attr("cy", d => d.y);
+    //    text
+    //        .attr("x", d => d.x + 10)
+    //        .attr("y", d => d.y);
+    //}); 
 }
 
 
