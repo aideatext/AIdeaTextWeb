@@ -17,18 +17,13 @@ body, html {
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
 }
 
-/* Contenedor-1 */
-.container-1 {
-    display: flex;
-    flex-direction: row; /* Los elementos hijos se apilarán horizontalmente */
-    flex: 1; /* El contenedor-1 ocupará todo el espacio disponible */
-}
-
-/* Contenedor-2 */
+/* Contenedor-1 y Contenedor-2 */
+.container-1,
 .container-2 {
     display: flex;
-    flex-direction: row; /* Los elementos hijos se apilarán horizontalmente */
-    flex: 1; /* El contenedor-2 ocupará todo el espacio disponible */
+    flex-direction: row;
+    flex: 1;
+    overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
 }
 
 /* Áreas de sección */
@@ -43,6 +38,12 @@ body, html {
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
+}
+
+/* Establece un tamaño máximo para el grafo */
+#network-1,
+#network-2 {
+    max-width: 50%; /* Por ejemplo, establece un tamaño máximo del 50% del contenedor */
 }
 
 /* Botón de procesamiento */
