@@ -103,6 +103,7 @@ function visualizeData(data) {
 
     if (data.syntax) {
         visualizeSyntax(data.syntax, countContainer);
+        console.log("datos de análisis sintáctico recibidos:", data.syntax); // Agregar esta línea para imprimir los datos de cra en la consola
     }
 
     //if (data.entities) {
@@ -125,7 +126,15 @@ function visualizeSyntax(syntaxData, countContainer) {
         return;
     }
 
-    console.log("Datos de análisis sintáctico recibidos:", syntaxData);
+    // console.log("Datos de análisis sintáctico recibidos:", syntaxData);
+
+    // Accede a las propiedades del objeto syntaxData
+    const { nodes, edges, pos_count } = syntaxData;
+
+    // Verifica la estructura de los datos accediendo a las propiedades individualmente o imprimiendo syntaxData en la consola
+    console.log("Nodos:", nodes);
+    console.log("Edges:", edges);
+    console.log("Conteo de partes del discurso:", pos_count);
 
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
