@@ -80,6 +80,22 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Conteo de palabras por función gramatical
     const wordCountByPOS = syntaxData.pos_count;
 
+    // Palabras por categoría gramatical
+    const POSLabels = {
+        det: 'determinante',
+        noun: 'sustantivo',
+        verb: 'verbo',
+        adj: 'adjetivo',
+        adv: 'adverbio',
+        adp: 'preposición',
+        conj: 'conjunción',
+        num: 'número',
+        pron: 'pronombre',
+        propn: 'nombre propio',
+        punct: 'puntuación',
+        sconj: 'conjunción subordinante'
+    };
+
     // Verificar si wordCountByPOS está definido correctamente
     if (!wordCountByPOS || typeof wordCountByPOS !== 'object') {
         console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
@@ -123,10 +139,15 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>Conteo de palabras por función gramatical:</span><br>
     `;
     
-    // Mostrar el recuento de palabras por función gramatical
+ // Mostrar el recuento de palabras por función gramatical y las primeras diez palabras de cada categoría
     Object.entries(wordCountByPOS).forEach(([pos, count]) => {
-        pos = pos.toLowerCase().replace('_', ' ');
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}</span><br>`;
+        const posLabel = POSLabels[pos] || pos;
+        syntaxInfoElement.innerHTML += `<span>[${count}] son ${posLabel}. `;
+        if (syntaxData.pos_words && syntaxData.pos_words[pos]) {
+            syntaxInfoElement.innerHTML += `Las primeras diez palabras: ${syntaxData.pos_words[pos].slice(0, 10).join(', ')}</span><br>`;
+        } else {
+            syntaxInfoElement.innerHTML += `No se encontraron palabras.</span><br>`;
+        }
     });
 
     // Verificar si pos_words está presente en syntaxData
