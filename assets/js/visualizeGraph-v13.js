@@ -8,6 +8,11 @@ async function callComprehendAPI(textInput) {
             },
             body: JSON.stringify({ text: textInput }),
         });
+        
+        if (!response.ok) {
+            throw new Error(`Error al llamar a la API de Comprehend: ${response.status} ${response.statusText}`);
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {
