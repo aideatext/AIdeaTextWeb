@@ -113,7 +113,6 @@ function visualizeData(data) {
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
  */
-
 function visualizeSyntax(syntaxData, countContainer) {
     clearContainer(countContainer);
 
@@ -125,18 +124,62 @@ function visualizeSyntax(syntaxData, countContainer) {
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
 
     const wordCount = syntaxData.nodes.length;
-    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
-    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
+    const posCount = syntaxData.pos_count;
 
-    const sentenceTypes = {
-        simple: syntaxData.pos_count['SIMPLE'] || 0,
-        compound: syntaxData.pos_count['COMPOUND'] || 0,
-        subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
+    // Crear un objeto para almacenar el recuento de palabras por tipo
+    const wordTypeCount = {
+        'Sustantivo (nombre)': posCount['NOUN'] || 0,
+        'Adjetivo': posCount['ADJ'] || 0,
+        'Verbo': posCount['VERB'] || 0,
+        'Adverbio': posCount['ADV'] || 0,
+        'Pronombre': posCount['PRON'] || 0,
+        'Preposición': posCount['ADP'] || 0,
+        'Conjunción': posCount['CCONJ'] || 0,
+        'Interjección': posCount['INTJ'] || 0
     };
 
-    // Aquí se llama a la función getSyntaxElement para obtener el elemento HTML con la información sintáctica
-    const syntaxInfoElement = getSyntaxElement(wordCount, mostCommonWord, leastCommonWord, sentenceTypes, syntaxData.pos_count);
-    countContainer.appendChild(syntaxInfoElement);
+    // Crear un objeto para almacenar las oraciones por tipo
+    const sentenceTypeCount = {
+        'Simple': 0,
+        'Compuesta': 0,
+        'Subordinada': 0
+    };
+
+    // Obtener la lista de oraciones
+    const sentences = syntaxData.edges.map(edge => edge.source);
+
+    // Contar el número de oraciones por tipo
+    sentences.forEach(sentence => {
+        const type = sentence.split(':')[0];
+        sentenceTypeCount[type]++;
+    });
+
+    // Crear elementos HTML para mostrar la información
+    const wordCountElement = document.createElement('p');
+    wordCountElement.textContent = `Este texto tiene un total de ${wordCount} palabras`;
+
+    const wordTypeListElement = document.createElement('ul');
+    for (const [type, count] of Object.entries(wordTypeCount)) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${count} ${type}: [listar los ${type.toLowerCase()}]`;
+        wordTypeListElement.appendChild(listItem);
+    }
+
+    const sentenceCountElement = document.createElement('p');
+    sentenceCountElement.textContent = `Después de oraciones, este texto tiene un total de ${sentences.length} oraciones`;
+
+    const sentenceTypeListElement = document.createElement('ul');
+    for (const [type, count] of Object.entries(sentenceTypeCount)) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${type}: [listar las ${type.toLowerCase()}]`;
+        sentenceTypeListElement.appendChild(listItem);
+    }
+
+    // Agregar los elementos al contenedor
+    countContainer.appendChild(wordCountElement);
+    countContainer.appendChild(wordTypeListElement);
+    countContainer.appendChild(sentenceCountElement);
+    countContainer.appendChild(sentenceTypeListElement);
 }
 
 /**
