@@ -129,41 +129,25 @@ function visualizeSyntax(syntaxData, countContainer) {
     const wordCount = syntaxData.nodes.length;
     const posCount = syntaxData.pos_count;
 
-    // Crear un objeto para almacenar las palabras más comunes por tipo de parte del discurso
-    const topWordsByType = {
-        'Sustantivo (nombre)': [],
-        'Adjetivo': [],
-        'Verbo': [],
-        'Adverbio': [],
-        'Pronombre': [],
-        'Preposición': [],
-        'Conjunción': [],
-        'Interjección': []
-    };
-
-    // Recorrer el objeto posCount para encontrar las palabras más comunes para cada tipo
-    for (const pos in posCount) {
-        if (pos !== 'word_count') {
-            const posName = pos.toLowerCase().replace('_', ' ');
-            const words = posCount[pos];
-            const topWords = Object.entries(words)
-                .sort((a, b) => b[1] - a[1]) // Ordenar por frecuencia descendente
-                .slice(0, 10) // Tomar las primeras 10 palabras más comunes
-                .map(entry => entry[0]); // Obtener solo las palabras
-            topWordsByType[posName] = topWords;
-        }
-    }
-
     // Crear elementos HTML para mostrar la información
     const wordCountElement = document.createElement('p');
     wordCountElement.textContent = `Este texto tiene un total de ${wordCount} palabras`;
 
     const wordTypeListElement = document.createElement('ul');
-    for (const [type, words] of Object.entries(topWordsByType)) {
-        const listItem = document.createElement('li');
-        const topTenWords = words.join(', '); // Concatenamos todas las palabras con una coma
-        listItem.textContent = `${words.length} ${type}: ${topTenWords}`;
-        wordTypeListElement.appendChild(listItem);
+    for (const pos in posCount) {
+        if (pos !== 'word_count') {
+            const posName = pos.toLowerCase().replace('_', ' ');
+            const words = posCount[pos];
+            const topTenWords = Object.entries(words)
+                .sort((a, b) => b[1] - a[1]) // Ordenar por frecuencia descendente
+                .slice(0, 10) // Tomar las primeras 10 palabras más comunes
+                .map(entry => entry[0]); // Obtener solo las palabras
+
+            // Crear un elemento de lista para mostrar las palabras
+            const listItem = document.createElement('li');
+            listItem.textContent = `${posCount[pos]} ${posName}: ${topTenWords.join(', ')}`;
+            wordTypeListElement.appendChild(listItem);
+        }
     }
 
     // Agregar la lista de palabras más comunes por tipo de parte del discurso al contenedor
