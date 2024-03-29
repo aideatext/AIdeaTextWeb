@@ -46,6 +46,7 @@ function visualizeGraph(data) {
 
     if (data.entities) {
         visualizeSemantic(data.entities, data.cra, networkContainer);
+        console.log(data.cra); // Agregar esta línea para imprimir los datos de cra en la consola
     }
 }
 
