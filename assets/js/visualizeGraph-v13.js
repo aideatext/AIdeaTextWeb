@@ -99,6 +99,12 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Conteo de palabras por función gramatical
     const wordCountByPOS = syntaxData.pos_count;
 
+    // Verificar si wordCountByPOS está definido correctamente
+    if (!wordCountByPOS || typeof wordCountByPOS !== 'object') {
+        console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
+        return;
+    }
+
     // Palabras por categoría gramatical
     const POSLabels = {
         det: 'determinante',
@@ -115,32 +121,56 @@ function visualizeSyntax(syntaxData, countContainer) {
         sconj: 'conjunción subordinante'
     };
 
-    // Crear un elemento para mostrar la información de sintaxis
-    const syntaxInfoElement = document.createElement('div');
-    syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span><br>
-    `;
+    // Palabra más común
+    const mostCommonWord = findMostCommonWord(syntaxData.nodes);
 
-    // Mostrar el recuento de palabras por función gramatical y las primeras diez palabras de cada categoría
-    Object.entries(wordCountByPOS).forEach(([pos, count]) => {
-        const posLabel = POSLabels[pos] || pos;
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${posLabel}. `;
-        if (syntaxData.pos_words && syntaxData.pos_words[pos]) {
-            syntaxInfoElement.innerHTML += `Las primeras diez palabras: ${syntaxData.pos_words[pos].slice(0, 10).join(', ')}</span><br>`;
-        } else {
-            syntaxInfoElement.innerHTML += `No se encontraron palabras.</span><br>`;
-        }
-    });
+    // Verificar si mostCommonWord está definido correctamente
+    if (!mostCommonWord || typeof mostCommonWord !== 'object') {
+        console.error("Error: La palabra más común no está definida correctamente.");
+        return;
+    }
 
-    // Obtener el conteo de oraciones
-    const sentenceCount = syntaxData.sentence_count || 0;
+    // Palabra menos común
+    const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
 
+    // Verificar si leastCommonWord está definido correctamente
+    if (!leastCommonWord || typeof leastCommonWord !== 'object') {
+        console.error("Error: La palabra menos común no está definida correctamente.");
+        return;
+    }
+
+        // Obtener el conteo de oraciones
+    const sentenceCount = syntaxData.sentence_count;
+    
     // Identificación de tipos de oraciones
     const sentenceTypes = {
         simple: syntaxData.pos_count['SIMPLE'] || 0,
         compound: syntaxData.pos_count['COMPOUND'] || 0,
         subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
     };
+
+ // Crear un elemento para mostrar la información de sintaxis
+    const syntaxInfoElement = document.createElement('div');
+    syntaxInfoElement.innerHTML = `
+        <span>El texto tiene ${wordCount} palabras.</span><br>
+        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span><br>
+        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span><br>
+        <span>Conteo de palabras por función gramatical:</span><br>
+    `;
+    
+    // Mostrar el recuento de palabras por función gramatical
+    Object.entries(wordCountByPOS).forEach(([pos, count]) => {
+        pos = pos.toLowerCase().replace('_', ' ');
+        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}</span><br>`;
+    });
+
+    // Verificar si pos_words está presente en syntaxData
+    if (syntaxData.pos_words) {
+        // Mostrar las diez primeras palabras por cada categoría gramatical
+        Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
+            syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
+        });
+    }
 
     // Mostrar información sobre oraciones
     syntaxInfoElement.innerHTML += `
@@ -149,13 +179,16 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span><br>
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span><br>
     `;
-
+    
     countContainer.appendChild(syntaxInfoElement);
 }
 
-
-
-
+    
+/**
+ * Visualiza el análisis semántico proporcionado por Amazon Comprehend.
+ * @param {Object} syntaxData - Los datos de análisis semántico.
+ * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
+ */
 
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
