@@ -125,7 +125,6 @@ function visualizeSyntax(syntaxData, countContainer) {
     }
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
-    console.log("Datos de edges:", syntaxData.edges); //Imprimir datos de edges
 
     const wordCount = syntaxData.nodes.length;
     const posCount = syntaxData.pos_count;
@@ -162,7 +161,8 @@ function visualizeSyntax(syntaxData, countContainer) {
     const wordTypeListElement = document.createElement('ul');
     for (const [type, words] of Object.entries(topWordsByType)) {
         const listItem = document.createElement('li');
-        listItem.textContent = `${words.length} ${type}: ${words.join(', ')}`;
+        const topTenWords = words.slice(0, 10).join(', ');
+        listItem.textContent = `${words.length} ${type}: ${topTenWords}`;
         wordTypeListElement.appendChild(listItem);
     }
 
@@ -170,6 +170,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(wordCountElement);
     countContainer.appendChild(wordTypeListElement);
 }
+
 
 /**
  * Visualiza el análisis semántico.
