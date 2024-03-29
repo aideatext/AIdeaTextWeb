@@ -11,7 +11,7 @@ function findMostCommonWord(nodes) {
   }
 
 function processText() {
-    var textInput = document.getElementById("text").value;
+    var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
         return; // Detener la ejecución si el texto está vacío
@@ -36,19 +36,19 @@ function processText() {
 }
 
 function visualizeGraph(data) {
-    const networkContainer = document.getElementById("network");
-    const countContainer = document.getElementById("count-section");
-    networkContainer.innerHTML = '';
-    countContainer.innerHTML = '';
+    const networkContainer = document.getElementById("network-1");
+    const countContainer = document.getElementById("count-section-1");
+    network-1Container.innerHTML = '';
+    count-1Container.innerHTML = '';
 
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSyntax(data.syntax, countContainer);
+        visualizeSyntax(data.syntax, count-1Container);
     }
 
     if (data.entities) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, data.cra, networkContainer);
+        visualizeSemantic(data.entities, data.cra, network-1Container);
     }
 }
 
@@ -99,7 +99,7 @@ function visualizeSyntax(syntaxData, countContainer) {
 
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
-    networkContainer.innerHTML = '';
+    network-1Container.innerHTML = '';
 
     // Creamos un elemento de lista para mostrar las entidades nombradas
     const entityList = document.createElement('ul');
@@ -113,7 +113,7 @@ function visualizeSemantic(entities, craData, networkContainer) {
     });
 
     // Agregamos la lista al contenedor
-    networkContainer.appendChild(entityList);
+    network-1Container.appendChild(entityList);
 
     // Visualizamos los resultados del CRA
     visualizeCRA(craData, networkContainer);
@@ -121,12 +121,12 @@ function visualizeSemantic(entities, craData, networkContainer) {
 
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
-    networkContainer.innerHTML = '';
+    network-1Container.innerHTML = '';
 
     // Configuración del contenedor SVG
     const width = 1200;
     const height = 800;
-    const svg = d3.select(networkContainer).append("svg")
+    const svg = d3.select(network-1Container).append("svg")
         .attr("width", width)
         .attr("height", height);
 
