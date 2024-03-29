@@ -52,25 +52,23 @@ function getSyntaxElement(wordCount, posCount) {
  * Encuentra la palabra más común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
  * @returns {Object} - El nodo más común.
-
+ */
 function findMostCommonWord(nodes) {
     return nodes.reduce((max, node) => {
         return node.frequency > max.frequency ? node : max;
     }, nodes[0]);
 }
- */
 
 /**
  * Encuentra la palabra menos común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
  * @returns {Object} - El nodo menos común.
-
+ */
 function findLeastCommonWord(nodes) {
     return nodes.reduce((min, node) => {
         return node.frequency < min.frequency ? node : min;
     }, nodes[0]);
 }
- */
 
 /**
  * Procesa el texto ingresado.
@@ -105,7 +103,6 @@ function visualizeData(data) {
 
     if (data.syntax) {
         visualizeSyntax(data.syntax, countContainer);
-        console.log("datos de análisis sintáctico recibidos:", data.syntax); // Agregar esta línea para imprimir los datos de cra en la consola
     }
 
     //if (data.entities) {
@@ -118,109 +115,75 @@ function visualizeData(data) {
  * Visualiza el análisis sintáctico.
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
- 
-function visualizeSyntax(syntaxData, countContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    countContainer.innerHTML = '';
-
-    if (!syntaxData || !syntaxData.pos_count) {
-        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
-        return;
-    }
-
-    // Recuento de palabras
-    const wordCount = syntaxData.nodes.length;
-    //const mostCommonWord = findMostCommonWord(syntaxData.nodes);
-    //const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
-
-    // Crear un elemento para mostrar la información de sintaxis
-    const syntaxInfoElement = document.createElement('div');
-    syntaxInfoElement.innerHTML = `
-        <h2>Análisis Sintáctico</h2>
-        <p>Este texto tiene un total de ${wordCount} palabras.</p>
-        <p>Conteo de palabras por función gramatical:</p>
-        // <span>El texto tiene ${wordCount} palabras.</span></br>
-        // <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-        // <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        // <span>Conteo de palabras por función gramatical:</span></br>
-    `;
-
-    // Mostrar el recuento de palabras por función gramatical
-    const posCount = syntaxData.pos_count;
-    const posList = document.createElement('ul');
-    for (const pos in posCount) {
-        const posName = pos.toLowerCase().replace('_', ' ');
-        const listItem = document.createElement('li');
-        listItem.textContent = `[${posCount[pos]}] ${posName}: ${posCount[pos] > 0 ? 'Sí' : 'No'}`;
-        posList.appendChild(listItem);
-    }
-    syntaxInfoElement.appendChild(posList);
-
-    // Almacenar las palabras por categoría gramatical
-    const wordsByCategory = {};
-    syntaxData.nodes.forEach(node => {
-        const category = node.type.toLowerCase();
-        if (!wordsByCategory[category]) {
-            wordsByCategory[category] = [];
-        }
-        wordsByCategory[category].push(node.text);
-    });
-
-    // Mostrar las 10 primeras palabras en cada categoría
-    syntaxInfoElement.innerHTML += "<span>Las 10 primeras palabras en cada categoría son:</span></br>";
-    for (const category in wordsByCategory) {
-        const words = wordsByCategory[category].slice(0, 10).join(', ');
-        syntaxInfoElement.innerHTML += `<span>Top 10 ${category}: ${words}</span></br>`;
-    }
-
-    // Mostrar la información en el contenedor
-    countContainer.appendChild(syntaxInfoElement);
-}
-*/
-
-/**
- * Visualiza el análisis sintáctico.
- * @param {Object} syntaxData - Los datos de análisis sintáctico.
- * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
  */
 function visualizeSyntax(syntaxData, countContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    countContainer.innerHTML = '';
+    clearContainer(countContainer);
 
     if (!syntaxData || !syntaxData.pos_count) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
         return;
     }
 
-    // Recuento de palabras
-    const wordCount = syntaxData.SyntaxTokens.length;
+    console.log("Datos de análisis sintáctico recibidos:", syntaxData);
+    console.log("Edges:", syntaxData.edges);
 
-    // Crear un elemento para mostrar la información de sintaxis
-    const syntaxInfoElement = document.createElement('div');
-    syntaxInfoElement.innerHTML = `
-        <h2>Análisis Sintáctico</h2>
-        <p>Este texto tiene un total de ${wordCount} palabras.</p>
-        <p>Conteo de palabras por función gramatical:</p>
-    `;
+    const wordCount = syntaxData.nodes.length;
+    const posCount = syntaxData.pos_count;
 
-    // Mostrar el recuento de palabras por función gramatical
-    const posCount = {};
-    syntaxData.SyntaxTokens.forEach(token => {
-        const pos = token.PartOfSpeech.Tag;
-        posCount[pos] = posCount[pos] ? posCount[pos] + 1 : 1;
+    // Crear un objeto para almacenar el recuento de palabras por tipo
+    const wordTypeCount = {
+        'Sustantivo (nombre)': posCount['NOUN'] || 0,
+        'Adjetivo': posCount['ADJ'] || 0,
+        'Verbo': posCount['VERB'] || 0,
+        'Adverbio': posCount['ADV'] || 0,
+        'Pronombre': posCount['PRON'] || 0,
+        'Preposición': posCount['ADP'] || 0,
+        'Conjunción': posCount['CCONJ'] || 0,
+        'Interjección': posCount['INTJ'] || 0
+    };
+
+    // Crear un objeto para almacenar las oraciones por tipo
+    const sentenceTypeCount = {
+        'Simple': 0,
+        'Compuesta': 0,
+        'Subordinada': 0
+    };
+
+    // Obtener la lista de oraciones
+    const sentences = syntaxData.edges.map(edge => edge.source);
+
+    // Contar el número de oraciones por tipo
+    sentences.forEach(sentence => {
+        const type = sentence.split(':')[0];
+        sentenceTypeCount[type]++;
     });
 
-    const posList = document.createElement('ul');
-    for (const pos in posCount) {
-        const posName = pos.toLowerCase();
-        const listItem = document.createElement('li');
-        listItem.textContent = `[${posCount[pos]}] ${posName}: ${posCount[pos] > 0 ? 'Sí' : 'No'}`;
-        posList.appendChild(listItem);
-    }
-    syntaxInfoElement.appendChild(posList);
+    // Crear elementos HTML para mostrar la información
+    const wordCountElement = document.createElement('p');
+    wordCountElement.textContent = `Este texto tiene un total de ${wordCount} palabras`;
 
-    // Mostrar la información en el contenedor
-    countContainer.appendChild(syntaxInfoElement);
+    const wordTypeListElement = document.createElement('ul');
+    for (const [type, count] of Object.entries(wordTypeCount)) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${count} ${type}: [listar los ${type.toLowerCase()}]`;
+        wordTypeListElement.appendChild(listItem);
+    }
+
+    const sentenceCountElement = document.createElement('p');
+    sentenceCountElement.textContent = `Después de oraciones, este texto tiene un total de ${sentences.length} oraciones`;
+
+    const sentenceTypeListElement = document.createElement('ul');
+    for (const [type, count] of Object.entries(sentenceTypeCount)) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${type}: [listar las ${type.toLowerCase()}]`;
+        sentenceTypeListElement.appendChild(listItem);
+    }
+
+    // Agregar los elementos al contenedor
+    countContainer.appendChild(wordCountElement);
+    countContainer.appendChild(wordTypeListElement);
+    countContainer.appendChild(sentenceCountElement);
+    countContainer.appendChild(sentenceTypeListElement);
 }
 
 /**
@@ -303,7 +266,7 @@ function visualizeCRA(craData, networkContainer) {
     //    text
     //        .attr("x", d => d.x + 10)
     //        .attr("y", d => d.y);
-    //});
+    //}); 
 }
 
 
