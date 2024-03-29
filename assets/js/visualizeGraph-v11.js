@@ -163,6 +163,7 @@ function visualizeSyntax(syntaxData, countContainer) {
         return;
     }
 
+/**
     // Obtener el conteo de oraciones
     const sentenceCount = syntaxData.sentence_count;
     
@@ -172,7 +173,8 @@ function visualizeSyntax(syntaxData, countContainer) {
         compound: syntaxData.pos_count['COMPOUND'] || 0,
         subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
     };
-
+ */
+    
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
@@ -201,14 +203,17 @@ function visualizeSyntax(syntaxData, countContainer) {
         });
     }
 
+/**
     // Mostrar información sobre oraciones
     syntaxInfoElement.innerHTML += `
         <span>El texto tiene ${sentenceCount} oraciones. De las cuales:</span><br>
         <span>${sentenceTypes.simple} son oraciones simples.</span><br>
         <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span><br>
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span><br>
-    `;
     
+    `; 
+*/
+
     countContainer.appendChild(syntaxInfoElement);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
