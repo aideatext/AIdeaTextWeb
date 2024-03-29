@@ -132,8 +132,8 @@ function visualizeSyntax(syntaxData, countContainer) {
         sconj: 'Conjunción subordinante'
     };
 
-    // Verificar si wordCountByPOS está definido correctamente
-    if (!wordCountByPOS || typeof wordCountByPOS !== 'object') {
+    // Verificar si syntaxData.pos_count está definido correctamente
+    if (!syntaxData.pos_count || typeof syntaxData.pos_count !== 'object') {
         console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
         return;
     }
