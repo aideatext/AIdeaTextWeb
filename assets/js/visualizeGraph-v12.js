@@ -52,23 +52,25 @@ function getSyntaxElement(wordCount, posCount) {
  * Encuentra la palabra más común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
  * @returns {Object} - El nodo más común.
- */
+
 function findMostCommonWord(nodes) {
     return nodes.reduce((max, node) => {
         return node.frequency > max.frequency ? node : max;
     }, nodes[0]);
 }
+ */
 
 /**
  * Encuentra la palabra menos común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
  * @returns {Object} - El nodo menos común.
- */
+
 function findLeastCommonWord(nodes) {
     return nodes.reduce((min, node) => {
         return node.frequency < min.frequency ? node : min;
     }, nodes[0]);
 }
+ */
 
 /**
  * Procesa el texto ingresado.
