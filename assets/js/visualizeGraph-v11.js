@@ -63,17 +63,46 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
 
+    if (!syntaxData.nodes) {
+        console.error("Error: No se encontraron nodos de análisis sintáctico.");
+        return;
+    }
+
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
+
+    // Verificar si syntaxData.pos_count está definido correctamente
+    if (!syntaxData.pos_count || typeof syntaxData.pos_count !== 'object') {
+        console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
+        return;
+    }
 
     // Conteo de palabras por función gramatical
     const wordCountByPOS = syntaxData.pos_count;
 
+    // Verificar si wordCountByPOS está definido correctamente
+    if (!wordCountByPOS || typeof wordCountByPOS !== 'object') {
+        console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
+        return;
+    }
+
     // Palabra más común
     const mostCommonWord = findMostCommonWord(syntaxData.nodes);
 
+    // Verificar si mostCommonWord está definido correctamente
+    if (!mostCommonWord || typeof mostCommonWord !== 'object') {
+        console.error("Error: La palabra más común no está definida correctamente.");
+        return;
+    }
+
     // Palabra menos común
     const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
+
+    // Verificar si leastCommonWord está definido correctamente
+    if (!leastCommonWord || typeof leastCommonWord !== 'object') {
+        console.error("Error: La palabra menos común no está definida correctamente.");
+        return;
+    }
 
     // Obtener el conteo de oraciones
     const sentenceCount = syntaxData.sentence_count;
