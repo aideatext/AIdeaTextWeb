@@ -1,4 +1,3 @@
-// Añade esta función para llamar a la API de Comprehend desde el frontend
 /**
  * Llama a la API para procesar el texto.
  * @param {string} textInput - El texto a procesar.
@@ -13,6 +12,14 @@ function callAPI(textInput) {
         body: JSON.stringify({ text: textInput }),
     })
     .then(response => response.json());
+}
+
+/**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
 }
 
 // Modifica la función processText para que llame a la nueva función de la API de Comprehend
