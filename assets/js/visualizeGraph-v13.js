@@ -14,7 +14,7 @@ async function callComprehendAPI(textInput) {
         }
 
         const data = await response.json();
-        return data;
+        return { syntax: data }; // Envuelve los datos del análisis sintáctico en una propiedad "syntax"
     } catch (error) {
         console.error('Error al llamar a la API de Comprehend:', error);
         throw error;
