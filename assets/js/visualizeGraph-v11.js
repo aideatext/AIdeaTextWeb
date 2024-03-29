@@ -57,17 +57,27 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.innerHTML = '';
 
     if (!syntaxData || !syntaxData.pos_count) {
-    console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
-    return;
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
     }
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
 
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
+
+    // Conteo de palabras por función gramatical
+    const wordCountByPOS = syntaxData.pos_count;
+
+    // Palabra más común
     const mostCommonWord = findMostCommonWord(syntaxData.nodes);
+
+    // Palabra menos común
     const leastCommonWord = findLeastCommonWord(syntaxData.nodes);
 
+    // Obtener el conteo de oraciones
+    const sentenceCount = syntaxData.sentence_count;
+    
     // Identificación de tipos de oraciones
     const sentenceTypes = {
         simple: syntaxData.pos_count['SIMPLE'] || 0,
@@ -78,25 +88,34 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span></br>
-        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        <span>El texto tiene ${wordCount} oraciones. De las cuales:</span></br>
-        <span>${sentenceTypes.simple} son oraciones simples.</span></br>
-        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
-        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
+        <span>El texto tiene ${wordCount} palabras.</span><br>
+        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span><br>
+        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span><br>
+        <span>Conteo de palabras por función gramatical:</span><br>
     `;
-
+    
     // Mostrar el recuento de palabras por función gramatical
-    syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
-    Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
-        pos = pos.toLowerCase().replace('_', ' '); // Convertir a minúsculas y reemplazar guiones bajos
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
+    Object.entries(wordCountByPOS).forEach(([pos, count]) => {
+        pos = pos.toLowerCase().replace('_', ' ');
+        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}</span><br>`;
     });
-
+    
+    // Mostrar las diez primeras palabras por cada categoría gramatical
+    Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
+        syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
+    });
+    
+    // Mostrar información sobre oraciones
+    syntaxInfoElement.innerHTML += `
+        <span>El texto tiene ${sentenceCount} oraciones. De las cuales:</span><br>
+        <span>${sentenceTypes.simple} son oraciones simples.</span><br>
+        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span><br>
+        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span><br>
+    `;
+    
     countContainer.appendChild(syntaxInfoElement);
-}
-
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
