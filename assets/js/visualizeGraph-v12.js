@@ -113,11 +113,6 @@ function visualizeData(data) {
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
  */
-/**
- * Visualiza el análisis sintáctico.
- * @param {Object} syntaxData - Los datos de análisis sintáctico.
- * @param {HTMLElement} countContainer - El contenedor para mostrar la información de sintaxis.
- */
 
 function visualizeSyntax(syntaxData, countContainer) {
     clearContainer(countContainer);
