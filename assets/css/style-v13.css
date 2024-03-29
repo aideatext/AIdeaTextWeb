@@ -95,7 +95,7 @@ body, html {
 
 /* Contenedor del grafo */
 #count-section {
-    height: 25%; /* Altura del 25% */
+    height: 100%; /* Altura del 25% */
     border: 1px solid #ccc;
     display: flex;
     justify-content: center; /* Centrar contenido horizontalmente */
