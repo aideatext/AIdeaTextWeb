@@ -130,7 +130,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     const wordCount = syntaxData.nodes.length;
     const posCount = syntaxData.pos_count;
 
-    // Crear un objeto para almacenar el recuento de palabras por tipo
+    // Crear un objeto para almacenar el recuento de palabras por tipo de parte del discurso
     const wordTypeCount = {
         'Sustantivo (nombre)': posCount['NOUN'] || 0,
         'Adjetivo': posCount['ADJ'] || 0,
@@ -141,33 +141,6 @@ function visualizeSyntax(syntaxData, countContainer) {
         'Conjunción': posCount['CCONJ'] || 0,
         'Interjección': posCount['INTJ'] || 0
     };
-
-    // Crear un objeto para almacenar las oraciones por tipo
-    const sentenceTypeCount = {
-        'Simple': 0,
-        'Compuesta': 0,
-        'Subordinada': 0
-    };
-
-    // Aquí colocas el código para imprimir los datos de edges
-
-    syntaxData.edges.forEach(edge => {
-        const sentence = edge.sentence; // Suponiendo que el objeto en edges tiene una propiedad 'sentence'
-        console.log(sentence); // Imprime la oración para verificar que se está obteniendo correctamente
-        const type = sentence.split(':')[0].trim(); // Asegúrate de eliminar espacios en blanco
-        sentenceTypeCount[type]++;
-    });
-
-    // Obtener la lista de oraciones
-    const sentences = syntaxData.edges.map(edge => edge.source);
-
-    // Contar el número de oraciones por tipo
-    sentences.forEach(sentence => {
-        console.log(sentence); // Imprime el valor de sentence en la consola
-        const type = sentence.split(':')[0].trim(); // Asegúrate de eliminar espacios en blanco
-        sentenceTypeCount[type]++;
-        
-    });
 
     // Crear elementos HTML para mostrar la información
     const wordCountElement = document.createElement('p');
@@ -180,21 +153,9 @@ function visualizeSyntax(syntaxData, countContainer) {
         wordTypeListElement.appendChild(listItem);
     }
 
-    const sentenceCountElement = document.createElement('p');
-    sentenceCountElement.textContent = `Después de oraciones, este texto tiene un total de ${sentences.length} oraciones`;
-
-    const sentenceTypeListElement = document.createElement('ul');
-    for (const [type, count] of Object.entries(sentenceTypeCount)) {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${type}: [listar las ${type.toLowerCase()}]`;
-        sentenceTypeListElement.appendChild(listItem);
-    }
-
     // Agregar los elementos al contenedor
     countContainer.appendChild(wordCountElement);
     countContainer.appendChild(wordTypeListElement);
-    countContainer.appendChild(sentenceCountElement);
-    countContainer.appendChild(sentenceTypeListElement);
 }
 
 /**
@@ -277,7 +238,7 @@ function visualizeCRA(craData, networkContainer) {
     //    text
     //        .attr("x", d => d.x + 10)
     //        .attr("y", d => d.y);
-    //}); 
+    //});
 }
 
 
