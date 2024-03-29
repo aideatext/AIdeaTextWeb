@@ -24,22 +24,25 @@ function clearContainer(container) {
  * @param {Object} posCount - Conteo de partes del discurso.
  * @returns {HTMLElement} - El elemento HTML creado.
  */
-function getSyntaxElement(wordCount, mostCommonWord, leastCommonWord, sentenceTypes, posCount) {
+function getSyntaxElement(wordCount, posCount) {
     const syntaxElement = document.createElement('div');
+
+    // Construir la lista de palabras por tipo de partes del discurso
+    let posList = '';
+    for (const pos in posCount) {
+        if (pos !== 'word_count') {
+            const posName = pos.toLowerCase().replace('_', ' ');
+            posList += `<li>${posCount[pos]} ${posName}: ${posCount[pos]}</li>`;
+        }
+    }
 
     syntaxElement.innerHTML = `
         <h2>Análisis Sintáctico</h2>
-        <p>Número de palabras: ${wordCount}</p>
-        <p>Palabra más común: ${mostCommonWord}</p>
-        <p>Palabra menos común: ${leastCommonWord}</p>
-        <p>Tipo de oraciones:</p>
+        <p>Este texto tiene un total de ${wordCount} palabras.</p>
+        <p>Que se dividen en:</p>
         <ul>
-            <li>Simple: ${sentenceTypes.simple}</li>
-            <li>Compuesta: ${sentenceTypes.compound}</li>
-            <li>Subordinada: ${sentenceTypes.subordinate}</li>
+            ${posList}
         </ul>
-        <p>Conteo de partes del discurso:</p>
-        <pre>${JSON.stringify(posCount, null, 2)}</pre>
     `;
 
     return syntaxElement;
