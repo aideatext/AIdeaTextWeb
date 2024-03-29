@@ -1,19 +1,37 @@
+/**
+ * Obtiene un elemento del DOM por su ID.
+ * @param {string} id - El ID del elemento.
+ * @returns {HTMLElement} - El elemento del DOM.
+ */
 function getContainerElement(id) {
     return document.getElementById(id);
 }
 
+/**
+ * Encuentra la palabra más común en un conjunto de nodos.
+ * @param {Array} nodes - Los nodos a analizar.
+ * @returns {Object} - El nodo más común.
+ */
 function findMostCommonWord(nodes) {
     return nodes.reduce((max, node) => {
-      return node.frequency > max.frequency ? node : max;
+        return node.frequency > max.frequency ? node : max;
     }, nodes[0]);
 }
 
+/**
+ * Encuentra la palabra menos común en un conjunto de nodos.
+ * @param {Array} nodes - Los nodos a analizar.
+ * @returns {Object} - El nodo menos común.
+ */
 function findLeastCommonWord(nodes) {
     return nodes.reduce((min, node) => {
-      return node.frequency < min.frequency ? node : min;  
+        return node.frequency < min.frequency ? node : min;
     }, nodes[0]);
 }
 
+/**
+ * Procesa el texto ingresado.
+ */
 function processText() {
     const textInput = document.getElementById("text").value.trim();
     if (!textInput) {
@@ -21,24 +39,22 @@ function processText() {
         return;
     }
 
-    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: textInput }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Datos recibidos del backend:", data);
-        visualizeGraph(data);
-    })
-    .catch(error => {
-        console.error("Error al procesar el texto:", error)
-    });
+    // Realiza la llamada a la API para procesar el texto
+    callAPI(textInput)
+        .then(data => {
+            console.log("Datos recibidos del backend:", data);
+            visualizeData(data);
+        })
+        .catch(error => {
+            console.error("Error al procesar el texto:", error)
+        });
 }
 
-function visualizeGraph(data) {
+/**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} data - Los datos recibidos del backend.
+ */
+function visualizeData(data) {
     const networkContainer = getContainerElement("network");
     const countContainer = getContainerElement("count-section");
     clearContainer(networkContainer);
@@ -54,6 +70,11 @@ function visualizeGraph(data) {
     }
 }
 
+/**
+ * Visualiza el análisis sintáctico.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
+ */
 function visualizeSyntax(syntaxData, countContainer) {
     clearContainer(countContainer);
 
@@ -78,6 +99,12 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(syntaxInfoElement);
 }
 
+/**
+ * Visualiza el análisis semántico.
+ * @param {Array} entities - Las entidades detectadas en el texto.
+ * @param {Object} craData - Los datos de análisis CRA.
+ * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+ */
 function visualizeSemantic(entities, craData, networkContainer) {
     clearContainer(networkContainer);
 
@@ -90,11 +117,9 @@ function visualizeSemantic(entities, craData, networkContainer) {
     });
 
     networkContainer.appendChild(entityList);
-    
-    // Agregar console.log para inspeccionar craData
+
     console.log("Datos de CRA:", craData);
 
-    // Verificar si craData es un array antes de llamar a visualizeCRA
     if (!Array.isArray(craData)) {
         console.error("craData debe ser un array");
         return;
@@ -103,22 +128,11 @@ function visualizeSemantic(entities, craData, networkContainer) {
     visualizeCRA(craData, networkContainer);
 }
 
-function visualizeGraph(data) {
-    const networkContainer = getContainerElement("network");
-    const countContainer = getContainerElement("count-section");
-    clearContainer(networkContainer);
-    clearContainer(countContainer);
-
-    if (data.syntax) {
-        visualizeSyntax(data.syntax, countContainer);
-    }
-
-    if (data.entities) {
-        console.log(data.cra); // Agregar esta línea para imprimir los datos de cra en la consola
-        visualizeSemantic(data.entities, data.cra, networkContainer);
-    }
-}
-
+/**
+ * Visualiza el análisis CRA.
+ * @param {Array} craData - Los datos de análisis CRA.
+ * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+ */
 function visualizeCRA(craData, networkContainer) {
     clearContainer(networkContainer);
 
@@ -159,4 +173,28 @@ function visualizeCRA(craData, networkContainer) {
             .attr("x", d => d.x + 10)
             .attr("y", d => d.y);
     });
+}
+
+/**
+ * Llama a la API para procesar el texto.
+ * @param {string} textInput - El texto a procesar.
+ * @returns {Promise<Object>} - Una promesa que resuelve con los datos procesados.
+ */
+function callAPI(textInput) {
+    return fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: textInput }),
+    })
+    .then(response => response.json());
+}
+
+/**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
 }
