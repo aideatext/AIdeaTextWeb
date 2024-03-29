@@ -122,7 +122,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Conteo de palabras por función gramatical
     const wordCountByPOS = syntaxData.pos_count;
 
-    // Palabras por categoría gramatical
+    // Palabras por función gramatical
     const POSLabels = {
         det: 'determinante',
         noun: 'sustantivo',
@@ -162,18 +162,6 @@ function visualizeSyntax(syntaxData, countContainer) {
         return;
     }
 
-/**
-    // Obtener el conteo de oraciones
-    const sentenceCount = syntaxData.sentence_count;
-    
-    // Identificación de tipos de oraciones
-    const sentenceTypes = {
-        simple: syntaxData.pos_count['SIMPLE'] || 0,
-        compound: syntaxData.pos_count['COMPOUND'] || 0,
-        subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
-    };
- */
-    
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
@@ -191,99 +179,91 @@ function visualizeSyntax(syntaxData, countContainer) {
             syntaxInfoElement.innerHTML += `<span> - Palabras: ${syntaxData.nodes.filter(node => node.pos === pos).slice(0, 10).map(node => node.text).join(', ')}</span><br>`;
         }
     }
-
-        // Verificar si pos_words está presente en syntaxData
-        if (syntaxData.pos_words) {
-            // Mostrar las diez primeras palabras por cada categoría gramatical
-            Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
-                syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
-            });
-        } else {
-            console.error("Error: No se encontraron palabras por categoría gramatical.");
-        }
-
-    countContainer.appendChild(syntaxInfoElement);   
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * Visualiza el análisis semántico.
- * @param {Array} entities - Las entidades detectadas en el texto.
- * @param {Object} craData - Los datos de análisis CRA.
- * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
- */
 
-function visualizeSemantic(entities, craData, networkContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+    // Agregar el elemento de información de sintaxis al contenedor
+        countContainer.appendChild(syntaxInfoElement);
+    }
 
-    // Creamos un elemento de lista para mostrar las entidades nombradas
-    const entityList = document.createElement('ul');
+    /**
+     * Visualiza el análisis semántico.
+     * @param {Array} entities - Las entidades detectadas en el texto.
+     * @param {Object} craData - Los datos de análisis CRA.
+     * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+     */
+    function visualizeSemantic(entities, craData, networkContainer) {
+        // Limpiamos el contenedor antes de mostrar los resultados
+        networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
 
-    // Recorremos las entidades encontradas en el análisis semántico
-    entities.forEach(entity => {
-        // Creamos un elemento de lista para cada entidad
-        const listItem = document.createElement('li');
-        listItem.textContent = entity;
-        entityList.appendChild(listItem);
-    });
+        // Creamos un elemento de lista para mostrar las entidades nombradas
+        const entityList = document.createElement('ul');
 
-    // Agregamos la lista al contenedor
-    networkContainer.appendChild(entityList);
+        // Recorremos las entidades encontradas en el análisis semántico
+        entities.forEach(entity => {
+            // Creamos un elemento de lista para cada entidad
+            const listItem = document.createElement('li');
+            listItem.textContent = entity;
+            entityList.appendChild(listItem);
+        });
 
-    // Visualizamos los resultados del CRA
-    visualizeCRA(craData, networkContainer);
-}
+        // Agregamos la lista al contenedor
+        networkContainer.appendChild(entityList);
 
-/**
- * Visualiza el análisis CRA.
- * @param {Array} craData - Los datos de análisis CRA.
- * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
- */
-function visualizeCRA(craData, networkContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+        // Visualizamos los resultados del CRA
+        visualizeCRA(craData, networkContainer);
+    }
 
-    // Configuración del contenedor SVG
-    const width = 1200;
-    const height = 800;
-    const svg = d3.select(networkContainer).append("svg") // Corregido de network-1Container a networkContainer
-        .attr("width", width)
-        .attr("height", height);
+    /**
+     * Visualiza el análisis CRA.
+     * @param {Array} craData - Los datos de análisis CRA.
+     * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+     */
+    function visualizeCRA(craData, networkContainer) {
+        // Limpiamos el contenedor antes de mostrar los resultados
+        networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
 
-    // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
-    const scaleNodeSize = d3.scaleLinear()
-        .domain([0, d3.max(craData.map(node => node.weight))])
-        .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
+        // Configuración del contenedor SVG
+        const width = 1200;
+        const height = 800;
+        const svg = d3.select(networkContainer).append("svg") // Corregido de network-1Container a networkContainer
+            .attr("width", width)
+            .attr("height", height);
 
-    // Creamos los nodos y los enlaces basados en los datos del CRA
-    const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
+        // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
+        const scaleNodeSize = d3.scaleLinear()
+            .domain([0, d3.max(craData.map(node => node.weight))])
+            .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
 
-    // Creamos la simulación de fuerzas
-    const simulation = d3.forceSimulation(nodes)
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+        // Creamos los nodos y los enlaces basados en los datos del CRA
+        const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
 
-    // Dibujamos los nodos
-    const node = svg.selectAll("circle")
-        .data(nodes)
-        .enter().append("circle")
-        .attr("r", d => d.size)
-        .attr("fill", "#66ccff"); // Color azul para los nodos
+        // Creamos la simulación de fuerzas
+        const simulation = d3.forceSimulation(nodes)
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width / 2, height / 2));
 
-    // Etiquetas de texto para los nodos
-    const text = svg.selectAll("text")
-        .data(nodes)
-        .enter().append("text")
-        .text(d => d.id)
-        .attr("x", 8)
-        .attr("y", "0.31em");
+        // Dibujamos los nodos
+        const node = svg.selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("r", d => d.size)
+            .attr("fill", "#66ccff"); // Color azul para los nodos
 
-    // Actualizamos la posición de los elementos en cada paso de la simulación
-    simulation.on("tick", () => {
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-        text
-            .attr("x", d => d.x + 10)
-            .attr("y", d => d.y);
-    });
-}
+        // Etiquetas de texto para los nodos
+        const text = svg.selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .text(d => d.id)
+            .attr("x", 8)
+            .attr("y", "0.31em");
+
+        // Actualizamos la posición de los elementos en cada paso de la simulación
+        simulation.on("tick", () => {
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+            text
+                .attr("x", d => d.x + 10)
+                .attr("y", d => d.y);
+        });
+    }
