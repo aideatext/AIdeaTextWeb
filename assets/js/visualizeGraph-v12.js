@@ -87,6 +87,13 @@ function visualizeSemantic(entities, craData, networkContainer) {
 
     networkContainer.appendChild(entityList);
     visualizeCRA(craData, networkContainer);
+
+    // Verificar si craData es un array antes de llamar a visualizeCRA
+    if (Array.isArray(craData)) {
+        visualizeCRA(craData, networkContainer);
+    } else {
+        console.error("Los datos de CRA no tienen el formato adecuado:", craData);
+    }
 }
 
 function visualizeCRA(craData, networkContainer) {
