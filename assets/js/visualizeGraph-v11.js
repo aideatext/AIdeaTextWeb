@@ -184,41 +184,21 @@ function visualizeSyntax(syntaxData, countContainer) {
     `;
     
  // Mostrar el recuento de palabras por función gramatical y las primeras diez palabras de cada categoría
-        for (const pos in wordCountByPOS) {
-        if (wordCountByPOS.hasOwnProperty(pos)) {
-            syntaxInfoElement.innerHTML += `<span>${wordCountByPOS[pos]} ${POSLabels[pos]}.</span><br>`;
+            for (const pos in wordCountByPOS) {
+            if (Object.prototype.hasOwnProperty.call(wordCountByPOS, pos)) {
+                syntaxInfoElement.innerHTML += `<span>${wordCountByPOS[pos]} ${POSLabels[pos]}.</span><br>`;
+            }
         }
-    }
- 
-    Object.entries(wordCountByPOS).forEach(([pos, count]) => {
-        const posLabel = POSLabels[pos] || pos;
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${posLabel}. `;
-        if (syntaxData.pos_words && syntaxData.pos_words[pos]) {
-            syntaxInfoElement.innerHTML += `Las primeras diez palabras: ${syntaxData.pos_words[pos].slice(0, 10).join(', ')}</span><br>`;
+
+        // Verificar si pos_words está presente en syntaxData
+        if (syntaxData.pos_words) {
+            // Mostrar las diez primeras palabras por cada categoría gramatical
+            Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
+                syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
+            });
         } else {
-            syntaxInfoElement.innerHTML += `No se encontraron palabras.</span><br>`;
+            console.error("Error: No se encontraron palabras por categoría gramatical.");
         }
-    });
-    
-
-    // Verificar si pos_words está presente en syntaxData
-    if (syntaxData.pos_words) {
-        // Mostrar las diez primeras palabras por cada categoría gramatical
-        Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
-            syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
-        });
-    }
-
-/**
-    // Mostrar información sobre oraciones
-    syntaxInfoElement.innerHTML += `
-        <span>El texto tiene ${sentenceCount} oraciones. De las cuales:</span><br>
-        <span>${sentenceTypes.simple} son oraciones simples.</span><br>
-        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span><br>
-        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span><br>
-    
-    `; 
-*/
 
     countContainer.appendChild(syntaxInfoElement);
 }
