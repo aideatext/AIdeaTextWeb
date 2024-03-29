@@ -138,7 +138,7 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>El texto tiene ${wordCount} palabras.</span></br>
         <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
         <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        // <span>El texto tiene ${wordCount} oraciones.</span></br>
+        // <span>El texto tiene ${wordSetence} oraciones.</span></br>
     `;
 
     // Mostrar el recuento de palabras por función gramatical
