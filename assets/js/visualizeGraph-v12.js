@@ -1,3 +1,7 @@
+function getContainerElement(id) {
+    return document.getElementById(id);
+}
+
 function findMostCommonWord(nodes) {
     return nodes.reduce((max, node) => {
       return node.frequency > max.frequency ? node : max;
