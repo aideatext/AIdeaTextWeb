@@ -79,19 +79,25 @@ body, html {
     position: fixed;
     left: 10px;
     right: 10px;
-    height: 90px;
-    background-color: #ffffff; /* Ajusta el color de fondo según sea necesario */
+    height: auto; /* Ajusta la altura automáticamente según el contenido */
+    background-color: #ffffff;
     text-align: center;
-    font-family: "Monserrat", sans-serif;
-    max-width: calc(100% - 20px); /* Ancho máximo igual al ancho de la pantalla menos el margen izquierdo y derecho */
-    overflow-x: auto; /* Habilitar desplazamiento horizontal si el contenido del footer es demasiado ancho */
+    font-family: "Montserrat", sans-serif;
 }
 
-.footer-text {
-    font-size: 25px;
-    padding-left: 40px;
-    float: center;
-    word-spacing: 20px;
+.footer-content {
+    display: flex;
+    flex-wrap: wrap; /* Permite que el contenido se envuelva si no cabe en una sola línea */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    max-width: calc(100% - 20px); /* Ancho máximo igual al ancho de la pantalla menos el margen izquierdo y derecho */
+    overflow: hidden; /* Oculta cualquier desbordamiento */
+}
+
+.footer-content p {
+    margin: 0; /* Elimina el margen predeterminado */
+    padding: 5px; /* Añade un pequeño espacio entre los párrafos */
+    white-space: nowrap; /* Evita que el texto se envuelva a la siguiente línea */
 }
 
 /* Estilos para dispositivos móviles */
