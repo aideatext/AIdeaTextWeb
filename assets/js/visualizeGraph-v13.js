@@ -72,57 +72,158 @@ function visualizeData(data) {
  * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
  */
 function visualizeSyntax(syntaxData, countContainer) {
-    clearContainer(countContainer);
+    // Limpiamos el contenedor antes de mostrar los resultados
+    countContainer.innerHTML = '';
 
-    if (!syntaxData || !syntaxData.syntaxTokens) {
+    if (!syntaxData || !syntaxData.pos_count) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
         return;
     }
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
-    
-    const wordCount = syntaxData.syntaxTokens.length;
-    const posCount = {};
 
-    // Contar el número de ocurrencias de cada parte del discurso
-    syntaxData.syntaxTokens.forEach(token => {
-        const pos = token.partOfSpeech.tag;
-        posCount[pos] = posCount[pos] ? posCount[pos] + 1 : 1;
-    });
+    if (!syntaxData.nodes) {
+        console.error("Error: No se encontraron nodos de análisis sintáctico.");
+        return;
+    }
 
-    // Crear un objeto para mapear las abreviaturas de las partes del discurso a nombres legibles
-    const posLabels = {
-        "ADJ": "Adjetivo",
-        "ADP": "Preposición",
-        "ADV": "Adverbio",
-        "CONJ": "Conjunción",
-        "DET": "Determinante",
-        "NOUN": "Sustantivo",
-        "NUM": "Número",
-        "PRON": "Pronombre",
-        "PRT": "Partícula",
-        "VERB": "Verbo",
-        ".": "Puntuación",
-        "X": "Otra"
+    // Recuento de palabras
+    const wordCount = syntaxData.nodes.length;
+
+    // Verificar si syntaxData.pos_count está definido correctamente
+    if (!syntaxData.pos_count || typeof syntaxData.pos_count !== 'object') {
+        console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
+        return;
+    }
+
+    // Conteo de palabras por función gramatical
+    const wordCountByPOS = syntaxData.pos_count;
+
+    // Palabras por categoría gramatical
+    const POSLabels = {
+        det: 'determinante',
+        noun: 'sustantivo',
+        verb: 'verbo',
+        adj: 'adjetivo',
+        adv: 'adverbio',
+        adp: 'preposición',
+        conj: 'conjunción',
+        num: 'número',
+        pron: 'pronombre',
+        propn: 'nombre propio',
+        punct: 'puntuación',
+        sconj: 'conjunción subordinante'
     };
 
-    // Crear elementos HTML para mostrar la información de análisis sintáctico
+    // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <h2>Análisis Sintáctico</h2>
-        <p>Este texto tiene un total de ${wordCount} palabras.</p>
-        <p>Conteo de palabras por función gramatical:</p>
+        <span>El texto tiene ${wordCount} palabras.</span><br>
     `;
 
-    const posList = document.createElement('ul');
-    for (const pos in posCount) {
-        const posName = posLabels[pos] || pos;
-        const listItem = document.createElement('li');
-        listItem.textContent = `${posCount[pos]} ${posName}`;
-        posList.appendChild(listItem);
-    }
-    syntaxInfoElement.appendChild(posList);
+    // Mostrar el recuento de palabras por función gramatical y las primeras diez palabras de cada categoría
+    Object.entries(wordCountByPOS).forEach(([pos, count]) => {
+        const posLabel = POSLabels[pos] || pos;
+        syntaxInfoElement.innerHTML += `<span>[${count}] son ${posLabel}. `;
+        if (syntaxData.pos_words && syntaxData.pos_words[pos]) {
+            syntaxInfoElement.innerHTML += `Las primeras diez palabras: ${syntaxData.pos_words[pos].slice(0, 10).join(', ')}</span><br>`;
+        } else {
+            syntaxInfoElement.innerHTML += `No se encontraron palabras.</span><br>`;
+        }
+    });
 
-    // Mostrar la información en el contenedor
+    // Obtener el conteo de oraciones
+    const sentenceCount = syntaxData.sentence_count || 0;
+
+    // Identificación de tipos de oraciones
+    const sentenceTypes = {
+        simple: syntaxData.pos_count['SIMPLE'] || 0,
+        compound: syntaxData.pos_count['COMPOUND'] || 0,
+        subordinate: syntaxData.pos_count['SUBORDINATE'] || 0
+    };
+
+    // Mostrar información sobre oraciones
+    syntaxInfoElement.innerHTML += `
+        <span>El texto tiene ${sentenceCount} oraciones. De las cuales:</span><br>
+        <span>${sentenceTypes.simple} son oraciones simples.</span><br>
+        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span><br>
+        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span><br>
+    `;
+
     countContainer.appendChild(syntaxInfoElement);
 }
+
+
+function visualizeSemantic(entities, craData, networkContainer) {
+    // Limpiamos el contenedor antes de mostrar los resultados
+    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+
+    // Creamos un elemento de lista para mostrar las entidades nombradas
+    const entityList = document.createElement('ul');
+
+    // Recorremos las entidades encontradas en el análisis semántico
+    entities.forEach(entity => {
+        // Creamos un elemento de lista para cada entidad
+        const listItem = document.createElement('li');
+        listItem.textContent = entity;
+        entityList.appendChild(listItem);
+    });
+
+    // Agregamos la lista al contenedor
+    networkContainer.appendChild(entityList);
+
+    // Visualizamos los resultados del CRA
+    visualizeCRA(craData, networkContainer);
+}
+
+function visualizeCRA(craData, networkContainer) {
+    // Limpiamos el contenedor antes de mostrar los resultados
+    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+
+    // Configuración del contenedor SVG
+    const width = 1200;
+    const height = 800;
+    const svg = d3.select(networkContainer).append("svg") // Corregido de network-1Container a networkContainer
+        .attr("width", width)
+        .attr("height", height);
+
+    // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
+    const scaleNodeSize = d3.scaleLinear()
+        .domain([0, d3.max(craData.map(node => node.weight))])
+        .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
+
+    // Creamos los nodos y los enlaces basados en los datos del CRA
+    const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
+
+    // Creamos la simulación de fuerzas
+    const simulation = d3.forceSimulation(nodes)
+        .force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    // Dibujamos los nodos
+    const node = svg.selectAll("circle")
+        .data(nodes)
+        .enter().append("circle")
+        .attr("r", d => d.size)
+        .attr("fill", "#66ccff"); // Color azul para los nodos
+
+    // Etiquetas de texto para los nodos
+    const text = svg.selectAll("text")
+        .data(nodes)
+        .enter().append("text")
+        .text(d => d.id)
+        .attr("x", 8)
+        .attr("y", "0.31em");
+
+    // Actualizamos la posición de los elementos en cada paso de la simulación
+    simulation.on("tick", () => {
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+        text
+            .attr("x", d => d.x + 10)
+            .attr("y", d => d.y);
+    });
+}
+
+
