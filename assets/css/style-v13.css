@@ -54,15 +54,15 @@ body, html {
     text-align: center;
 }
 
-/* Contenedor */
-.container {
+/* Contenedor-1 */
+.container-1 {
     display: flex;
     width: 100%; /* Ancho del contenedor */
     height: 100%; /* Altura del contenedor */
     margin: 0 auto; /* Centrar el contenedor */
 }
 
-.left-section, .center-section, .right-section {
+.left-section-top, .center-section-1, .right-section-1 {
     flex: 1;
     overflow-y: auto; /* Permite desplazamiento vertical */
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
@@ -70,14 +70,14 @@ body, html {
 }
 
 /* Área de texto fija */
-#text {
+#text-1 {
     width: 100%;
     height: 600px; /* Altura fija */
     border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
 }
 
-#text::placeholder {
+#text-1::placeholder {
     color: #000000; /* Cambia el color del texto del placeholder */
     font-style: italic; /* Estilo de fuente para el placeholder */
     font-size: 14px; /* Tamaño de fuente específico para el placeholder */
@@ -89,26 +89,86 @@ body, html {
 }
 
 /* Estilos para la sección derecha (Visualización del Grafo) */
-.right-section {
+.right-section-1 {
     height: 100%; /* Altura del 100% */
 }
 
 /* Contenedor del grafo */
-#count-section {
+#count-section-1 {
     width: 100%;
     height: 600px; /* Altura fija */
     border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
 }
 
-#network {
+#network-1 {
     width: 100%;
     height: 600px; /* Altura fija */
     border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
 }
 
-#procesarButton {
+#procesarButton-1 {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+
+/* Contenedor-2 */
+.container-2 {
+    display: flex;
+    width: 100%; /* Ancho del contenedor */
+    height: 100%; /* Altura del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+.left-section-bottom, .center-section-2, .right-section-2 {
+    flex: 1;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+}
+
+/* Área de texto fija */
+#text-2 {
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#text-2::placeholder {
+    color: #000000; /* Cambia el color del texto del placeholder */
+    font-style: italic; /* Estilo de fuente para el placeholder */
+    font-size: 14px; /* Tamaño de fuente específico para el placeholder */
+    text-align: justify; /* Alinea el texto del placeholder */
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0;
+    /* Otros estilos que quieras aplicar */
+}
+
+/* Estilos para la sección derecha (Visualización del Grafo) */
+.right-section-2 {
+    height: 100%; /* Altura del 100% */
+}
+
+/* Contenedor del grafo */
+#count-section-2 {
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#network-2 {
+    width: 100%;
+    height: 600px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#procesarButton-2 {
     padding: 10px 20px;
     font-size: 14px;
 }
