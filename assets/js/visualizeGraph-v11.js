@@ -1,14 +1,47 @@
+/**
+ * Obtiene un elemento del DOM por su ID.
+ * @param {string} id - El ID del elemento.
+ * @returns {HTMLElement} - El elemento del DOM.
+ */
+function getContainerElement(id) {
+    return document.getElementById(id);
+}
+
+/**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
+}
+
+
+/**
+ * Encuentra la palabra más común en un conjunto de nodos.
+ * @param {Array} nodes - Los nodos a analizar.
+ * @returns {Object} - El nodo más común.
+ */
 function findMostCommonWord(nodes) {
     return nodes.reduce((max, node) => {
-      return node.frequency > max.frequency ? node : max;
+        return node.frequency > max.frequency ? node : max;
     }, nodes[0]);
 }
-  
+
+
+/**
+ * Encuentra la palabra menos común en un conjunto de nodos.
+ * @param {Array} nodes - Los nodos a analizar.
+ * @returns {Object} - El nodo menos común.
+ */
 function findLeastCommonWord(nodes) {
     return nodes.reduce((min, node) => {
-      return node.frequency < min.frequency ? node : min;  
+        return node.frequency < min.frequency ? node : min;
     }, nodes[0]);
 }
+
+/**
+ * Procesa el texto ingresado.
+ */
 
 function processText() {
     var textInput = document.getElementById("text-1").value;
@@ -35,6 +68,10 @@ function processText() {
     });
 }
 
+/**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} data - Los datos recibidos del backend.
+ */
 function visualizeGraph(data) {
     const networkContainer = document.getElementById("network-1");
     const countContainer = document.getElementById("count-section-1");
@@ -52,6 +89,11 @@ function visualizeGraph(data) {
     }
 }
 
+/**
+ * Visualiza el análisis sintáctico.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
+ */
 function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
@@ -169,6 +211,13 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(syntaxInfoElement);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Visualiza el análisis semántico.
+ * @param {Array} entities - Las entidades detectadas en el texto.
+ * @param {Object} craData - Los datos de análisis CRA.
+ * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+ */
+
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
@@ -191,6 +240,11 @@ function visualizeSemantic(entities, craData, networkContainer) {
     visualizeCRA(craData, networkContainer);
 }
 
+/**
+ * Visualiza el análisis CRA.
+ * @param {Array} craData - Los datos de análisis CRA.
+ * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+ */
 function visualizeCRA(craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
