@@ -125,6 +125,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     }
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
+    console.log("Edges:", syntaxData.edges);
 
     const wordCount = syntaxData.nodes.length;
     const posCount = syntaxData.pos_count;
