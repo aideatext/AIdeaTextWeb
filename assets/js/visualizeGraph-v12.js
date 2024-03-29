@@ -160,13 +160,9 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Mostrar las 10 palabras más comunes en cada categoría
     syntaxInfoElement.innerHTML += "<span>Las 10 palabras más comunes en cada categoría son:</span></br>";
-    Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
-        pos = pos.toLowerCase();
-        // Mostrar solo si hay palabras de esa categoría
-        if (count > 0) {
-            const words = syntaxData.nodes.filter(node => node.type === pos).slice(0, 10).map(node => node.text).join(', ');
-            syntaxInfoElement.innerHTML += `<span>Top 10 ${pos}: ${words}</span></br>`;
-        }
+    Object.entries(wordsByCategory).forEach(([category, words]) => {
+        const topWords = words.slice(0, 10).join(', ');
+        syntaxInfoElement.innerHTML += `<span>Top 10 ${category}: ${topWords}</span></br>`;
     });
 
     countContainer.appendChild(syntaxInfoElement);
