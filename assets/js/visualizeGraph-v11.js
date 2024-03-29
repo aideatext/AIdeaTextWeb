@@ -189,7 +189,7 @@ function visualizeSyntax(syntaxData, countContainer) {
             syntaxInfoElement.innerHTML += `<span>${wordCountByPOS[pos]} ${POSLabels[pos]}.</span><br>`;
         }
     }
- /**
+ 
     Object.entries(wordCountByPOS).forEach(([pos, count]) => {
         const posLabel = POSLabels[pos] || pos;
         syntaxInfoElement.innerHTML += `<span>[${count}] son ${posLabel}. `;
@@ -199,7 +199,7 @@ function visualizeSyntax(syntaxData, countContainer) {
             syntaxInfoElement.innerHTML += `No se encontraron palabras.</span><br>`;
         }
     });
-    */
+    
 
     // Verificar si pos_words está presente en syntaxData
     if (syntaxData.pos_words) {
