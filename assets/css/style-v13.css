@@ -1,55 +1,178 @@
-/* Contenedor principal */
-.main-container {
-    display: flex;
-    flex-direction: column; /* Los contenedores hijos se apilarán verticalmente */
-    height: calc(100% - 120px); /* Altura total menos la altura del footer */
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: "Monserrat", sans-serif;
+    overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
-/* Contenedor-1 y Contenedor-2 */
-.container-1,
-.container-2 {
-    display: flex;
-    flex-direction: column; /* Los elementos hijos se apilarán verticalmente */
-    flex: 1; /* El contenedor ocupará todo el espacio disponible */
-    margin: 10px; /* Espacio entre los contenedores */
+/* Upper section */
+.upper-section {
+    text-align: center;
 }
 
-/* Contenedor de texto y botón */
-.left-section-top,
-.left-section-bottom {
+/* File Operation section */
+.file-operations {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px; /* Espacio entre el área de texto y el botón */
+    align-items: left;
+    margin: 20px 0; /* Ajusta el margen según sea necesario */
 }
 
-/* Área de texto */
-.text-input-section-1 textarea,
-.text-input-section-2 textarea {
-    width: calc(100% - 20px); /* Ancho total menos el padding */
-    height: 200px; /* Altura fija del área de texto */
-    padding: 10px; /* Espacio interno */
-    border: 1px solid #ccc; /* Borde */
-    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
-    margin-bottom: 10px; /* Espacio inferior */
+/* Estilos para las etiquetas de las secciones */
+.section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: left;
 }
 
-/* Botón de procesamiento */
-#procesarButton-1,
-#procesarButton-2 {
+.download-buttons, .upload-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.download-buttons button, .upload-buttons input {
+    width: 30%;
+    padding: 10px;
+    margin: 0 5px;
+}
+
+.upload-file {
+    display: none; /* Oculta el input de tipo file */
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+    width: 29%;
+    text-align: center;
+}
+
+/* Contenedor-1 */
+.container-1 {
+    display: flex;
+    width: 100%; /* Ancho del contenedor */
+    height: 100%; /* Altura del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+.left-section-top, .center-section-1, .right-section-1 {
+    flex: 1;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+}
+
+/* Área de texto fija */
+#text-1 {
     width: 100%;
+    height: 300px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#text-1::placeholder {
+    color: #000000; /* Cambia el color del texto del placeholder */
+    font-style: italic; /* Estilo de fuente para el placeholder */
+    font-size: 14px; /* Tamaño de fuente específico para el placeholder */
+    text-align: justify; /* Alinea el texto del placeholder */
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0;
+    /* Otros estilos que quieras aplicar */
+}
+
+/* Estilos para la sección derecha (Visualización del Grafo) */
+.right-section-1 {
+    height: 50%; /* Altura del 100% */
+}
+
+/* Contenedor del análisis sintáctico */
+#count-section-1 {
+    width: 100%;
+    height: 300px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+/* Contenedor del análisis semántico */
+#network-1 {
+    width: 100%;
+    height: 300px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#procesarButton-1 {
     padding: 10px 20px;
     font-size: 14px;
 }
 
-/* Contenedor del análisis sintáctico y semántico */
-.center-section-1,
-.center-section-2,
-.right-section-1,
+
+/* Contenedor-2 */
+.container-2 {
+    display: flex;
+    width: 100%; /* Ancho del contenedor */
+    height: 100%; /* Altura del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+.left-section-bottom, .center-section-2, .right-section-2 {
+    flex: 1;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+}
+
+/* Área de texto fija */
+#text-2 {
+    width: 100%;
+    height: 300px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#text-2::placeholder {
+    color: #000000; /* Cambia el color del texto del placeholder */
+    font-style: italic; /* Estilo de fuente para el placeholder */
+    font-size: 14px; /* Tamaño de fuente específico para el placeholder */
+    text-align: justify; /* Alinea el texto del placeholder */
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0;
+    /* Otros estilos que quieras aplicar */
+}
+
+/* Estilos para la sección derecha (Visualización del Grafo) */
 .right-section-2 {
-    flex: 1; /* El contenedor ocupará todo el espacio disponible */
-    border: 1px solid #ccc; /* Borde */
-    margin-bottom: 10px; /* Espacio entre los contenedores */
-    overflow: auto; /* Permitir desplazamiento vertical si el contenido es demasiado grande */
+    height: 50%; /* Altura del 100% */
+}
+
+/* Contenedor del análsis sintáctico */
+#count-section-2 {
+    width: 100%;
+    height: 300px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+/* Contenedor del análsis semántico */
+#network-2 {
+    width: 100%;
+    height: 300px; /* Altura fija */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+}
+
+#procesarButton-2 {
+    padding: 10px 20px;
+    font-size: 14px;
 }
 
 /* Footer */
@@ -89,4 +212,3 @@
     #network {
         height: 400px; /* Altura más pequeña para dispositivos móviles */
     }
-}
