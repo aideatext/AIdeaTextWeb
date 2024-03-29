@@ -86,16 +86,32 @@ function visualizeSemantic(entities, craData, networkContainer) {
     });
 
     networkContainer.appendChild(entityList);
-    visualizeCRA(craData, networkContainer);
-
+    
     // Agregar console.log para inspeccionar craData
     console.log("Datos de CRA:", craData);
 
     // Verificar si craData es un array antes de llamar a visualizeCRA
-    if (Array.isArray(craData)) {
-        visualizeCRA(craData, networkContainer);
-    } else {
-        console.error("Los datos de CRA no tienen el formato adecuado:", craData);
+    if (!Array.isArray(craData)) {
+        console.error("craData debe ser un array");
+        return;
+    }
+
+    visualizeCRA(craData, networkContainer);
+}
+
+function visualizeGraph(data) {
+    const networkContainer = getContainerElement("network");
+    const countContainer = getContainerElement("count-section");
+    clearContainer(networkContainer);
+    clearContainer(countContainer);
+
+    if (data.syntax) {
+        visualizeSyntax(data.syntax, countContainer);
+    }
+
+    if (data.entities) {
+        console.log(data.cra); // Agregar esta línea para imprimir los datos de cra en la consola
+        visualizeSemantic(data.entities, data.cra, networkContainer);
     }
 }
 
@@ -139,35 +155,4 @@ function visualizeCRA(craData, networkContainer) {
             .attr("x", d => d.x + 10)
             .attr("y", d => d.y);
     });
-}
-
-// Helper functions
-
-function getContainerElement(id) {
-    return document.getElementById(id);
-}
-
-function clearContainer(container) {
-    container.innerHTML = '';
-}
-
-function getSyntaxElement(wordCount, mostCommonWord, leastCommonWord, sentenceTypes, posCount) {
-    const syntaxInfoElement = document.createElement('div');
-    syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span></br>
-        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        <span>El texto tiene ${wordCount} oraciones. De las cuales:</span></br>
-        <span>${sentenceTypes.simple} son oraciones simples.</span></br>
-        <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
-        <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
-    `;
-
-    syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
-    Object.entries(posCount).forEach(([pos, count]) => {
-        pos = pos.toLowerCase().replace('_', ' ');
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
-    });
-
-    return syntaxInfoElement;
 }
