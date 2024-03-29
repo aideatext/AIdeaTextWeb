@@ -169,18 +169,18 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(syntaxInfoElement);
 
 // Mostrar el conteo de palabras por función gramatical
-Object.keys(syntaxData.pos_count).forEach(pos => {
-    const wordCount = syntaxData.pos_count[pos];
-    const label = POSLabels[pos.toLowerCase()] || pos;
-    const posInfoElement = document.createElement('span');
-    posInfoElement.textContent = `- ${label}: `;
-    const words = syntaxData.nodes.filter(node => node.type.toLowerCase() === pos);
-    words.forEach((word, index) => {
-        posInfoElement.textContent += `${word.text}${index === words.length - 1 ? '' : ', '}`;
+    Object.keys(syntaxData.pos_count).forEach(pos => {
+        const wordCount = syntaxData.pos_count[pos];
+        const label = POSLabels[pos.toLowerCase()] || pos;
+        const posInfoElement = document.createElement('span');
+        posInfoElement.textContent = `- ${label}: `;
+        const words = syntaxData.nodes.filter(node => node.type.toLowerCase() === pos);
+        words.forEach((word, index) => {
+            posInfoElement.textContent += `${word.text}${index === words.length - 1 ? '' : ', '}`;
+        });
+        posInfoElement.textContent += `\n`;
+        countContainer.appendChild(posInfoElement);
     });
-    posInfoElement.textContent += `\n`;
-    countContainer.appendChild(posInfoElement);
-});
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
