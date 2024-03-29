@@ -52,7 +52,7 @@ function visualizeGraph(data) {
     }
 }
 
-function visualizeSyntax(syntaxData, countContainer) {
+unction visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
 
@@ -99,12 +99,15 @@ function visualizeSyntax(syntaxData, countContainer) {
         pos = pos.toLowerCase().replace('_', ' ');
         syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}</span><br>`;
     });
-    
-    // Mostrar las diez primeras palabras por cada categoría gramatical
-    Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
-        syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
-    });
-    
+
+    // Verificar si pos_words está presente en syntaxData
+    if (syntaxData.pos_words) {
+        // Mostrar las diez primeras palabras por cada categoría gramatical
+        Object.entries(syntaxData.pos_words).forEach(([pos, words]) => {
+            syntaxInfoElement.innerHTML += `<span>Las diez primeras palabras de la categoría gramatical "${pos}": ${words.slice(0, 10).join(', ')}</span><br>`;
+        });
+    }
+
     // Mostrar información sobre oraciones
     syntaxInfoElement.innerHTML += `
         <span>El texto tiene ${sentenceCount} oraciones. De las cuales:</span><br>
@@ -114,7 +117,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     `;
     
     countContainer.appendChild(syntaxInfoElement);
-    }
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSemantic(entities, craData, networkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
