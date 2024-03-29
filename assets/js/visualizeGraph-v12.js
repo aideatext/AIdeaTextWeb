@@ -146,7 +146,9 @@ function getSyntaxElement(wordCount, mostCommonWord, leastCommonWord, sentenceTy
         <span>El texto tiene ${wordCount} palabras.</span></br>
         <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
         <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        <span>El texto tiene ${wordCount} oraciones. De las cuales:</span></br>
+        
+        <span>El texto tiene ${wordSetence} oraciones. De las cuales:</span></br>
+        
         <span>${sentenceTypes.simple} son oraciones simples.</span></br>
         <span>${sentenceTypes.compound} son oraciones compuestas con 2 o más verbos.</span></br>
         <span>${sentenceTypes.subordinate} son oraciones subordinadas.</span></br>
