@@ -148,19 +148,22 @@ function visualizeSyntax(syntaxData, countContainer) {
         syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
     });
 
+    // Mostrar el recuento de palabras por función gramatical
+    syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
+    Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
+        pos = pos.toLowerCase().replace('_', ' '); // Convertir a minúsculas y reemplazar guiones bajos
+        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
+    });
+
     // Mostrar las 10 palabras más comunes en cada categoría
     syntaxInfoElement.innerHTML += "<span>Las 10 palabras más comunes en cada categoría son:</span></br>";
     Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
         pos = pos.toLowerCase();
-        // const words = syntaxData.nodes.filter(node => node.type === pos);
-        // const topWords = words.slice(0, 10).map(node => node.text).join(', ');
-        syntaxInfoElement.innerHTML += `<span>Top 10 ${pos}: ${topWords}</span></br>`;
-
-            // Mostrar las 10 palabras más comunes en cada categoría
-            if (count > 0) {
-                const words = syntaxData.nodes.filter(node => node.type === pos).slice(0, 10).map(node => node.text).join(', ');
-                syntaxInfoElement.innerHTML += `<span>Top 10 ${pos}: ${words}</span></br>`;
-            }
+        // Mostrar solo si hay palabras de esa categoría
+        if (count > 0) {
+            const words = syntaxData.nodes.filter(node => node.type === pos).slice(0, 10).map(node => node.text).join(', ');
+            syntaxInfoElement.innerHTML += `<span>Top 10 ${pos}: ${words}</span></br>`;
+        }
     });
 
     countContainer.appendChild(syntaxInfoElement);
