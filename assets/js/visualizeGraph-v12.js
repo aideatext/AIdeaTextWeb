@@ -125,7 +125,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     }
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
-    console.log("Edges:", syntaxData.edges);
+    console.log("Datos de edges:", syntaxData.edges); //Imprimir datos de edges
 
     const wordCount = syntaxData.nodes.length;
     const posCount = syntaxData.pos_count;
@@ -148,6 +148,15 @@ function visualizeSyntax(syntaxData, countContainer) {
         'Compuesta': 0,
         'Subordinada': 0
     };
+
+    // Aquí colocas el código para imprimir los datos de edges
+
+    syntaxData.edges.forEach(edge => {
+        const sentence = edge.sentence; // Suponiendo que el objeto en edges tiene una propiedad 'sentence'
+        console.log(sentence); // Imprime la oración para verificar que se está obteniendo correctamente
+        const type = sentence.split(':')[0].trim(); // Asegúrate de eliminar espacios en blanco
+        sentenceTypeCount[type]++;
+    });
 
     // Obtener la lista de oraciones
     const sentences = syntaxData.edges.map(edge => edge.source);
