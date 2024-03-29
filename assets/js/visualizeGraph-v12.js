@@ -138,15 +138,8 @@ function visualizeSyntax(syntaxData, countContainer) {
         <span>El texto tiene ${wordCount} palabras.</span></br>
         <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
         <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-        <span>El texto tiene ${wordCount} oraciones.</span></br>
+        // <span>El texto tiene ${wordCount} oraciones.</span></br>
     `;
-
-    // Mostrar el recuento de palabras por función gramatical
-    syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
-    Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
-        pos = pos.toLowerCase().replace('_', ' '); // Convertir a minúsculas y reemplazar guiones bajos
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
-    });
 
     // Mostrar el recuento de palabras por función gramatical
     syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
