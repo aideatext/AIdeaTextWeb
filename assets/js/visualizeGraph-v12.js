@@ -126,16 +126,6 @@ function visualizeSyntax(syntaxData, countContainer) {
         return;
     }
 
-    // console.log("Datos de análisis sintáctico recibidos:", syntaxData);
-
-    // Accede a las propiedades del objeto syntaxData
-    const { nodes, edges, pos_count } = syntaxData;
-
-    // Verifica la estructura de los datos accediendo a las propiedades individualmente o imprimiendo syntaxData en la consola
-    console.log("Nodos:", nodes);
-    console.log("Edges:", edges);
-    console.log("Conteo de partes del discurso:", pos_count);
-
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
     const mostCommonWord = findMostCommonWord(syntaxData.nodes);
@@ -144,23 +134,24 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-    <span>El texto tiene ${wordCount} palabras.</span></br>
-    <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
-    <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
-    <span>Conteo de palabras por función gramatical:</span></br>
-    ${posList}
-    <span>Las 10 palabras más comunes en cada categoría son:</span></br>
-    ${topWordsList}
-`;
+        <span>El texto tiene ${wordCount} palabras.</span></br>
+        <span>La palabra que más se repite es: "${mostCommonWord.text}".</span></br>
+        <span>La palabra que menos se repite es: "${leastCommonWord.text}".</span></br>
+        <span>Conteo de palabras por función gramatical:</span></br>
+    `;
 
     // Mostrar el recuento de palabras por función gramatical
-    syntaxInfoElement.innerHTML += "<span>Conteo de palabras por función gramatical:</span></br>";
-    Object.entries(syntaxData.pos_count).forEach(([pos, count]) => {
-        pos = pos.toLowerCase().replace('_', ' '); // Convertir a minúsculas y reemplazar guiones bajos
-        syntaxInfoElement.innerHTML += `<span>[${count}] son ${pos}:</span> ${count > 0 ? 'Sí' : 'No'}</br>`;
-    });
+    const posCount = syntaxData.pos_count;
+    const posList = document.createElement('ul');
+    for (const pos in posCount) {
+        const posName = pos.toLowerCase().replace('_', ' ');
+        const listItem = document.createElement('li');
+        listItem.textContent = `[${posCount[pos]}] ${posName}: ${posCount[pos] > 0 ? 'Sí' : 'No'}`;
+        posList.appendChild(listItem);
+    }
+    syntaxInfoElement.appendChild(posList);
 
-        // Almacenar las palabras por categoría gramatical
+    // Almacenar las palabras por categoría gramatical
     const wordsByCategory = {};
     syntaxData.nodes.forEach(node => {
         const category = node.type.toLowerCase();
@@ -170,15 +161,17 @@ function visualizeSyntax(syntaxData, countContainer) {
         wordsByCategory[category].push(node.text);
     });
 
-    // Mostrar las 10 palabras más comunes en cada categoría
-    syntaxInfoElement.innerHTML += "<span>Las 10 palabras más comunes en cada categoría son:</span></br>";
-    Object.entries(wordsByCategory).forEach(([category, words]) => {
-        const topWords = words.slice(0, 10).join(', ');
-        syntaxInfoElement.innerHTML += `<span>Top 10 ${category}: ${topWords}</span></br>`;
-    });
+    // Mostrar las 10 primeras palabras en cada categoría
+    syntaxInfoElement.innerHTML += "<span>Las 10 primeras palabras en cada categoría son:</span></br>";
+    for (const category in wordsByCategory) {
+        const words = wordsByCategory[category].slice(0, 10).join(', ');
+        syntaxInfoElement.innerHTML += `<span>Top 10 ${category}: ${words}</span></br>`;
+    }
 
+    // Mostrar la información en el contenedor
     countContainer.appendChild(syntaxInfoElement);
 }
+
 
 /**
  * Visualiza el análisis semántico.
