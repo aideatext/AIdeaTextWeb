@@ -137,36 +137,43 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
 
-    // Recuento de palabras
-    const wordCount = syntaxData.nodes.length;
+    // Filtrar palabras, excluyendo signos de puntuación y números
+    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM').map(node => node.text);
 
-    // Obtener la palabra más citada en el texto
-    const mostCommonWordInText = findMostCommonWordInText(syntaxData.nodes.map(node => node.text));
+    // Contar todas las palabras que tienen una función gramatical
+    const wordFrequency = filteredWords.reduce((acc, word) => {
+        acc[word] = (acc[word] || 0) + 1;
+        return acc;
+    }, {});
 
-    // Obtener la palabra menos citada en el texto
-    const leastCommonWordInText = findLeastCommonWordInText(syntaxData.nodes.map(node => node.text));
+    // Calcular el número total de palabras
+    const wordCount = Object.values(wordFrequency).reduce((total, count) => total + count, 0);
 
-    // Crear un objeto para contener las palabras por su función gramatical
-    const wordsByPOS = {};
-
-    // Contar y agrupar las palabras por su función gramatical
-    syntaxData.nodes.forEach(node => {
-        if (wordsByPOS[node.type]) {
-            wordsByPOS[node.type].push(node.text);
-        } else {
-            wordsByPOS[node.type] = [node.text];
-        }
-    });
+    // Obtener la palabra más común y menos común
+    const mostCommonWord = Object.keys(wordFrequency).reduce((a, b) => wordFrequency[a] > wordFrequency[b] ? a : b);
+    const leastCommonWord = Object.keys(wordFrequency).reduce((a, b) => wordFrequency[a] < wordFrequency[b] ? a : b);
 
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
         <span>Número total de palabras: ${wordCount}</span><br>
-        <span>La palabra más citada es: "${mostCommonWordInText}".</span><br>
-        <span>La palabra menos citada es: "${leastCommonWordInText}".</span><br>
+        <span>La palabra más citada es: "${mostCommonWord}".</span><br>
+        <span>La palabra menos citada es: "${leastCommonWord}".</span><br>
         <span>Conteo de palabras por función gramatical:</span><br>`;
 
     // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
+    const wordsByPOS = {};
+
+    syntaxData.nodes.forEach(node => {
+        if (node.type !== 'PUNCT' && node.type !== 'NUM') {
+            if (wordsByPOS[node.type]) {
+                wordsByPOS[node.type].push(node.text);
+            } else {
+                wordsByPOS[node.type] = [node.text];
+            }
+        }
+    });
+
     const POSLabels = {
         adp: 'preposición',
         conj: 'conjunción',
@@ -177,19 +184,13 @@ function visualizeSyntax(syntaxData, countContainer) {
         verb: 'verbo',
         adj: 'adjetivo',
         pron: 'pronombre',
-        propn: 'nombre propio',
-        punct: 'puntuación',
-        num: 'número'
+        propn: 'nombre propio'
     };
 
     for (const pos in wordsByPOS) {
         const count = wordsByPOS[pos].length;
         const words = wordsByPOS[pos].reduce((acc, word) => {
-            if (acc[word]) {
-                acc[word]++;
-            } else {
-                acc[word] = 1;
-            }
+            acc[word] = (acc[word] || 0) + 1;
             return acc;
         }, {});
 
@@ -201,6 +202,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Agregar el elemento de información de sintaxis al contenedor
     countContainer.appendChild(syntaxInfoElement);
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
