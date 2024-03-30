@@ -126,66 +126,40 @@ function visualizeGraph(data) {
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar la información de sintaxis.
  */
-function visualizeSyntax(syntaxData, syntaxNetworkContainer) {
+/**
+ * Visualiza el análisis sintáctico utilizando un treemap.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
+ */
+function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     syntaxNetworkContainer.innerHTML = '';
 
+    // Verificar si hay datos válidos de análisis sintáctico
     if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
         return;
     }
 
-    console.log("Datos de análisis sintáctico recibidos:", syntaxData);
-
     // Filtrar palabras, excluyendo signos de puntuación y números
-    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM').map(node => node.text);
+    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
 
-    // Contar todas las palabras que tienen una función gramatical
-    const wordFrequency = filteredWords.reduce((acc, word) => {
-        acc[word] = (acc[word] || 0) + 1;
-        return acc;
-    }, {});
+    // Crear un conjunto de datos para el treemap
+    const treemapData = {
+        name: 'syntax',
+        children: []
+    };
 
-    // Calcular el número total de palabras
-    const wordCount = Object.values(wordFrequency).reduce((total, count) => total + count, 0);
-
-    // Obtener la palabra más común y menos común
-    const mostCommonWord = Object.keys(wordFrequency).reduce((a, b) => wordFrequency[a] > wordFrequency[b] ? a : b);
-    const leastCommonWord = Object.keys(wordFrequency).reduce((a, b) => wordFrequency[a] < wordFrequency[b] ? a : b);
-
-    // Crear un elemento para mostrar la información de sintaxis
-    const syntaxInfoElement = document.createElement('div');
-    syntaxInfoElement.innerHTML = `
-        <span>Número total de palabras: ${wordCount}</span><br>
-        <span>La palabra más citada es: "${mostCommonWord}".</span><br>
-        <span>La palabra menos citada es: "${leastCommonWord}".</span><br>
-        <span>Conteo de palabras por función gramatical:</span><br>`;
-
-    // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
+    // Agrupar palabras por categoría gramatical y calcular proporciones
     const wordsByPOS = {};
 
-    syntaxData.nodes.forEach(node => {
-        if (node.type !== 'PUNCT' && node.type !== 'NUM') {
-            if (wordsByPOS[node.type]) {
-                wordsByPOS[node.type].push(node.text);
-            } else {
-                wordsByPOS[node.type] = [node.text];
-            }
+    filteredWords.forEach(node => {
+        if (wordsByPOS[node.type]) {
+            wordsByPOS[node.type].push(node.text);
+        } else {
+            wordsByPOS[node.type] = [node.text];
         }
     });
-
-    const POSLabels = {
-        adp: 'preposición',
-        conj: 'conjunción',
-        sconj: 'conjunción subordinante',
-        adv: 'adverbio',
-        det: 'determinante',
-        noun: 'sustantivo',
-        verb: 'verbo',
-        adj: 'adjetivo',
-        pron: 'pronombre',
-        propn: 'nombre propio'
-    };
 
     for (const pos in wordsByPOS) {
         const count = wordsByPOS[pos].length;
@@ -194,13 +168,66 @@ function visualizeSyntax(syntaxData, syntaxNetworkContainer) {
             return acc;
         }, {});
 
-        const wordsList = Object.entries(words).map(([word, frequency]) => `${word} [${frequency}]`).join(', ');
+        const wordsList = Object.entries(words).map(([word, frequency]) => ({
+            name: word,
+            value: frequency
+        }));
 
-        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: ${wordsList}</span><br>`;
+        treemapData.children.push({
+            name: pos,
+            children: wordsList
+        });
     }
 
-    // Agregar el elemento de información de sintaxis al contenedor
-    syntaxNetworkContainer.appendChild(syntaxInfoElement);
+    // Configurar el tamaño del treemap
+    const width = 800;
+    const height = 600;
+
+    // Crear el layout del treemap
+    const treemapLayout = d3.treemap()
+        .size([width, height])
+        .padding(2);
+
+    // Convertir los datos en una jerarquía de d3
+    const root = d3.hierarchy(treemapData)
+        .sum(d => d.value);
+
+    // Calcular la posición y tamaño de cada rectángulo en el treemap
+    treemapLayout(root);
+
+    // Crear el contenedor SVG para el treemap
+    const svg = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    // Renderizar los rectángulos del treemap
+    svg.selectAll("rect")
+        .data(root.leaves())
+        .enter().append("rect")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => getColorByPOS(d.parent.data.name)); // Asignar color basado en la categoría gramatical
+
+    // Función para asignar colores a las categorías gramaticales
+    function getColorByPOS(pos) {
+        // Aquí puedes definir tus propios colores para cada categoría gramatical
+        const colorMap = {
+            'ADP': '#1f77b4',
+            'DET': '#ff7f0e',
+            'ADJ': '#2ca02c',
+            'NOUN': '#d62728',
+            'PROPN': '#9467bd',
+            'PRON': '#8c564b',
+            'VERB': '#e377c2',
+            'SCONJ': '#7f7f7f',
+            'ADV': '#bcbd22',
+            'AUX': '#17becf',
+            'CCONJ': '#aec7e8'
+        };
+        return colorMap[pos] || '#000000'; // Color negro por defecto
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
