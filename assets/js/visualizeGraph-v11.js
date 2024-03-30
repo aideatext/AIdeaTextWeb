@@ -176,7 +176,7 @@ function visualizeSyntax(syntaxData, countContainer) {
             const count = syntaxData.pos_count[pos];
             const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => node.text).join(', ');
             syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos}: ${count}</span><br>`;
-            syntaxInfoElement.innerHTML += `<span> - Palabras: ${wordsOfPOS}</span><br>`;
+            syntaxInfoElement.innerHTML += `<span> - : ${wordsOfPOS}</span><br>`;
         }
     }
 
