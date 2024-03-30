@@ -15,6 +15,33 @@ function clearContainer(container) {
     container.innerHTML = '';
 }
 
+/**
+ * Encuentra la palabra más común en un array de palabras.
+ * @param {Array} words - El array de palabras.
+ * @returns {string} - La palabra más común.
+ */
+function findMostCommonWordInText(words) {
+    const wordFrequency = {};
+    
+    // Contar la frecuencia de cada palabra
+    words.forEach(word => {
+        const normalizedWord = word.toLowerCase(); // Convertir la palabra a minúsculas para evitar distinciones de mayúsculas y minúsculas
+        wordFrequency[normalizedWord] = (wordFrequency[normalizedWord] || 0) + 1;
+    });
+    
+    // Encontrar la palabra con la frecuencia más alta
+    let mostCommonWord = '';
+    let highestFrequency = 0;
+    
+    for (const word in wordFrequency) {
+        if (wordFrequency[word] > highestFrequency) {
+            mostCommonWord = word;
+            highestFrequency = wordFrequency[word];
+        }
+    }
+    
+    return mostCommonWord;
+}
 
 /**
  * Encuentra la palabra más común en un conjunto de nodos.
@@ -121,6 +148,21 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Conteo de palabras por función gramatical
     const wordCountByPOS = syntaxData.pos_count;
+
+    // Obtener la palabra más común en el texto
+    const wordsInText = syntaxData.nodes.map(node => node.text);
+    const mostCommonWordInText = findMostCommonWordInText(wordsInText);
+    
+    // Verificar si mostCommonWordInText está definido correctamente
+    if (!mostCommonWordInText) {
+        console.error("Error: La palabra más común en el texto no se encontró correctamente.");
+        return;
+    }
+    
+    // Crear un elemento para mostrar la palabra más común en el texto
+    const mostCommonWordElement = document.createElement('div');
+    mostCommonWordElement.textContent = `La palabra que más se repite es: "${mostCommonWordInText}".`;
+    countContainer.appendChild(mostCommonWordElement);
 
     // Palabras por función gramatical
     const POSLabels = {
