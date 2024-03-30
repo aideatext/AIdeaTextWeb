@@ -196,6 +196,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
 
         // Agregar cada palabra y su frecuencia de aparición
         words.forEach(word => {
+            const wordCount = words.filter(w => w === word).length; // Contar cuántas veces se repite la palabra
             categoryNode.children.push({
                 name: `${word} [${wordCount}]`,
                 value: wordCount // Usar el número de repeticiones como valor
@@ -222,17 +223,17 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .data(root.leaves())
         .enter().append("g")
         .attr("transform", d => `translate(${d.x0},${d.y0})`);
-
+    
     cell.append("rect")
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", "lightblue"); // Color de fondo de los rectángulos
-
+        .attr("fill", d => getColorByPOS(d.data.parent.data.name)); // Seleccionar color basado en la categoría gramatical
+    
     // Agregar etiquetas de texto a cada cuadrado del treemap
     cell.append("text")
         .attr("x", 5)
         .attr("y", 15)
-        .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
+        .text(d => `${d.data.name}`) // Mostrar el nombre de la categoría gramatical o palabra
         .attr("fill", "black"); // Color del texto
 
     // Agregar leyenda horizontal
@@ -258,7 +259,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
 
         legendX += label.length * 6 + 40;
     }
-}
+
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
@@ -279,6 +280,7 @@ function getColorByPOS(pos) {
     return colorMap[pos] || '#000000'; // Color negro por defecto
 }
 
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
