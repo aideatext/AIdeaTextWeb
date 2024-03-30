@@ -6,10 +6,6 @@ body, html {
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
-/* Upper section */
-.upper-section {
-    text-align: center;
-}
 /* Contenedor principal */
 .main-container {
     display: flex;
@@ -27,42 +23,58 @@ body, html {
 }
 
 /* Áreas de sección */
-.left-section-top,
-.left-section-bottom,
+.left-section,
 .center-section-1,
 .center-section-2,
 .right-section-1,
 .right-section-2 {
-    flex: 1; /* Los elementos se expandirán para ocupar todo el espacio disponible */
     overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
 }
 
-/* Establece un tamaño máximo para el grafo */
-#network-1,
-#network-2 {
-    max-width: 50%; /* Por ejemplo, establece un tamaño máximo del 50% del contenedor */
+/* Sección izquierda */
+.left-section {
+    flex: 1; /* Los elementos se expandirán para ocupar todo el espacio disponible */
+    width: 35%; /* Ocupa el 35% del contenedor horizontalmente */
+}
+
+/* Sección derecha */
+.right-section {
+    width: 65%; /* Ocupa el 65% del contenedor horizontalmente */
+    height: 50%; /* Ocupa el 50% del contenedor verticalmente */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Contenedores de la red sintáctica y semántica */
+.containerUp,
+.containerDown {
+    height: 48%; /* Cada contenedor ocupa el 48% del espacio disponible verticalmente */
+    border: 1px solid #ccc; /* Borde opcional */
+    margin-bottom: 10px; /* Margen inferior para separar los contenedores */
 }
 
 /* Botón de procesamiento */
 #procesarButton-1,
 #procesarButton-2 {
-    width: 100%;
+    width: calc(100% - 40px); /* El ancho del botón es igual al 100% del contenedor menos el padding */
     padding: 10px 20px;
     font-size: 14px;
 }
 
-/* Área de texto fija */
+/* Área de texto */
 #text-1,
 #text-2 {
-    width: 100%;
+    width: calc(100% - 22px); /* El ancho del área de texto es igual al 100% del contenedor menos el padding y el borde */
     height: 300px; /* Altura fija */
     border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
 }
 
+/* Placeholder del área de texto */
 #text-1::placeholder,
 #text-2::placeholder {
     color: #000000; /* Cambia el color del texto del placeholder */
@@ -72,7 +84,6 @@ body, html {
     text-indent: 0;
     padding-left: 0;
     margin-left: 0;
-    /* Otros estilos que quieras aplicar */
 }
 
 /* Footer */
@@ -103,19 +114,24 @@ body, html {
 
 /* Estilos para dispositivos móviles */
 @media screen and (max-width: 768px) {
-    .container {
+    .container-1,
+    .container-2 {
         flex-direction: column;
     }
 
-    .left-section, .right-section {
+    .left-section,
+    .right-section {
         width: 100%;
         height: auto;
     }
 
-    #text {
+    #text-1,
+    #text-2 {
         height: 200px;
     }
 
-    #network {
-        height: 400px; /* Altura más pequeña para dispositivos móviles */
+    .containerUp,
+    .containerDown {
+        height: 250px; /* Altura más pequeña para dispositivos móviles */
     }
+}
