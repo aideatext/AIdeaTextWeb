@@ -77,7 +77,7 @@ function processText() {
         return; // Detener la ejecución si el texto está vacío
     }
 
-    //fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
