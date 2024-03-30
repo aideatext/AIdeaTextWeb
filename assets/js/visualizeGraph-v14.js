@@ -138,6 +138,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         return;
     }
 
+
      // Filtrar palabras, excluyendo signos de puntuación y números
     const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
 
