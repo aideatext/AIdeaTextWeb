@@ -128,6 +128,8 @@ function visualizeGraph(data) {
  */
 // Limpiar el contenedor antes de mostrar los resultados
 
+function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
+    // Limpiar el contenedor antes de mostrar los resultados
     syntaxNetworkContainer.innerHTML = '';
 
     // Verificar si hay datos válidos de análisis sintáctico
@@ -136,7 +138,7 @@ function visualizeGraph(data) {
         return;
     }
 
-    // Filtrar palabras, excluyendo signos de puntuación y números
+     // Filtrar palabras, excluyendo signos de puntuación y números
     const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
 
     // Agrupar palabras por categoría gramatical y calcular proporciones
@@ -150,7 +152,7 @@ function visualizeGraph(data) {
         }
     });
 
-    // Definir etiquetas completas para las categorías gramaticales
+    // Definir etiquetas completas para las categorías gramaticales en español
     const POSLabels = {
         adp: 'preposición',
         conj: 'conjunción',
@@ -195,7 +197,7 @@ function visualizeGraph(data) {
         words.forEach(word => {
             categoryNode.children.push({
                 name: `${word} [${wordCount}]`,
-                value: 1 // Cada palabra cuenta como 1
+                value: wordCount // Usar el número de repeticiones como valor
             });
         });
 
@@ -231,26 +233,51 @@ function visualizeGraph(data) {
         .attr("y", 15)
         .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
         .attr("fill", "black"); // Color del texto
-}
-    // Función para asignar colores a las categorías gramaticales
-    function getColorByPOS(pos) {
-        // Aquí puedes definir tus propios colores para cada categoría gramatical
-        const colorMap = {
-            'ADP': '#1f77b4',
-            'DET': '#ff7f0e',
-            'ADJ': '#2ca02c',
-            'NOUN': '#d62728',
-            'PROPN': '#9467bd',
-            'PRON': '#8c564b',
-            'VERB': '#e377c2',
-            'SCONJ': '#7f7f7f',
-            'ADV': '#bcbd22',
-            'AUX': '#17becf',
-            'CCONJ': '#aec7e8'
-        };
-        return colorMap[pos] || '#000000'; // Color negro por defecto
+
+    // Agregar leyenda horizontal
+    const legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", `translate(10, ${height - 20})`);
+
+    let legendX = 0;
+    for (const pos in POSLabels) {
+        const label = POSLabels[pos];
+        legend.append("rect")
+            .attr("x", legendX)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .style("fill", getColorByPOS(pos));
+
+        legend.append("text")
+            .attr("x", legendX + 15)
+            .attr("y", 10)
+            .text(label)
+            .attr("font-size", "10px");
+
+        legendX += label.length * 6 + 40;
     }
 }
+
+// Función para asignar colores a las categorías gramaticales
+function getColorByPOS(pos) {
+    // Aquí puedes definir tus propios colores para cada categoría gramatical
+    const colorMap = {
+        'adp': '#1f77b4',
+        'det': '#ff7f0e',
+        'adj': '#2ca02c',
+        'noun': '#d62728',
+        'propn': '#9467bd',
+        'pron': '#8c564b',
+        'verb': '#e377c2',
+        'sconj': '#7f7f7f',
+        'adv': '#bcbd22',
+        'aux': '#17becf',
+        'cconj': '#aec7e8'
+    };
+    return colorMap[pos] || '#000000'; // Color negro por defecto
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
