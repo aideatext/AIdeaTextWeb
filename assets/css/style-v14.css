@@ -24,6 +24,8 @@ body, html {
     flex-direction: column; /* Orientación vertical */
     flex: 0 0 35%; /* Ocupa el 35% del ancho disponible */
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+    padding: 20px; /* Padding izquierdo y derecho */
+    border: 1px solid #ccc; /* Borde */
 }
 
 /* Contenedor-2 */
@@ -32,6 +34,9 @@ body, html {
     flex-direction: column; /* Orientación vertical */
     flex: 0 0 65%; /* Ocupa el 65% del ancho disponible */
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+    padding: 20px; /* Padding izquierdo y derecho */
+    border: 1px solid #ccc; /* Borde */
+    margin-left: 20px; /* Margen izquierdo para separar las secciones */
 }
 
 /* Ajuste para cajas en contenedor-2 */
@@ -42,15 +47,16 @@ body, html {
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
-    margin-left: 20px; /* Margen izquierdo para separar las secciones */
+    margin-top: 20px; /* Espacio entre las cajas */
 }
+
 
 /* Área de entrada de texto */
 .text-input-section-1 {
     padding: 20px;
     border: 1px solid #ccc;
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
-    height: calc(50% - 40px); /* 50% de la altura menos el padding */
+    height: calc(100% - 40px); /* 100% de la altura menos el padding */
     margin-bottom: 20px; /* Espacio entre la caja de texto y el botón */
 }
 
@@ -64,7 +70,7 @@ body, html {
 /* Área de texto */
 #text-1,{
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
-    height: calc(50% - 40px); /* 50% de la altura menos el padding */
+    height: calc(100% - 40px); /* 100% de la altura menos el padding */
     border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
     margin-bottom: 20px; /* Espacio entre la caja de texto y el botón */
