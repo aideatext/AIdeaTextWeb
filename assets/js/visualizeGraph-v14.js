@@ -105,30 +105,30 @@ function processText() {
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeGraph(data) {
-    const networkContainer = document.getElementById("syntax-network");
-    const countContainer = document.getElementById("semantic-network");
-    networkContainer.innerHTML = '';
-    countContainer.innerHTML = '';
+    const syntaxNetworkContainer = document.getElementById("syntax-network");
+    const semanticNetworkContainer = document.getElementById("semantic-network");
+    syntaxNetworkContainer.innerHTML = '';
+    semanticNetworkContainer.innerHTML = '';
 
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSyntax(data.syntax, countContainer);
+        visualizeSyntax(data.syntax, syntaxNetworkContainer);
     }
 
     if (data.entities) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, data.cra, networkContainer);
+        visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
     }
 }
 
 /**
  * Visualiza el análisis sintáctico.
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
- * @param {HTMLElement} countContainer - El contenedor para mostrar la información.
+ * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar la información de sintaxis.
  */
-function visualizeSyntax(syntaxData, countContainer) {
+function visualizeSyntax(syntaxData, syntaxNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
-    countContainer.innerHTML = '';
+    syntaxNetworkContainer.innerHTML = '';
 
     if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
@@ -200,7 +200,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     }
 
     // Agregar el elemento de información de sintaxis al contenedor
-    countContainer.appendChild(syntaxInfoElement);
+    syntaxNetworkContainer.appendChild(syntaxInfoElement);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,11 +208,11 @@ function visualizeSyntax(syntaxData, countContainer) {
      * Visualiza el análisis semántico.
      * @param {Array} entities - Las entidades detectadas en el texto.
      * @param {Object} craData - Los datos de análisis CRA.
-     * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
      */
-    function visualizeSemantic(entities, craData, networkContainer) {
+    function visualizeSemantic(entities, craData, semanticNetworkContainer) {
         // Limpiamos el contenedor antes de mostrar los resultados
-        networkContainer.innerHTML = '';
+        semanticNetworkContainer.innerHTML = '';
 
         // Creamos un elemento de lista para mostrar las entidades nombradas
         const entityList = document.createElement('ul');
@@ -226,25 +226,25 @@ function visualizeSyntax(syntaxData, countContainer) {
         });
 
         // Agregamos la lista al contenedor
-        networkContainer.appendChild(entityList);
+        semanticNetworkContainer.appendChild(entityList);
 
         // Visualizamos los resultados del CRA
-        visualizeCRA(craData, networkContainer);
+        visualizeCRA(craData, semanticNetworkContainer);
     }
 
     /**
      * Visualiza el análisis CRA.
      * @param {Array} craData - Los datos de análisis CRA.
-     * @param {HTMLElement} networkContainer - El contenedor para mostrar la red semántica.
+     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
      */
-    function visualizeCRA(craData, networkContainer) {
+    function visualizeCRA(craData, semanticNetworkContainer) {
         // Limpiamos el contenedor antes de mostrar los resultados
-        networkContainer.innerHTML = '';
+        semanticNetworkContainer.innerHTML = '';
 
         // Configuración del contenedor SVG
         const width = 1200;
         const height = 800;
-        const svg = d3.select(networkContainer).append("svg")
+        const svg = d3.select(semanticNetworkContainer).append("svg")
             .attr("width", width)
             .attr("height", height);
 
