@@ -191,8 +191,8 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
     sortedPOS.forEach(pos => {
         const count = syntaxData.pos_count[pos];
-        const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => node.text);
-        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: "${wordsOfPOS.join('", "')}"</span><br>`;
+        const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => `"${node.text}"`).join(', ');
+        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: ${wordsOfPOS}</span><br>`;
     });
 
     // Agregar el elemento de información de sintaxis al contenedor
