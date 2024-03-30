@@ -4,7 +4,7 @@
  * @returns {Promise<Object>} - Una promesa que resuelve con los datos procesados.
  */
 async function callComprehendAPI(textInput) {
-    const response = await fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    //const response = await fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
