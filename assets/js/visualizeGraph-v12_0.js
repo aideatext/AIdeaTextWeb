@@ -262,7 +262,7 @@ function visualizeCRA(craData, networkContainer) {
  * @returns {Promise<Object>} - Una promesa que resuelve con los datos procesados.
  */
 function callAPI(textInput) {
-    return fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    // return fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
