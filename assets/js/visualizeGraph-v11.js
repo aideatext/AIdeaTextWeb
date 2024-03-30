@@ -142,28 +142,17 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Obtener la palabra más común en el texto
     const mostCommonWordInText = findMostCommonWordInText(syntaxData.nodes.map(node => node.text));
-
-    // Obtener la palabra menos común en el texto
-    const leastCommonWordInText = findLeastCommonWordInText(syntaxData.nodes.map(node => node.text));
-
-    // Crear un objeto para contener las palabras por su función gramatical
-    const wordsByPOS = {};
-
-    // Contar y agrupar las palabras por su función gramatical
-    syntaxData.nodes.forEach(node => {
-        if (wordsByPOS[node.type]) {
-            wordsByPOS[node.type].push(node.text);
-        } else {
-            wordsByPOS[node.type] = [node.text];
-        }
-    });
+    
+    // Crear un elemento para mostrar la palabra más común en el texto
+    const mostCommonWordElement = document.createElement('div');
+    mostCommonWordElement.textContent = `La palabra que más se repite es: "${mostCommonWordInText}".`;
+    countContainer.appendChild(mostCommonWordElement);
 
     // Crear un elemento para mostrar la información de sintaxis
     const syntaxInfoElement = document.createElement('div');
     syntaxInfoElement.innerHTML = `
-        <span>Número total de palabras: ${wordCount}</span><br>
-        <span>La palabra más citada es: "${mostCommonWordInText}".</span><br>
-        <span>La palabra menos citada es: "${leastCommonWordInText}".</span><br>
+        <span>El texto tiene ${wordCount} palabras.</span><br>
+        <span>La palabra que más se repite es: "${mostCommonWordInText}".</span><br>
         <span>Conteo de palabras por función gramatical:</span><br>`;
 
     // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
@@ -182,21 +171,15 @@ function visualizeSyntax(syntaxData, countContainer) {
         num: 'número'
     };
 
-    for (const pos in wordsByPOS) {
-        const count = wordsByPOS[pos].length;
-        const words = wordsByPOS[pos].reduce((acc, word) => {
-            if (acc[word]) {
-                acc[word]++;
-            } else {
-                acc[word] = 1;
-            }
-            return acc;
-        }, {});
+    const sortedPOS = Object.keys(syntaxData.pos_count).sort((a, b) => {
+        return Object.keys(POSLabels).indexOf(a) - Object.keys(POSLabels).indexOf(b);
+    });
 
-        const wordsList = Object.entries(words).map(([word, frequency]) => `${word} [${frequency}]`).join(', ');
-
-        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: ${wordsList}</span><br>`;
-    }
+    sortedPOS.forEach(pos => {
+        const count = syntaxData.pos_count[pos];
+        const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos);
+        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: ${wordsOfPOS.map(node => node.text).join(', ')}</span><br>`;
+    });
 
     // Agregar el elemento de información de sintaxis al contenedor
     countContainer.appendChild(syntaxInfoElement);
