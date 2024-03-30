@@ -125,43 +125,32 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     countContainer.innerHTML = '';
 
-    if (!syntaxData || !syntaxData.pos_count) {
+    if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
         return;
     }
 
     console.log("Datos de análisis sintáctico recibidos:", syntaxData);
 
-    if (!syntaxData.nodes) {
-        console.error("Error: No se encontraron nodos de análisis sintáctico.");
-        return;
-    }
-
     // Recuento de palabras
     const wordCount = syntaxData.nodes.length;
 
-    // Verificar si syntaxData.pos_count está definido correctamente
-    if (!syntaxData.pos_count || typeof syntaxData.pos_count !== 'object') {
-        console.error("Error: El conteo de palabras por función gramatical no está definido correctamente.");
-        return;
-    }
-
     // Obtener la palabra más común en el texto
-    const wordsInText = syntaxData.nodes.map(node => node.text);
-    const mostCommonWordInText = findMostCommonWordInText(wordsInText);
-    
-    // Verificar si mostCommonWordInText está definido correctamente
-    if (!mostCommonWordInText) {
-        console.error("Error: La palabra más común en el texto no se encontró correctamente.");
-        return;
-    }
+    const mostCommonWordInText = findMostCommonWordInText(syntaxData.nodes.map(node => node.text));
     
     // Crear un elemento para mostrar la palabra más común en el texto
     const mostCommonWordElement = document.createElement('div');
     mostCommonWordElement.textContent = `La palabra que más se repite es: "${mostCommonWordInText}".`;
     countContainer.appendChild(mostCommonWordElement);
 
-    // Palabras por función gramatical ordenadas
+    // Crear un elemento para mostrar la información de sintaxis
+    const syntaxInfoElement = document.createElement('div');
+    syntaxInfoElement.innerHTML = `
+        <span>El texto tiene ${wordCount} palabras.</span><br>
+        <span>La palabra que más se repite es: "${mostCommonWordInText}".</span><br>
+        <span>Conteo de palabras por función gramatical:</span><br>`;
+
+    // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
     const POSLabels = {
         adp: 'preposición',
         conj: 'conjunción',
@@ -181,18 +170,10 @@ function visualizeSyntax(syntaxData, countContainer) {
         return Object.keys(POSLabels).indexOf(a) - Object.keys(POSLabels).indexOf(b);
     });
 
-    // Crear un elemento para mostrar la información de sintaxis
-    const syntaxInfoElement = document.createElement('div');
-    syntaxInfoElement.innerHTML = `
-        <span>El texto tiene ${wordCount} palabras.</span><br>
-        <span>La palabra que más se repite es: "${mostCommonWordInText}".</span><br>
-        <span>Conteo de palabras por función gramatical:</span><br>`;
-
-    // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
     sortedPOS.forEach(pos => {
         const count = syntaxData.pos_count[pos];
-        const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => `"${node.text}"`).join(', ');
-        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: ${wordsOfPOS}</span><br>`;
+        const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos);
+        syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos} [${count}]: ${wordsOfPOS.map(node => node.text).join(', ')}</span><br>`;
     });
 
     // Agregar el elemento de información de sintaxis al contenedor
