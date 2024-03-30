@@ -127,7 +127,6 @@ function visualizeGraph(data) {
  * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
  */
 // Limpiar el contenedor antes de mostrar los resultados
-
 function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     syntaxNetworkContainer.innerHTML = '';
@@ -138,9 +137,14 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         return;
     }
 
-
-     // Filtrar palabras, excluyendo signos de puntuación y números
+    // Filtrar palabras, excluyendo signos de puntuación y números
     const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
+
+    // Crear un conjunto de datos para el treemap
+    const treemapData = {
+        name: 'syntax',
+        children: []
+    };
 
     // Agrupar palabras por categoría gramatical y calcular proporciones
     const wordsByPOS = {};
@@ -153,7 +157,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         }
     });
 
-    // Definir etiquetas completas para las categorías gramaticales en español
+    // Definir etiquetas completas para las categorías gramaticales
     const POSLabels = {
         adp: 'preposición',
         conj: 'conjunción',
@@ -167,6 +171,19 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         propn: 'nombre propio'
     };
 
+    for (const pos in wordsByPOS) {
+        const words = wordsByPOS[pos];
+        const wordsList = words.map(word => ({
+            name: word,
+            value: 1 // Cada palabra cuenta como 1
+        }));
+
+        treemapData.children.push({
+            name: POSLabels[pos] || pos, // Usar la etiqueta completa si está disponible, de lo contrario, usar el identificador original
+            children: wordsList
+        });
+    }
+
     // Configurar el tamaño del treemap
     const width = 800;
     const height = 600;
@@ -175,36 +192,6 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     const treemapLayout = d3.treemap()
         .size([width, height])
         .padding(2);
-
-    // Crear un conjunto de datos para el treemap
-    const treemapData = {
-        name: 'syntax',
-        children: []
-    };
-
-    // Iterar sobre las categorías gramaticales y sus palabras asociadas
-    for (const pos in wordsByPOS) {
-        const words = wordsByPOS[pos];
-        const wordCount = words.length;
-
-        // Agregar la etiqueta completa de la categoría gramatical
-        const categoryLabel = POSLabels[pos] || pos;
-        const categoryNode = {
-            name: categoryLabel,
-            children: []
-        };
-
-        // Agregar cada palabra y su frecuencia de aparición
-        words.forEach(word => {
-            const wordCount = words.filter(w => w === word).length; // Contar cuántas veces se repite la palabra
-            categoryNode.children.push({
-                name: `${word} [${wordCount}]`,
-                value: wordCount // Usar el número de repeticiones como valor
-            });
-        });
-
-        treemapData.children.push(categoryNode);
-    }
 
     // Convertir los datos en una jerarquía de d3
     const root = d3.hierarchy(treemapData)
@@ -223,68 +210,21 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .data(root.leaves())
         .enter().append("g")
         .attr("transform", d => `translate(${d.x0},${d.y0})`);
-    
+
     cell.append("rect")
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByPOS(d.data.parent ? d.data.parent.data.name : null)); // Verificar si el padre está definid
-    
+        .attr("fill", "lightblue"); // Color de fondo de los rectángulos
+
     // Agregar etiquetas de texto a cada cuadrado del treemap
     cell.append("text")
         .attr("x", 5)
         .attr("y", 15)
-        .text(d => `${d.data.name}`) // Mostrar el nombre de la categoría gramatical o palabra
+        .text(d => `${d.data.name} [${d.data.children.length}]`) // Agregar el número de palabras
         .attr("fill", "black"); // Color del texto
 
-    // Agregar leyenda horizontal
-    const legend = svg.append("g")
-        .attr("class", "legend")
-        .attr("transform", `translate(10, ${height - 20})`);
-
-    let legendX = 0;
-    for (const pos in POSLabels) {
-        const label = POSLabels[pos];
-        legend.append("rect")
-            .attr("x", legendX)
-            .attr("y", 0)
-            .attr("width", 10)
-            .attr("height", 10)
-            .style("fill", getColorByPOS(pos));
-
-        legend.append("text")
-            .attr("x", legendX + 15)
-            .attr("y", 10)
-            .text(label)
-            .attr("font-size", "10px");
-
-        legendX += label.length * 6 + 40;
-    }
-
-
-    // Función para asignar colores a las categorías gramaticales
-            function getColorByPOS(pos) {
-                // Aquí puedes definir tus propios colores para cada categoría gramatical
-                const colorMap = {
-                    'adp': '#1f77b4',
-                    'det': '#ff7f0e',
-                    'adj': '#2ca02c',
-                    'noun': '#d62728',
-                    'propn': '#9467bd',
-                    'pron': '#8c564b',
-                    'verb': '#e377c2',
-                    'sconj': '#7f7f7f',
-                    'adv': '#bcbd22',
-                    'aux': '#17becf',
-                    'cconj': '#aec7e8'
-                };
-                // Verificar si el padre está definido y si tiene datos asociados
-        if (pos && colorMap[pos]) {
-            return colorMap[pos];
-        } else {
-            return '#000000'; // Color negro por defecto
-        }
-    }
-
+    // Agregar el elemento de información de sintaxis al contenedor
+    syntaxNetworkContainer.appendChild(syntaxInfoElement);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
