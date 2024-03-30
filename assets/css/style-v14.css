@@ -9,8 +9,8 @@ body, html {
 /* Contenedor principal */
 .main-container {
     display: flex;
-    /* flex-direction: column;  Los contenedores hijos se apilarán verticalmente */
-    flex-direction: row; /* Los contenedores hijos se apilarán verticalmente */
+    flex-direction: column;  Los contenedores hijos se apilarán verticalmente */
+    /* flex-direction: row; Los contenedores hijos se apilarán verticalmente */
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
 }
 
