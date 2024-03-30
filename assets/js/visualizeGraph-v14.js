@@ -180,8 +180,8 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     }
 
     // Configurar el tamaño del treemap
-    const width = 800;
-    const height = 600;
+    const width = 600;
+    const height = 800;
 
     // Crear el layout del treemap
     const treemapLayout = d3.treemap()
@@ -200,15 +200,23 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("width", width)
         .attr("height", height);
 
-    // Renderizar los rectángulos del treemap
-    svg.selectAll("rect")
+     // Renderizar los rectángulos del treemap
+    const cell = svg.selectAll("g")
         .data(root.leaves())
-        .enter().append("rect")
-        .attr("x", d => d.x0)
-        .attr("y", d => d.y0)
+        .enter().append("g")
+        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+
+    cell.append("rect")
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         .attr("fill", d => getColorByPOS(d.parent.data.name)); // Asignar color basado en la categoría gramatical
+
+    // Agregar etiquetas de texto a cada cuadrado del treemap
+    cell.append("text")
+        .attr("x", 5)
+        .attr("y", 15)
+        .text(d => d.data.name) // Utilizar el nombre de la categoría gramatical como etiqueta
+        .attr("fill", "black"); // Color del texto
 
     // Función para asignar colores a las categorías gramaticales
     function getColorByPOS(pos) {
