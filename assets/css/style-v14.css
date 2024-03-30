@@ -29,9 +29,20 @@ body, html {
 /* Contenedor-2 */
 .container-2 {
     display: flex;
-    flex-direction: row; /* Orientación horizontal */
-    flex: 1; /* Expande para ocupar todo el espacio restante */
+    flex-direction: column; /* Orientación vertical */
+    flex: 0 0 65%; /* Ocupa el 65% del ancho disponible */
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+}
+
+/* Ajuste para cajas en contenedor-2 */
+.containerUp,
+.containerDown {
+    flex: 1; /* Expande para ocupar todo el espacio disponible */
+    overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+    border: 1px solid #ccc; /* Borde opcional */
+    margin-left: 20px; /* Margen izquierdo para separar las secciones */
 }
 
 /* Área de entrada de texto */
@@ -44,16 +55,14 @@ body, html {
 }
 
 /* Botón de procesamiento */
-#procesarButton-1,
-#procesarButton-2 {
+#procesarButton-1,{
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
     padding: 10px 20px;
     font-size: 14px;
 }
 
 /* Área de texto */
-#text-1,
-#text-2 {
+#text-1,{
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
     height: calc(50% - 40px); /* 50% de la altura menos el padding */
     border: 1px solid #ccc; /* Borde opcional */
@@ -62,8 +71,7 @@ body, html {
 }
 
 /* Placeholder del área de texto */
-#text-1::placeholder,
-#text-2::placeholder {
+#text-1::placeholder,{
     color: #000000; /* Cambia el color del texto del placeholder */
     font-style: italic; /* Estilo de fuente para el placeholder */
     font-size: 14px; /* Tamaño de fuente específico para el placeholder */
