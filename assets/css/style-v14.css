@@ -2,66 +2,66 @@ body, html {
     height: 100%;
     margin: 0;
     background-color: #f0f0f0;
-    font-family: "Monserrat", sans-serif;
+    font-family: "Montserrat", sans-serif;
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
 /* Contenedor principal */
 .main-container {
     display: flex;
-    flex-direction: column;  Los contenedores hijos se apilarán verticalmente */
-    /* flex-direction: row; Los contenedores hijos se apilarán verticalmente */
+    flex-direction: row; /* Cambio a orientación horizontal */
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
 }
 
-/* Contenedor-1 y Contenedor-2 */
-.container-1,
-.container-2 {
+/* Contenedor-1 */
+.container-1 {
     display: flex;
-    flex-direction: row;
+    flex-direction: column; /* Orientación vertical */
     flex: 1;
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
 }
 
+/* Contenedor-2 */
+.container-2 {
+    display: flex;
+    flex-direction: row; /* Orientación horizontal */
+    flex: 1;
+    overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+}
+
+/* Área de entrada de texto */
+.text-input-section-1 {
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
 /* Áreas de sección */
 .left-section,
-.center-section-1,
-.center-section-2,
-.right-section-1,
-.right-section-2 {
+.containerUp,
+.containerDown {
     overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
 }
 
-/* Sección izquierda */
 .left-section {
-    flex: 1; /* Los elementos se expandirán para ocupar todo el espacio disponible */
-    width: 35%; /* Ocupa el 35% del contenedor horizontalmente */
+    flex: 1; /* Expande para ocupar todo el espacio disponible */
+    width: 100%; /* Ocupa todo el ancho disponible */
 }
 
-/* Sección derecha */
-.right-section {
-    width: 65%; /* Ocupa el 65% del contenedor horizontalmente */
-    height: 50%; /* Ocupa el 50% del contenedor verticalmente */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-/* Contenedores de la red sintáctica y semántica */
 .containerUp,
 .containerDown {
-    height: 48%; /* Cada contenedor ocupa el 48% del espacio disponible verticalmente */
-    border: 1px solid #ccc; /* Borde opcional */
-    margin-bottom: 10px; /* Margen inferior para separar los contenedores */
+    flex: 1; /* Expande para ocupar todo el espacio disponible */
+    height: 100%; /* Ocupa toda la altura disponible */
+    margin-left: 20px; /* Margen izquierdo para separar las secciones */
 }
 
 /* Botón de procesamiento */
 #procesarButton-1,
 #procesarButton-2 {
-    width: calc(100% - 40px); /* El ancho del botón es igual al 100% del contenedor menos el padding */
+    width: 100%;
     padding: 10px 20px;
     font-size: 14px;
 }
@@ -69,7 +69,7 @@ body, html {
 /* Área de texto */
 #text-1,
 #text-2 {
-    width: calc(100% - 22px); /* El ancho del área de texto es igual al 100% del contenedor menos el padding y el borde */
+    width: 100%;
     height: 300px; /* Altura fija */
     border: 1px solid #ccc; /* Borde opcional */
     resize: none; /* Evita que el usuario pueda cambiar el tamaño */
@@ -115,24 +115,12 @@ body, html {
 
 /* Estilos para dispositivos móviles */
 @media screen and (max-width: 768px) {
-    .container-1,
-    .container-2 {
-        flex-direction: column;
-    }
-
-    .left-section,
-    .right-section {
-        width: 100%;
-        height: auto;
-    }
-
-    #text-1,
-    #text-2 {
-        height: 200px;
+    .main-container {
+        flex-direction: column; /* Cambio a orientación vertical para dispositivos móviles */
     }
 
     .containerUp,
     .containerDown {
-        height: 250px; /* Altura más pequeña para dispositivos móviles */
+        height: 200px; /* Altura más pequeña para dispositivos móviles */
     }
 }
