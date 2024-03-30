@@ -185,6 +185,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     countContainer.appendChild(syntaxInfoElement);
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
