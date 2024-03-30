@@ -14,7 +14,7 @@ body, html {
 /* Contenedor principal */
 .main-container {
     display: flex;
-    flex-direction: row; /* Cambio a orientación horizontal */
+    flex-direction: row; /* Orientación horizontal */
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
 }
 
@@ -22,7 +22,7 @@ body, html {
 .container-1 {
     display: flex;
     flex-direction: column; /* Orientación vertical */
-    flex: 1;
+    flex: 0 0 35%; /* Ocupa el 35% del ancho disponible */
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
 }
 
@@ -30,7 +30,7 @@ body, html {
 .container-2 {
     display: flex;
     flex-direction: row; /* Orientación horizontal */
-    flex: 1;
+    flex: 1; /* Expande para ocupar todo el espacio restante */
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
 }
 
@@ -39,6 +39,7 @@ body, html {
     padding: 20px;
     border: 1px solid #ccc;
     width: 100%;
+    height: 100%; /* Ocupa toda la altura disponible */
 }
 
 /* Áreas de sección */
@@ -59,7 +60,7 @@ body, html {
 .containerUp,
 .containerDown {
     flex: 1; /* Expande para ocupar todo el espacio disponible */
-    height: 100%; /* Ocupa toda la altura disponible */
+    height: 50%; /* Ocupa el 50% de la altura disponible */
     margin-left: 20px; /* Margen izquierdo para separar las secciones */
 }
 
@@ -91,7 +92,6 @@ body, html {
     padding-left: 0;
     margin-left: 0;
 }
-
 
 /* Footer */
 .footer {
