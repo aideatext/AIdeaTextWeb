@@ -6,6 +6,11 @@ body, html {
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
+/* Upper section */
+.upper-section {
+    text-align: center;
+}
+
 /* Contenedor principal */
 .main-container {
     display: flex;
