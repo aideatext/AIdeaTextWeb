@@ -96,22 +96,6 @@ body, html {
     margin-left: 0;
 }
 
-/* Áreas de sección */
-.left-section,
-.containerUp,
-.containerDown {
-    overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
-    overflow-x: hidden; /* Evita el desplazamiento horizontal */
-    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
-    border: 1px solid #ccc; /* Borde opcional */
-    flex: 1; /* Expande para ocupar todo el espacio disponible */
-}
-
-.containerUp,
-.containerDown {
-    margin-left: 20px; /* Margen izquierdo para separar las secciones */
-}
-
 /* Footer */
 .footer {
     position: fixed;
