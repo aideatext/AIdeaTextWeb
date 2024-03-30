@@ -277,10 +277,16 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
                 'aux': '#17becf',
                 'cconj': '#aec7e8'
             };
-            return colorMap[pos] || '#000000'; // Color negro por defecto
-        }
+            // Verificar si el padre está definido y si tiene datos asociados
+    if (pos && colorMap[pos]) {
+        return colorMap[pos];
+    } else {
+        return '#000000'; // Color negro por defecto
+    }
+}
 
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
