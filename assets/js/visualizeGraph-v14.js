@@ -227,7 +227,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     cell.append("rect")
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByPOS(d.data.parent.data.name)); // Seleccionar color basado en la categoría gramatical
+        .attr("fill", d => getColorByPOS(d.data.parent ? d.data.parent.data.name : null)); // Verificar si el padre está definid
     
     // Agregar etiquetas de texto a cada cuadrado del treemap
     cell.append("text")
@@ -261,29 +261,29 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     }
 
 
-// Función para asignar colores a las categorías gramaticales
-        function getColorByPOS(pos) {
-            // Aquí puedes definir tus propios colores para cada categoría gramatical
-            const colorMap = {
-                'adp': '#1f77b4',
-                'det': '#ff7f0e',
-                'adj': '#2ca02c',
-                'noun': '#d62728',
-                'propn': '#9467bd',
-                'pron': '#8c564b',
-                'verb': '#e377c2',
-                'sconj': '#7f7f7f',
-                'adv': '#bcbd22',
-                'aux': '#17becf',
-                'cconj': '#aec7e8'
-            };
-            // Verificar si el padre está definido y si tiene datos asociados
-    if (pos && colorMap[pos]) {
-        return colorMap[pos];
-    } else {
-        return '#000000'; // Color negro por defecto
+    // Función para asignar colores a las categorías gramaticales
+            function getColorByPOS(pos) {
+                // Aquí puedes definir tus propios colores para cada categoría gramatical
+                const colorMap = {
+                    'adp': '#1f77b4',
+                    'det': '#ff7f0e',
+                    'adj': '#2ca02c',
+                    'noun': '#d62728',
+                    'propn': '#9467bd',
+                    'pron': '#8c564b',
+                    'verb': '#e377c2',
+                    'sconj': '#7f7f7f',
+                    'adv': '#bcbd22',
+                    'aux': '#17becf',
+                    'cconj': '#aec7e8'
+                };
+                // Verificar si el padre está definido y si tiene datos asociados
+        if (pos && colorMap[pos]) {
+            return colorMap[pos];
+        } else {
+            return '#000000'; // Color negro por defecto
+        }
     }
-}
 
 }
 
