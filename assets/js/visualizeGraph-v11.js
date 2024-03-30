@@ -87,8 +87,13 @@ function processText() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data);
+        if (data.syntax && data.syntax.nodes) {
+        
         // Visualiza la sintaxis del texto en la página web
         visualizeGraph(data); // Asegúrate de que esta línea esté presente
+      } else {  
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+        }
     })
     .catch(error => {
         console.error("Error al procesar el texto:", error)
