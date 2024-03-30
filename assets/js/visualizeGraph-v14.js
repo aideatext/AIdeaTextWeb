@@ -105,8 +105,8 @@ function processText() {
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeGraph(data) {
-    const networkContainer = document.getElementById("network-1");
-    const countContainer = document.getElementById("count-section-1");
+    const networkContainer = document.getElementById("syntax-network");
+    const countContainer = document.getElementById("semantic-network");
     networkContainer.innerHTML = '';
     countContainer.innerHTML = '';
 
