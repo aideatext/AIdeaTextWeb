@@ -122,11 +122,6 @@ function visualizeGraph(data) {
 }
 
 /**
- * Visualiza el análisis sintáctico.
- * @param {Object} syntaxData - Los datos de análisis sintáctico.
- * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar la información de sintaxis.
- */
-/**
  * Visualiza el análisis sintáctico utilizando un treemap.
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
@@ -180,8 +175,8 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     }
 
     // Configurar el tamaño del treemap
-    const width = 600;
-    const height = 800;
+    const width = 800;
+    const height = 600;
 
     // Crear el layout del treemap
     const treemapLayout = d3.treemap()
@@ -200,7 +195,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("width", width)
         .attr("height", height);
 
-     // Renderizar los rectángulos del treemap
+    // Renderizar los rectángulos del treemap
     const cell = svg.selectAll("g")
         .data(root.leaves())
         .enter().append("g")
@@ -237,7 +232,6 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         return colorMap[pos] || '#000000'; // Color negro por defecto
     }
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
