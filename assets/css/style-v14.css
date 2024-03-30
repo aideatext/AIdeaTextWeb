@@ -15,7 +15,13 @@ body, html {
 .main-container {
     display: flex;
     flex-direction: row; /* Orientación horizontal */
-    padding: 20px; /* Padding izquierdo y derecho */
+    height: calc(100% - 120px); /* Altura total menos la altura del footer */
+}
+
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    flex-direction: row; /* Orientación horizontal */
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
 }
 
@@ -27,6 +33,7 @@ body, html {
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
     padding: 20px; /* Padding izquierdo y derecho */
     border: 1px solid #ccc; /* Borde */
+    margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
 }
 
 /* Contenedor-2 */
@@ -37,7 +44,8 @@ body, html {
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
     padding: 20px; /* Padding izquierdo y derecho */
     border: 1px solid #ccc; /* Borde */
-    margin-left: 20px; /* Margen izquierdo para separar las secciones */
+    margin-left: auto; /* Ajusta el margen izquierdo para que se ajuste al extremo derecho */
+    margin-right: 0; /* Elimina el margen derecho */
 }
 
 /* Ajuste para cajas en contenedor-2 */
