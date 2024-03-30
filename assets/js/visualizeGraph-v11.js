@@ -124,18 +124,18 @@ function visualizeSyntax(syntaxData, countContainer) {
 
     // Palabras por función gramatical
     const POSLabels = {
+        adp: 'preposición',
+        conj: 'conjunción',
+        sconj: 'conjunción subordinante',
+        adv: 'adverbio',
         det: 'determinante',
         noun: 'sustantivo',
         verb: 'verbo',
         adj: 'adjetivo',
-        adv: 'adverbio',
-        adp: 'preposición',
-        conj: 'conjunción',
-        num: 'número',
         pron: 'pronombre',
         propn: 'nombre propio',
         punct: 'puntuación',
-        sconj: 'conjunción subordinante'
+        num: 'número'
     };
 
     // Verificar si wordCountByPOS está definido correctamente
