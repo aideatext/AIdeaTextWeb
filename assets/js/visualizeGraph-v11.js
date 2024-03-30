@@ -173,6 +173,7 @@ function visualizeSyntax(syntaxData, countContainer) {
     // Mostrar el recuento de palabras por función gramatical y todas las palabras de cada categoría
     for (const pos in syntaxData.pos_count) {
         if (syntaxData.pos_count.hasOwnProperty(pos)) {
+            const label = syntaxData[pos]; // Debería presentar la lista en el orden que hemos indicado.
             const count = syntaxData.pos_count[pos];
             const wordsOfPOS = syntaxData.nodes.filter(node => node.type === pos).map(node => node.text).join(', ');
             syntaxInfoElement.innerHTML += `<span> - ${POSLabels[pos] || pos}: ${count}</span><br>`;
