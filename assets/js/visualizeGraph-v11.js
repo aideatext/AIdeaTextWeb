@@ -107,8 +107,8 @@ function processText() {
 function visualizeGraph(data) {
     const networkContainer = document.getElementById("network-1");
     const countContainer = document.getElementById("count-section-1");
-    networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
-    countContainer.innerHTML = ''; // Corregido de count-1Container a countContainer
+    networkContainer.innerHTML = '';
+    countContainer.innerHTML = '';
 
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
@@ -212,7 +212,7 @@ function visualizeSyntax(syntaxData, countContainer) {
      */
     function visualizeSemantic(entities, craData, networkContainer) {
         // Limpiamos el contenedor antes de mostrar los resultados
-        networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+        networkContainer.innerHTML = '';
 
         // Creamos un elemento de lista para mostrar las entidades nombradas
         const entityList = document.createElement('ul');
@@ -239,12 +239,12 @@ function visualizeSyntax(syntaxData, countContainer) {
      */
     function visualizeCRA(craData, networkContainer) {
         // Limpiamos el contenedor antes de mostrar los resultados
-        networkContainer.innerHTML = ''; // Corregido de network-1Container a networkContainer
+        networkContainer.innerHTML = '';
 
         // Configuración del contenedor SVG
         const width = 1200;
         const height = 800;
-        const svg = d3.select(networkContainer).append("svg") // Corregido de network-1Container a networkContainer
+        const svg = d3.select(networkContainer).append("svg")
             .attr("width", width)
             .attr("height", height);
 
