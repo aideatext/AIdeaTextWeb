@@ -69,7 +69,6 @@ function findLeastCommonWord(nodes) {
 /**
  * Procesa el texto ingresado.
  */
-
 function processText() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
@@ -92,8 +91,8 @@ function processText() {
             // Visualiza la sintaxis del texto en la página web
             visualizeGraph(data); // Pasamos directamente los datos completos
             visualizeSemantic(data.entities, semanticNetworkContainer); // Movemos esta llamada aquí
-      } else {  
-        console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+        } else {  
+            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
     })
     .catch(error => {
@@ -118,9 +117,15 @@ function visualizeGraph(data) {
 
     if (data.entities) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
+        visualizeSemantic(data.entities, semanticNetworkContainer);
     }
 }
+
+const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
+
+
+
+
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
