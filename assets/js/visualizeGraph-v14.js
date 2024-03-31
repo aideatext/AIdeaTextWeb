@@ -120,13 +120,12 @@ function visualizeGraph(data) {
         visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
     }
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Visualiza el análisis sintáctico utilizando un treemap.
  * @param {Object} syntaxData - Los datos de análisis sintáctico.
  * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
  */
-
 function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     syntaxNetworkContainer.innerHTML = '';
@@ -197,22 +196,14 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("height", height);
 
     // Renderizar los rectángulos del treemap
-    const cell = svg.selectAll("g")
+    svg.selectAll("rect")
         .data(root.leaves())
-        .enter().append("g")
-        .attr("transform", d => `translate(${d.x0},${d.y0})`);
-
-    cell.append("rect")
+        .enter().append("rect")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         .attr("fill", d => getColorByPOS(d.parent.data.name)); // Asignar color basado en la categoría gramatical
-
-    // Agregar etiquetas de texto a cada cuadrado del treemap
-    cell.append("text")
-        .attr("x", 5)
-        .attr("y", 15)
-        .text(d => d.data.name) // Utilizar el nombre de la categoría gramatical como etiqueta
-        .attr("fill", "black"); // Color del texto
 
     // Función para asignar colores a las categorías gramaticales
     function getColorByPOS(pos) {
@@ -233,11 +224,6 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         return colorMap[pos] || '#000000'; // Color negro por defecto
     }
 }
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
