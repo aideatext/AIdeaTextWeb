@@ -298,7 +298,6 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("fill", "grey");
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
@@ -441,4 +440,4 @@ const semanticDataFromBackend = {
 };
 
 // Visualizar el análisis semántico
-visualizeSemantic(semanticData, container);
+visualizeSemantic(semanticDataFromBackend, container);
