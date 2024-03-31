@@ -1,3 +1,9 @@
+// Contenedor para la red semántica
+const semanticNetworkContainer = document.getElementById("semantic-network");
+
+// Contenedor para la red sintáctica
+const syntaxNetworkContainer = document.getElementById("syntax-network");
+
 /**
  * Obtiene un elemento del DOM por su ID.
  * @param {string} id - El ID del elemento.
@@ -14,9 +20,6 @@ function getContainerElement(id) {
 function clearContainer(container) {
     container.innerHTML = '';
 }
-
-// Declarar variables globales para contenedores de red sintáctica y semántica
-const semanticNetworkContainer = document.getElementById("semantic-network");
 
 /**
  * Visualiza los datos recibidos del backend.
