@@ -118,7 +118,6 @@ function syntaxProcess() {
         console.error("Error al procesar el texto:", error)
     });
 }
-syntaxProcess();
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
@@ -296,3 +295,4 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("font-size", "19px")
         .attr("fill", "grey");
 }
+syntaxProcess();
