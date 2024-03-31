@@ -142,6 +142,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     // Agrupar palabras por categoría gramatical y calcular proporciones
     const wordsByPOS = {};
 
+    // Iterar sobre las palabras filtradas y agruparlas por categoría gramatical
     filteredWords.forEach(node => {
         if (wordsByPOS[node.type]) {
             wordsByPOS[node.type].push(node.text);
@@ -198,7 +199,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
                 value: wordCount // Usar el número de repeticiones como valor
             });
         });
-
+         // Agregar el nodo de categoría gramatical al conjunto de datos del treemap
         treemapData.children.push(categoryNode);
     }
 
@@ -236,7 +237,8 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     const legend = svg.append("g")
         .attr("class", "legend")
         .attr("transform", `translate(10, ${height - 20})`);
-
+    
+     // Iterar sobre las categorías gramaticales y agregar rectángulos y etiquetas de leyenda
     let legendX = 0;
     for (const pos in POSLabels) {
         const label = POSLabels[pos];
