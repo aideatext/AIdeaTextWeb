@@ -54,12 +54,14 @@ body, html {
 
 /* Área de entrada de texto */
 .text-input-section-1 {
+    display: flex; /* Hace que los elementos internos se alineen como una fila */
+    flex-direction: column; /* Cambia la dirección de alineación a columna */
+    align-items: center; /* Centra horizontalmente los elementos en el contenedor */
     padding: 20px;
     border: 1px solid #ccc;
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
     height: calc(100% - 40px); /* 100% de la altura menos el padding */
     margin-bottom: 20px; /* Espacio entre la caja de texto y el botón */
-    display: flex; /* Hace que los elementos internos se alineen como una fila */
     justify-content: space-between; /* Espacia los elementos internos uniformemente en la fila */
     align-items: center; /* Centra verticalmente los elementos en el contenedor */
 }
