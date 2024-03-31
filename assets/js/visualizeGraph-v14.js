@@ -324,13 +324,13 @@ function visualizeSemantic(semanticData, container) {
         return;
     }
 
-    const nodes = semanticData.semantic_analysis.nodes;
-    const edges = semanticData.semantic_analysis.edges;
+    const semanticNodes = semanticData.semantic_analysis.nodes;
+    const semanticEdges = semanticData.semantic_analysis.edges;
 
     // Declarar la variable simulation antes de su uso
     // Definir la simulación de fuerza
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(filteredLinks).id(d => d.id))
+    const simulation = d3.forceSimulation(semanticNodes)
+        .force("link", d3.forceLink(semanticEdges).id(d => d.id))
         .force("charge", d3.forceManyBody().strength(-50))
         .force("x", d3.forceX())
         .force("y", d3.forceY())
@@ -346,21 +346,14 @@ function visualizeSemantic(semanticData, container) {
         .attr("class", "graph");
 
     // Definir el enlace de datos para los bordes
-    const links = semanticData.semantic_analysis.edges.map(d => ({
+    const links = semanticEdges.map(d => ({
         source: d.source.toString(),
         target: d.target.toString(),
         relation: d.relation
     }));
 
-    // Definir el enlace de datos para los nodos
-    const nodes = semanticData.semantic_analysis.nodes.map(d => ({
-        id: d.id.toString(),
-        text: d.text,
-        lemma: d.lemma
-    }));
-
     // Crear un objeto de conjunto para los nodos
-    const nodeSet = new Set(nodes.map(d => d.id));
+    const nodeSet = new Set(semanticNodes.map(d => d.id));
 
     // Filtrar los enlaces que tienen ambos extremos en el conjunto de nodos
     const filteredLinks = links.filter(link => nodeSet.has(link.source) && nodeSet.has(link.target));
@@ -379,7 +372,7 @@ function visualizeSemantic(semanticData, container) {
     const node = g.append("g")
         .attr("class", "nodes")
         .selectAll("circle")
-        .data(nodes)
+        .data(semanticNodes)
         .join("circle")
         .attr("r", 5)
         .attr("fill", "#1f77b4")
@@ -393,7 +386,7 @@ function visualizeSemantic(semanticData, container) {
     const text = g.append("g")
         .attr("class", "texts")
         .selectAll("text")
-        .data(nodes)
+        .data(semanticNodes)
         .join("text")
         .text(d => d.text)
         .attr("font-size", "10px")
@@ -445,26 +438,3 @@ function visualizeSemantic(semanticData, container) {
     // Añadir el SVG al contenedor
     container.appendChild(svg.node());
 }
-
-// Obtener el contenedor para mostrar el grafo
-const container = document.getElementById("semantic-network");
-
-// Simular los datos de análisis semántico recibidos del backend
-const semanticDataFromBackend = {
-    semantic_analysis: {
-        nodes: [
-            { id: 0, text: "Debe", lemma: "deber" },
-            { id: 1, text: "Node 1", lemma: "lemma 1" },
-            { id: 2, text: "Node 2", lemma: "lemma 2" },
-            // Agrega más nodos según sea necesario
-        ],
-        edges: [
-            { source: 1, target: 0, relation: "aux" },
-            { source: 1, target: 2, relation: "relation 1-2" },
-            // Agrega más relaciones según sea necesario
-        ]
-    }
-};
-
-// Visualizar el análisis semántico
-visualizeSemantic(semanticDataFromBackend, container);
