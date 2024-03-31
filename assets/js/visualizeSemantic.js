@@ -77,119 +77,13 @@ function visualizeSemantic(semanticData, container) {
         return;
     }
 
-    const semanticNodes = semanticData.nodes;
-    const semanticEdges = semanticData.edges;
+    const nodes = semanticData.nodes.map(node => ({ id: node.id }));
+    const links = semanticData.edges.map(edge => ({ source: edge.source, target: edge.target }));
 
-    // Declarar la variable simulation antes de su uso
-    // Definir la simulación de fuerza
-    const simulation = d3.forceSimulation(semanticNodes)
-        .force("link", d3.forceLink(semanticEdges).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
-        .on("tick", ticked);
-
-    // Crear un SVG para dibujar el grafo
-    const svg = d3.create("svg")
-        .attr("width", "100%")
-        .attr("height", "100%");
-
-    // Añadir un grupo principal al SVG
-    const g = svg.append("g")
-        .attr("class", "graph");
-
-    // Definir el enlace de datos para los bordes
-    const links = semanticEdges.map(d => ({
-        source: d.source.toString(),
-        target: d.target.toString(),
-        relation: d.relation
-    }));
-
-    // Crear un objeto de conjunto para los nodos
-    const nodeSet = new Set(semanticNodes.map(d => d.id));
-
-    // Filtrar los enlaces que tienen ambos extremos en el conjunto de nodos
-    const filteredLinks = links.filter(link => nodeSet.has(link.source) && nodeSet.has(link.target));
-
-    // Definir la función de enlace
-    const link = g.append("g")
-        .attr("class", "links")
-        .selectAll("line")
-        .data(filteredLinks)
-        .join("line")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6)
-        .attr("stroke-width", 1);
-
-    // Definir la función de nodo
-    const node = g.append("g")
-        .attr("class", "nodes")
-        .selectAll("circle")
-        .data(semanticNodes)
-        .join("circle")
-        .attr("r", 5)
-        .attr("fill", "#1f77b4")
-        .call(drag(simulation));
-
-    // Añadir etiquetas de texto a los nodos
-    node.append("title")
-        .text(d => d.text);
-
-    // Añadir texto a los nodos
-    const text = g.append("g")
-        .attr("class", "texts")
-        .selectAll("text")
-        .data(semanticNodes)
-        .join("text")
-        .text(d => d.text)
-        .attr("font-size", "10px")
-        .attr("fill", "#000")
-        .attr("dy", "0.35em");
-
-    // Definir la función ticked para actualizar las posiciones de los elementos en cada iteración
-    function ticked() {
-        link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
-
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-
-        text
-            .attr("x", d => d.x + 7)
-            .attr("y", d => d.y);
-    }
-
-    // Definir la función de arrastre para los nodos
-    function drag(simulation) {
-        function dragstarted(event) {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
-            event.subject.fx = event.subject.x;
-            event.subject.fy = event.subject.y;
-        }
-
-        function dragged(event) {
-            event.subject.fx = event.x;
-            event.subject.fy = event.y;
-        }
-
-        function dragended(event) {
-            if (!event.active) simulation.alphaTarget(0);
-            event.subject.fx = null;
-            event.subject.fy = null;
-        }
-
-        return d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended);
-    }
+    const svg = ForceGraph({ nodes, links }, { width: "100%", height: "100%" });
 
     // Añadir el SVG al contenedor
-    container.appendChild(svg.node());
+    container.appendChild(svg);
 }
 
 // Llamar a la función semanticProcess al cargar la página
