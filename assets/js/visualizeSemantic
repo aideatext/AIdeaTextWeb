@@ -54,7 +54,6 @@ function findMostCommonWord(nodes) {
     }, nodes[0]);
 }
 
-
 /**
  * Encuentra la palabra menos común en un conjunto de nodos.
  * @param {Array} nodes - Los nodos a analizar.
@@ -90,10 +89,9 @@ function visualizeGraph(data) {
 }
 
 /**
- * Procesa el texto ingresado.
+ * Procesa el texto ingresado para análisis semántico.
  */
-
-function processText() {
+function processSemantic() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
@@ -120,35 +118,31 @@ function processText() {
 
         if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
             // Visualiza el análisis semántico en la página web
-            visualizeSemantic(data.semantic_analysis, document.getElementById("semantic-network"));
+            visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
         }
     })
     .catch(error => {
         console.error("Error al procesar el texto:", error)
     });
 }
-processText();
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * Visualiza el análisis semántico.
-     * @param {Array} entities - Las entidades detectadas en el texto.
-     * @param {Object} craData - Los datos de análisis CRA.
-     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
-     */
-
+/**
+ * Visualiza el análisis semántico.
+ * @param {Object} semanticData - Los datos de análisis semántico.
+ * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
+ */
 function visualizeSemantic(semanticData, container) {
     // Limpiar el contenedor antes de mostrar el grafo
     container.innerHTML = '';
 
     // Verificar si hay datos válidos de análisis semántico
-    if (!semanticData || !semanticData.semantic_analysis || !semanticData.semantic_analysis.nodes || !semanticData.semantic_analysis.edges) {
+    if (!semanticData || !semanticData.nodes || !semanticData.edges) {
         console.error("Error: No se encontraron datos de análisis semántico válidos.");
         return;
     }
 
-    const semanticNodes = semanticData.semantic_analysis.nodes;
-    const semanticEdges = semanticData.semantic_analysis.edges;
+    const semanticNodes = semanticData.nodes;
+    const semanticEdges = semanticData.edges;
 
     // Declarar la variable simulation antes de su uso
     // Definir la simulación de fuerza
@@ -261,3 +255,6 @@ function visualizeSemantic(semanticData, container) {
     // Añadir el SVG al contenedor
     container.appendChild(svg.node());
 }
+
+// Llamar a la función processSemantic al cargar la página
+processSemantic();
