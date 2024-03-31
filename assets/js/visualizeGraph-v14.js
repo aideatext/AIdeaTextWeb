@@ -140,6 +140,7 @@ function getColorByPOS(pos) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+// Función para análisis semántico en visualize.js
 /**
  * Visualiza el análisis semántico.
  * @param {Object} semanticData - Los datos de análisis semántico.
@@ -149,62 +150,51 @@ function visualizeSemantic(semanticData, semanticNetworkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
-    // Visualizamos los resultados del análisis semántico
-    visualizeCRA(semanticData.semantic_analysis, semanticNetworkContainer);
+    // Transformamos los datos del análisis semántico en una estructura adecuada para visualizeCRA
+    const craData = transformSemanticData(semanticData);
+
+    // Visualizamos los resultados del análisis CRA
+    visualizeCRA(craData, semanticNetworkContainer);
 }
 
-/**
- * Visualiza el análisis CRA.
- * @param {Object} craData - Los datos de análisis CRA.
- * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
- */
-function visualizeCRA(craData, semanticNetworkContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    semanticNetworkContainer.innerHTML = '';
+function transformSemanticData(semanticData) {
+    const nodes = semanticData.nodes.map(node => ({
+        id: node.id,
+        text: node.text, // Se incluye el texto del nodo
+        lemma: node.lemma, // Se incluye el lemma del nodo
+        weight: calculateNodeWeight(node), // Calcula un peso para el nodo
+    }));
 
-    // Configuración del contenedor SVG
-    const width = 1200;
-    const height = 800;
-    const svg = d3.select(semanticNetworkContainer).append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    const edges = semanticData.edges.map(edge => ({
+        source: edge.source,
+        target: edge.target,
+        relation: edge.relation
+    }));
 
-    // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
-    const scaleNodeSize = d3.scaleLinear()
-        .domain([0, d3.max(craData.nodes.map(node => node.weight))])
-        .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
-
-    // Creamos los nodos y los enlaces basados en los datos del CRA
-    const nodes = craData.nodes.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
-
-    // Creamos la simulación de fuerzas
-    const simulation = d3.forceSimulation(nodes)
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
-
-    // Dibujamos los nodos
-    const node = svg.selectAll("circle")
-        .data(nodes)
-        .enter().append("circle")
-        .attr("r", d => d.size)
-        .attr("fill", "#66ccff"); // Color azul para los nodos
-
-    // Etiquetas de texto para los nodos
-    const text = svg.selectAll("text")
-        .data(nodes)
-        .enter().append("text")
-        .text(d => d.id)
-        .attr("x", 8)
-        .attr("y", "0.31em");
-
-    // Actualizamos la posición de los elementos en cada paso de la simulación
-    simulation.on("tick", () => {
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-        text
-            .attr("x", d => d.x + 10)
-            .attr("y", d => d.y);
-    });
+    return { nodes, edges };
 }
+
+function calculateNodeWeight(node) {
+    // Aquí podrías calcular el peso del nodo basado en algún criterio relevante,
+    // como la frecuencia de la palabra o su importancia en el texto.
+    // Por ejemplo, podrías usar la frecuencia de la palabra del análisis sintáctico.
+    // Aquí se debe devolver un valor numérico que represente el peso del nodo.
+    // Por simplicidad, podríamos devolver 1 para todos los nodos.
+    return 1;
+}
+
+// Ahora, llamamos a visualizeSemantic con los datos del análisis semántico y el contenedor adecuado
+const semanticData = {
+    nodes: [
+        // Los nodos del análisis semántico
+    ],
+    edges: [
+        // Las relaciones entre los nodos
+    ]
+};
+
+const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
+
+visualizeSemantic(semanticData, semanticNetworkContainer);
+
 
