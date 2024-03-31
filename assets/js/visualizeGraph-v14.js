@@ -295,4 +295,4 @@ function calculateNodeWeight(node) {
 }
 
 const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
-visualizeSemantic(semanticDataFromBackend, semanticNetworkContainer);
+visualizeSemantic(semanticData, semanticNetworkContainer);
