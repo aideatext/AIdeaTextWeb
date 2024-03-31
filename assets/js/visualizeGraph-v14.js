@@ -262,7 +262,7 @@ function visualizeSemantic(semanticData, semanticNetworkContainer) {
     semanticNetworkContainer.innerHTML = '';
 
     // Transformamos los datos del análisis semántico en una estructura adecuada para visualizeCRA
-    const craData = transformSemanticData(semanticData.semantic_analysis);
+    const craData = transformSemanticData(semanticData);
 
     // Visualizamos los resultados del análisis CRA
     visualizeCRA(craData, semanticNetworkContainer);
@@ -293,14 +293,6 @@ function calculateNodeWeight(node) {
     // Por simplicidad, podríamos devolver 1 para todos los nodos.
     return 1;
 }
-
-// Los datos del análisis semántico se toman directamente del objeto proporcionado por el backend
-const semanticDataFromBackend = {
-    semantic_analysis: {
-        nodes: semantic_analysis.nodes,
-        edges: semantic_analysis.edges
-    }
-};
 
 const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
 visualizeSemantic(semanticDataFromBackend, semanticNetworkContainer);
