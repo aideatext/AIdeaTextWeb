@@ -190,33 +190,22 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         children: []
     };
 
-    for (const pos in wordsByPOS) {
+    // Ordenar las categorías gramaticales por número de ocurrencias (de mayor a menor)
+    const sortedCategories = Object.keys(wordsByPOS).sort((a, b) => wordsByPOS[b].length - wordsByPOS[a].length);
+
+    // Iterar sobre las categorías gramaticales ordenadas
+    sortedCategories.forEach(pos => {
         const words = wordsByPOS[pos];
         const wordCount = words.length;
 
         const categoryLabel = POSLabels[pos] || pos;
         const categoryNode = {
             name: categoryLabel,
-            children: []
+            children: words.map(word => ({ name: word, value: 1 })) // Each word is treated as a separate child node
         };
 
-        // Sort words by count in descending order
-        words.sort((a, b) => wordsByPOS[pos].filter(word => word === b).length - wordsByPOS[pos].filter(word => word === a).length);
-
-        // Calculate color shade based on word count
-        const colorScale = d3.scaleLinear()
-            .domain([1, wordCount])
-            .range(['lightblue', getColorByPOS(pos)]);
-
-        words.forEach((word, index) => {
-            categoryNode.children.push({
-                name: `${word} [${wordCount - index}]`,
-                value: wordCount - index // Assign higher values to darker shades
-            });
-        });
-        
         treemapData.children.push(categoryNode);
-    }
+    });
 
     const root = d3.hierarchy(treemapData)
         .sum(d => d.value);
@@ -236,7 +225,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr('height', d => d.y1 - d.y0)
         .style("stroke", "black")
         .style("fill", d => getColorByPOS(d.parent.data.name)) // Use parent category color
-        .style("opacity", d => 0.6 + 0.4 * (d.value / (d.data.name.split('[')[1].split(']')[0]))); // Adjust opacity based on word count
+        .style("opacity", d => 0.6 + 0.4 * (d.value / (d.parent.value))); // Adjust opacity based on word count within category
 
     svg.selectAll("text")
         .data(root.leaves())
@@ -244,18 +233,8 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .append("text")
         .attr("x", d => d.x0 + 5)
         .attr("y", d => d.y0 + 20)
-        .text(d => d.data.name.split('[')[0]) // Extracting only the word
+        .text(d => d.data.name) // Display word
         .attr("font-size", "14px")
-        .attr("fill", "white");
-
-    svg.selectAll("vals")
-        .data(root.leaves())
-        .enter()
-        .append("text")
-        .attr("x", d => d.x0 + 5)
-        .attr("y", d => d.y0 + 35)
-        .text(d => `[${d.value}]`)
-        .attr("font-size", "11px")
         .attr("fill", "white");
 
     svg.selectAll("titles")
@@ -264,7 +243,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .append("text")
         .attr("x", d => d.x0)
         .attr("y", d => d.y0 + 21)
-        .text(d => `${d.data.name} [${d.data.children.length}]`)
+        .text(d => `${d.data.name} [${d.value}]`) // Display category name and total count
         .attr("font-size", "14px")
         .attr("fill", d => getColorByPOS(d.data.name));
 
@@ -275,7 +254,6 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("font-size", "14px")
         .attr("fill", "grey");
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
