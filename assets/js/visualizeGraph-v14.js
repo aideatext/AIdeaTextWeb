@@ -224,8 +224,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     cell.append("rect")
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        // .attr("fill", "lightblue"); Color de fondo de los rectángulos
-        .attr("fill", d => getColorByPOS(d.data.name)); // Obtener el color según la categoría gramatical
+        .attr("fill", d => getColorByPOS(d.data.name)); 
 
     // Agregar etiquetas de texto a cada cuadrado del treemap
     cell.append("text")
@@ -258,7 +257,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
 
         legendX += label.length * 6 + 40;
     }
-}
+
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
@@ -276,7 +275,9 @@ function getColorByPOS(pos) {
         'aux': '#17becf',
         'cconj': '#aec7e8'
     };
-    return colorMap[pos] || 'lightblue'; // Color negro por defecto
+    return colorMap[pos] || 'lightblue';
+}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
