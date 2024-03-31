@@ -120,6 +120,25 @@ function visualizeGraph(data) {
         visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
     }
 }
+
+// Función para asignar colores a las categorías gramaticales
+function getColorByPOS(pos) {
+    const colorMap = {
+        'adp': '#1f77b4',
+        'det': '#ff7f0e',
+        'adj': '#2ca02c',
+        'noun': '#d62728',
+        'propn': '#9467bd',
+        'pron': '#8c564b',
+        'verb': '#e377c2',
+        'sconj': '#7f7f7f',
+        'adv': '#bcbd22',
+        'aux': '#17becf',
+        'cconj': '#aec7e8'
+    };
+    return colorMap[pos] || 'lightblue';
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Visualiza el análisis sintáctico utilizando un treemap.
