@@ -52,13 +52,6 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
         
-        if (data.syntax && data.syntax.nodes) {
-            // Visualiza la sintaxis del texto en la página web
-            visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
-        } else {  
-            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
-        }
-
         if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
             // Visualiza el análisis semántico en la página web
             visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
