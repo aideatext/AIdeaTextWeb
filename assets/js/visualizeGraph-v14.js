@@ -439,11 +439,18 @@ function visualizeSemantic(semanticData, container) {
 // Obtener el contenedor para mostrar el grafo
 const container = document.getElementById("semantic-network");
 
-// Obtener los datos de análisis semántico del backend
+// Simular los datos de análisis semántico recibidos del backend
 const semanticDataFromBackend = {
     semantic_analysis: {
-        nodes: semantic_analysis.nodes,
-        edges: semantic_analysis.edges
+        nodes: [
+            { id: "1", text: "Node 1", lemma: "lemma 1" },
+            { id: "2", text: "Node 2", lemma: "lemma 2" },
+            // Agrega más nodos según sea necesario
+        ],
+        edges: [
+            { source: "1", target: "2", relation: "relation 1-2" },
+            // Agrega más relaciones según sea necesario
+        ]
     }
 };
 
