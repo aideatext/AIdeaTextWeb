@@ -88,17 +88,22 @@ function processText() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
         if (data.syntax && data.syntax.nodes) {
-        
-        // Visualiza la sintaxis del texto en la página web
-        visualizeGraph(data); // Asegúrate de que esta línea esté presente
-      } else {  
-        console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+            // Visualiza la sintaxis del texto en la página web
+            visualizeGraph(data);
+        } else {  
+            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+        }
+
+        if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
+            // Visualiza el análisis semántico en la página web
+            visualizeSemantic(data.semantic_analysis);
         }
     })
     .catch(error => {
         console.error("Error al procesar el texto:", error)
     });
 }
+
 
 /**
  * Visualiza los datos recibidos del backend.
