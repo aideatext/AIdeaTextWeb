@@ -178,7 +178,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         propn: 'nombre propio'
     };
 
-    const width = 800;
+    const width = 1200;
     const height = 600;
 
     const treemapLayout = d3.treemap()
