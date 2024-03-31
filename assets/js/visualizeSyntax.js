@@ -93,7 +93,7 @@ function visualizeGraph(data) {
  * Procesa el texto ingresado.
  */
 
-function processText() {
+function syntaxProcess() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
@@ -127,7 +127,7 @@ function processText() {
         console.error("Error al procesar el texto:", error)
     });
 }
-processText();
+syntaxProcess();
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
