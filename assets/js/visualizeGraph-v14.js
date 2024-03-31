@@ -69,6 +69,7 @@ function findLeastCommonWord(nodes) {
 /**
  * Procesa el texto ingresado.
  */
+
 function processText() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
@@ -88,12 +89,8 @@ function processText() {
         console.log("Datos recibidos del backend:", data);
         if (data.syntax && data.syntax.nodes) {
         
-            // Visualiza la sintaxis del texto en la página web
-            visualizeGraph(data); // Pasamos directamente los datos completos
-            
-            // Llamamos a visualizeSemantic aquí, después de obtener los datos
-            const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
-            visualizeSemantic(data.entities, semanticNetworkContainer); 
+        // Visualiza la sintaxis del texto en la página web
+        visualizeGraph(data); // Asegúrate de que esta línea esté presente
       } else {  
         console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
@@ -120,10 +117,9 @@ function visualizeGraph(data) {
 
     if (data.entities) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, semanticNetworkContainer);
+        visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
     }
 }
-
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
@@ -144,18 +140,28 @@ function getColorByPOS(pos) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Visualiza el análisis sintáctico utilizando un treemap.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
+ */
 function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
+    // Limpiar el contenedor antes de mostrar los resultados
     syntaxNetworkContainer.innerHTML = '';
 
+    // Verificar si hay datos válidos de análisis sintáctico
     if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
         return;
     }
 
+    // Filtrar palabras, excluyendo signos de puntuación y números
     const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
 
+    // Agrupar palabras por categoría gramatical y calcular proporciones
     const wordsByPOS = {};
 
+    // Iterar sobre las palabras filtradas y agruparlas por categoría gramatical
     filteredWords.forEach(node => {
         if (wordsByPOS[node.type]) {
             wordsByPOS[node.type].push(node.text);
@@ -164,6 +170,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         }
     });
 
+    // Definir etiquetas completas para las categorías gramaticales en español
     const POSLabels = {
         adp: 'preposición',
         conj: 'conjunción',
@@ -177,44 +184,67 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         propn: 'nombre propio'
     };
 
-    const width = 1200;
+    // Configurar el tamaño del treemap
+    const width = 800;
     const height = 600;
 
+    // Crear el layout del treemap
     const treemapLayout = d3.treemap()
         .size([width, height])
         .padding(2);
 
+    // Crear un conjunto de datos para el treemap
     const treemapData = {
         name: 'syntax',
         children: []
     };
 
-    // Ordenar las categorías gramaticales por número de ocurrencias (de mayor a menor)
-    const sortedCategories = Object.keys(wordsByPOS).sort((a, b) => wordsByPOS[b].length - wordsByPOS[a].length);
-
-    // Iterar sobre las categorías gramaticales ordenadas
-    sortedCategories.forEach(pos => {
+    // Iterar sobre las categorías gramaticales y sus palabras asociadas
+    for (const pos in wordsByPOS) {
         const words = wordsByPOS[pos];
         const wordCount = words.length;
 
+        // Agregar la etiqueta completa de la categoría gramatical
         const categoryLabel = POSLabels[pos] || pos;
         const categoryNode = {
             name: categoryLabel,
-            children: words.map(word => ({ name: word, value: 1 })) // Each word is treated as a separate child node
+            children: []
         };
 
+        // Agregar cada palabra y su frecuencia de aparición
+        words.forEach(word => {
+            categoryNode.children.push({
+                name: `${word} [${wordCount}]`,
+                value: wordCount // Usar el número de repeticiones como valor
+            });
+        });
+         // Agregar el nodo de categoría gramatical al conjunto de datos del treemap
         treemapData.children.push(categoryNode);
-    });
+    }
 
+    // Convertir los datos en una jerarquía de d3
     const root = d3.hierarchy(treemapData)
         .sum(d => d.value);
 
+    // Calcular la posición y tamaño de cada rectángulo en el treemap
     treemapLayout(root);
 
+    // Crear el contenedor SVG para el treemap
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height);
 
+    // Prepare a color scale
+    const color = d3.scaleOrdinal()
+        .domain(Object.keys(POSLabels))
+        .range(['#402D54', '#D18975', '#8FD175', '#AEC7E8', '#BCBD22', '#8C564B', '#2CA02C', '#D62728', '#9467BD', '#FF7F0E', '#1F77B4']);
+
+    // And an opacity scale
+    const opacity = d3.scaleLinear()
+        .domain([1, 10]) // Adjust as needed
+        .range([0.5, 1]);
+
+    // Use this information to add rectangles:
     svg.selectAll("rect")
         .data(root.leaves())
         .join("rect")
@@ -223,80 +253,132 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr('width', d => d.x1 - d.x0)
         .attr('height', d => d.y1 - d.y0)
         .style("stroke", "black")
-        .style("fill", d => getColorByPOS(d.parent.data.name)) // Use parent category color
-        .style("opacity", d => 0.6 + 0.4 * (d.value / (d.parent.value))); // Adjust opacity based on word count within category
+        .style("fill", d => color(d.data.name))
+        .style("opacity", d => opacity(d.data.value / d.data.name.split(' ').length));
 
+    // And to add the text labels
     svg.selectAll("text")
         .data(root.leaves())
         .enter()
         .append("text")
         .attr("x", d => d.x0 + 5)
         .attr("y", d => d.y0 + 20)
-        .text(d => d.data.name) // Display word
-        .attr("font-size", "14px")
+        .text(d => d.data.name.split(' ')[0]) // Extracting only the word
+        .attr("font-size", "19px")
         .attr("fill", "white");
 
+    // And to add the text labels for counts
+    svg.selectAll("vals")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 35)
+        .text(d => `[${d.data.value}]`)
+        .attr("font-size", "11px")
+        .attr("fill", "white");
+
+    // Add title for the 3 groups
     svg.selectAll("titles")
         .data(root.descendants().filter(d => d.depth === 1))
         .enter()
         .append("text")
         .attr("x", d => d.x0)
         .attr("y", d => d.y0 + 21)
-        .text(d => `${d.data.name} [${d.value}]`) // Display category name and total count
-        .attr("font-size", "14px")
-        .attr("fill", d => getColorByPOS(d.data.name));
+        .text(d => d.data.name)
+        .attr("font-size", "19px")
+        .attr("fill", d => color(d.data.name));
 
+    // Add title for the treemap
     svg.append("text")
         .attr("x", 0)
         .attr("y", 14)
         .text("Análisis Sintáctico")
-        .attr("font-size", "14px")
+        .attr("font-size", "19px")
         .attr("fill", "grey");
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// Función para análisis semántico en visualize.js
-/**
- * Visualiza el análisis semántico.
- * @param {Object} semanticData - Los datos de análisis semántico.
- * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
- */
-function visualizeSemantic(semanticData, semanticNetworkContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
-    semanticNetworkContainer.innerHTML = '';
+    /**
+     * Visualiza el análisis semántico.
+     * @param {Array} entities - Las entidades detectadas en el texto.
+     * @param {Object} craData - Los datos de análisis CRA.
+     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
+     */
+    function visualizeSemantic(entities, craData, semanticNetworkContainer) {
+        // Limpiamos el contenedor antes de mostrar los resultados
+        semanticNetworkContainer.innerHTML = '';
 
-    // Transformamos los datos del análisis semántico en una estructura adecuada para visualizeCRA
-    const craData = transformSemanticData(semanticData);
+        // Creamos un elemento de lista para mostrar las entidades nombradas
+        const entityList = document.createElement('ul');
 
-    // Visualizamos los resultados del análisis CRA
-    visualizeCRA(craData, semanticNetworkContainer);
-}
+        // Recorremos las entidades encontradas en el análisis semántico
+        entities.forEach(entity => {
+            // Creamos un elemento de lista para cada entidad
+            const listItem = document.createElement('li');
+            listItem.textContent = entity;
+            entityList.appendChild(listItem);
+        });
 
-function transformSemanticData(semanticData) {
-    const nodes = semanticData.nodes.map(node => ({
-        id: node.id,
-        text: node.text, // Se incluye el texto del nodo
-        lemma: node.lemma, // Se incluye el lemma del nodo
-        weight: calculateNodeWeight(node), // Calcula un peso para el nodo
-    }));
+        // Agregamos la lista al contenedor
+        semanticNetworkContainer.appendChild(entityList);
 
-    const edges = semanticData.edges.map(edge => ({
-        source: edge.source,
-        target: edge.target,
-        relation: edge.relation
-    }));
+        // Visualizamos los resultados del CRA
+        visualizeCRA(craData, semanticNetworkContainer);
+    }
 
-    return { nodes, edges };
-}
+    /**
+     * Visualiza el análisis CRA.
+     * @param {Array} craData - Los datos de análisis CRA.
+     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
+     */
+    function visualizeCRA(craData, semanticNetworkContainer) {
+        // Limpiamos el contenedor antes de mostrar los resultados
+        semanticNetworkContainer.innerHTML = '';
 
-function calculateNodeWeight(node) {
-    // Aquí podrías calcular el peso del nodo basado en algún criterio relevante,
-    // como la frecuencia de la palabra o su importancia en el texto.
-    // Por ejemplo, podrías usar la frecuencia de la palabra del análisis sintáctico.
-    // Aquí se debe devolver un valor numérico que represente el peso del nodo.
-    // Por simplicidad, podríamos devolver 1 para todos los nodos.
-    return 1;
-}
+        // Configuración del contenedor SVG
+        const width = 1200;
+        const height = 800;
+        const svg = d3.select(semanticNetworkContainer).append("svg")
+            .attr("width", width)
+            .attr("height", height);
 
-const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
-visualizeSemantic(data.entities, semanticNetworkContainer);
+        // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
+        const scaleNodeSize = d3.scaleLinear()
+            .domain([0, d3.max(craData.map(node => node.weight))])
+            .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
+
+        // Creamos los nodos y los enlaces basados en los datos del CRA
+        const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
+
+        // Creamos la simulación de fuerzas
+        const simulation = d3.forceSimulation(nodes)
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        // Dibujamos los nodos
+        const node = svg.selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("r", d => d.size)
+            .attr("fill", "#66ccff"); // Color azul para los nodos
+
+        // Etiquetas de texto para los nodos
+        const text = svg.selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .text(d => d.id)
+            .attr("x", 8)
+            .attr("y", "0.31em");
+
+        // Actualizamos la posición de los elementos en cada paso de la simulación
+        simulation.on("tick", () => {
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+            text
+                .attr("x", d => d.x + 10)
+                .attr("y", d => d.y);
+        });
+    }
