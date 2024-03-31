@@ -141,200 +141,70 @@ function getColorByPOS(pos) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Visualiza el análisis sintáctico utilizando un treemap.
- * @param {Object} syntaxData - Los datos de análisis sintáctico.
- * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
+ * Visualiza el análisis semántico.
+ * @param {Object} semanticData - Los datos de análisis semántico.
+ * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
  */
-function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
-    syntaxNetworkContainer.innerHTML = '';
+function visualizeSemantic(semanticData, semanticNetworkContainer) {
+    // Limpiamos el contenedor antes de mostrar los resultados
+    semanticNetworkContainer.innerHTML = '';
 
-    if (!syntaxData || !syntaxData.nodes) {
-        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
-        return;
-    }
+    // Visualizamos los resultados del análisis semántico
+    visualizeCRA(semanticData.semantic_analysis, semanticNetworkContainer);
+}
 
-    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
+/**
+ * Visualiza el análisis CRA.
+ * @param {Object} craData - Los datos de análisis CRA.
+ * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
+ */
+function visualizeCRA(craData, semanticNetworkContainer) {
+    // Limpiamos el contenedor antes de mostrar los resultados
+    semanticNetworkContainer.innerHTML = '';
 
-    const wordsByPOS = {};
-
-    filteredWords.forEach(node => {
-        if (wordsByPOS[node.type]) {
-            wordsByPOS[node.type].push(node.text);
-        } else {
-            wordsByPOS[node.type] = [node.text];
-        }
-    });
-
-    const POSLabels = {
-        adp: 'preposición',
-        conj: 'conjunción',
-        sconj: 'conjunción subordinante',
-        adv: 'adverbio',
-        det: 'determinante',
-        noun: 'sustantivo',
-        verb: 'verbo',
-        adj: 'adjetivo',
-        pron: 'pronombre',
-        propn: 'nombre propio'
-    };
-
+    // Configuración del contenedor SVG
     const width = 1200;
-    const height = 600;
-
-    const treemapLayout = d3.treemap()
-        .size([width, height])
-        .padding(2);
-
-    const treemapData = {
-        name: 'syntax',
-        children: []
-    };
-
-    // Ordenar las categorías gramaticales por número de ocurrencias (de mayor a menor)
-    const sortedCategories = Object.keys(wordsByPOS).sort((a, b) => wordsByPOS[b].length - wordsByPOS[a].length);
-
-    // Iterar sobre las categorías gramaticales ordenadas
-    sortedCategories.forEach(pos => {
-        const words = wordsByPOS[pos];
-        const wordCount = words.length;
-
-        const categoryLabel = POSLabels[pos] || pos;
-        const categoryNode = {
-            name: categoryLabel,
-            children: words.map(word => ({ name: word, value: 1 })) // Each word is treated as a separate child node
-        };
-
-        treemapData.children.push(categoryNode);
-    });
-
-    const root = d3.hierarchy(treemapData)
-        .sum(d => d.value);
-
-    treemapLayout(root);
-
-    const svg = d3.select(syntaxNetworkContainer).append("svg")
+    const height = 800;
+    const svg = d3.select(semanticNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height);
 
-    svg.selectAll("rect")
-        .data(root.leaves())
-        .join("rect")
-        .attr('x', d => d.x0)
-        .attr('y', d => d.y0)
-        .attr('width', d => d.x1 - d.x0)
-        .attr('height', d => d.y1 - d.y0)
-        .style("stroke", "black")
-        .style("fill", d => getColorByPOS(d.parent.data.name)) // Use parent category color
-        .style("opacity", d => 0.6 + 0.4 * (d.value / (d.parent.value))); // Adjust opacity based on word count within category
+    // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
+    const scaleNodeSize = d3.scaleLinear()
+        .domain([0, d3.max(craData.nodes.map(node => node.weight))])
+        .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
 
-    svg.selectAll("text")
-        .data(root.leaves())
-        .enter()
-        .append("text")
-        .attr("x", d => d.x0 + 5)
-        .attr("y", d => d.y0 + 20)
-        .text(d => d.data.name) // Display word
-        .attr("font-size", "14px")
-        .attr("fill", "white");
+    // Creamos los nodos y los enlaces basados en los datos del CRA
+    const nodes = craData.nodes.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
 
-    svg.selectAll("titles")
-        .data(root.descendants().filter(d => d.depth === 1))
-        .enter()
-        .append("text")
-        .attr("x", d => d.x0)
-        .attr("y", d => d.y0 + 21)
-        .text(d => `${d.data.name} [${d.value}]`) // Display category name and total count
-        .attr("font-size", "14px")
-        .attr("fill", d => getColorByPOS(d.data.name));
+    // Creamos la simulación de fuerzas
+    const simulation = d3.forceSimulation(nodes)
+        .force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2));
 
-    svg.append("text")
-        .attr("x", 0)
-        .attr("y", 14)
-        .text("Análisis Sintáctico")
-        .attr("font-size", "14px")
-        .attr("fill", "grey");
+    // Dibujamos los nodos
+    const node = svg.selectAll("circle")
+        .data(nodes)
+        .enter().append("circle")
+        .attr("r", d => d.size)
+        .attr("fill", "#66ccff"); // Color azul para los nodos
+
+    // Etiquetas de texto para los nodos
+    const text = svg.selectAll("text")
+        .data(nodes)
+        .enter().append("text")
+        .text(d => d.id)
+        .attr("x", 8)
+        .attr("y", "0.31em");
+
+    // Actualizamos la posición de los elementos en cada paso de la simulación
+    simulation.on("tick", () => {
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+        text
+            .attr("x", d => d.x + 10)
+            .attr("y", d => d.y);
+    });
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * Visualiza el análisis semántico.
-     * @param {Array} entities - Las entidades detectadas en el texto.
-     * @param {Object} craData - Los datos de análisis CRA.
-     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
-     */
-    function visualizeSemantic(entities, craData, semanticNetworkContainer) {
-        // Limpiamos el contenedor antes de mostrar los resultados
-        semanticNetworkContainer.innerHTML = '';
-
-        // Creamos un elemento de lista para mostrar las entidades nombradas
-        const entityList = document.createElement('ul');
-
-        // Recorremos las entidades encontradas en el análisis semántico
-        entities.forEach(entity => {
-            // Creamos un elemento de lista para cada entidad
-            const listItem = document.createElement('li');
-            listItem.textContent = entity;
-            entityList.appendChild(listItem);
-        });
-
-        // Agregamos la lista al contenedor
-        semanticNetworkContainer.appendChild(entityList);
-
-        // Visualizamos los resultados del CRA
-        visualizeCRA(craData, semanticNetworkContainer);
-    }
-
-    /**
-     * Visualiza el análisis CRA.
-     * @param {Array} craData - Los datos de análisis CRA.
-     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
-     */
-    function visualizeCRA(craData, semanticNetworkContainer) {
-        // Limpiamos el contenedor antes de mostrar los resultados
-        semanticNetworkContainer.innerHTML = '';
-
-        // Configuración del contenedor SVG
-        const width = 1200;
-        const height = 800;
-        const svg = d3.select(semanticNetworkContainer).append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
-        const scaleNodeSize = d3.scaleLinear()
-            .domain([0, d3.max(craData.map(node => node.weight))])
-            .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
-
-        // Creamos los nodos y los enlaces basados en los datos del CRA
-        const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
-
-        // Creamos la simulación de fuerzas
-        const simulation = d3.forceSimulation(nodes)
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter(width / 2, height / 2));
-
-        // Dibujamos los nodos
-        const node = svg.selectAll("circle")
-            .data(nodes)
-            .enter().append("circle")
-            .attr("r", d => d.size)
-            .attr("fill", "#66ccff"); // Color azul para los nodos
-
-        // Etiquetas de texto para los nodos
-        const text = svg.selectAll("text")
-            .data(nodes)
-            .enter().append("text")
-            .text(d => d.id)
-            .attr("x", 8)
-            .attr("y", "0.31em");
-
-        // Actualizamos la posición de los elementos en cada paso de la simulación
-        simulation.on("tick", () => {
-            node
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
-            text
-                .attr("x", d => d.x + 10)
-                .attr("y", d => d.y);
-        });
-    }
