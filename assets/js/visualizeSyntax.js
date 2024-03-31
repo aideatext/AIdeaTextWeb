@@ -1,3 +1,9 @@
+// Contenedor para la red semántica
+const semanticNetworkContainer = document.getElementById("semantic-network");
+
+// Contenedor para la red sintáctica
+const syntaxNetworkContainer = document.getElementById("syntax-network");
+
 /**
  * Obtiene un elemento del DOM por su ID.
  * @param {string} id - El ID del elemento.
@@ -65,9 +71,6 @@ function findLeastCommonWord(nodes) {
         return node.frequency < min.frequency ? node : min;
     }, nodes[0]);
 }
-
-// Declarar variables globales para contenedores de red semántica
-const syntaxNetworkContainer = document.getElementById("syntax-network");
 
 /**
  * Visualiza los datos recibidos del backend.
