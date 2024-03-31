@@ -54,7 +54,7 @@ body, html {
 
 /* Área de entrada de texto */
 .text-input-section-1 {
-    display: flex; /* Hace que los elementos internos se alineen como una fila */
+    display: flex; /* Hace que los elementos internos se alineen como una columna */
     flex-direction: column; /* Cambia la dirección de alineación a columna */
     align-items: center; /* Centra horizontalmente los elementos en el contenedor */
     padding: 20px;
@@ -62,17 +62,16 @@ body, html {
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
     height: calc(100% - 40px); /* 100% de la altura menos el padding */
     margin-bottom: 20px; /* Espacio entre la caja de texto y el botón */
-    justify-content: space-between; /* Espacia los elementos internos uniformemente en la fila */
-    align-items: center; /* Centra verticalmente los elementos en el contenedor */
+    justify-content: space-between; /* Espacia los elementos internos uniformemente en la columna */
 }
 
 /* Botón de procesamiento */
 #semanticButton,
 #syntaxButton {
     display: inline-block; /* Alinea los botones en la misma línea */
-    width: 45%; /* Establece el ancho de los botones */
+    width: 100%; /* Establece el ancho de los botones */
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 /* Área de texto */
