@@ -318,6 +318,15 @@ function visualizeSemantic(semanticData, container) {
     // Limpiar el contenedor antes de mostrar el grafo
     container.innerHTML = '';
 
+     // Declarar la variable simulation antes de su uso
+    // Definir la simulación de fuerza
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(filteredLinks).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("x", d3.forceX())
+        .force("y", d3.forceY())
+        .on("tick", ticked);
+
     // Crear un SVG para dibujar el grafo
     const svg = d3.create("svg")
         .attr("width", "100%")
@@ -381,14 +390,6 @@ function visualizeSemantic(semanticData, container) {
         .attr("font-size", "10px")
         .attr("fill", "#000")
         .attr("dy", "0.35em");
-
-    // Definir la simulación de fuerza
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(filteredLinks).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
-        .on("tick", ticked);
 
     // Definir la función ticked para actualizar las posiciones de los elementos en cada iteración
     function ticked() {
