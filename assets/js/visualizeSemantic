@@ -15,58 +15,7 @@ function clearContainer(container) {
     container.innerHTML = '';
 }
 
-/**
- * Encuentra la palabra más común en un array de palabras.
- * @param {Array} words - El array de palabras.
- * @returns {string} - La palabra más común.
- */
-function findMostCommonWordInText(words) {
-    const wordFrequency = {};
-    
-    // Contar la frecuencia de cada palabra
-    words.forEach(word => {
-        const normalizedWord = word.toLowerCase(); // Convertir la palabra a minúsculas para evitar distinciones de mayúsculas y minúsculas
-        wordFrequency[normalizedWord] = (wordFrequency[normalizedWord] || 0) + 1;
-    });
-    
-    // Encontrar la palabra con la frecuencia más alta
-    let mostCommonWord = '';
-    let highestFrequency = 0;
-    
-    for (const word in wordFrequency) {
-        if (wordFrequency[word] > highestFrequency) {
-            mostCommonWord = word;
-            highestFrequency = wordFrequency[word];
-        }
-    }
-    
-    return mostCommonWord;
-}
-
-/**
- * Encuentra la palabra más común en un conjunto de nodos.
- * @param {Array} nodes - Los nodos a analizar.
- * @returns {Object} - El nodo más común.
- */
-function findMostCommonWord(nodes) {
-    return nodes.reduce((max, node) => {
-        return node.frequency > max.frequency ? node : max;
-    }, nodes[0]);
-}
-
-/**
- * Encuentra la palabra menos común en un conjunto de nodos.
- * @param {Array} nodes - Los nodos a analizar.
- * @returns {Object} - El nodo menos común.
- */
-function findLeastCommonWord(nodes) {
-    return nodes.reduce((min, node) => {
-        return node.frequency < min.frequency ? node : min;
-    }, nodes[0]);
-}
-
 // Declarar variables globales para contenedores de red sintáctica y semántica
-const syntaxNetworkContainer = document.getElementById("syntax-network");
 const semanticNetworkContainer = document.getElementById("semantic-network");
 
 /**
@@ -74,13 +23,7 @@ const semanticNetworkContainer = document.getElementById("semantic-network");
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeGraph(data) {
-    syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
     semanticNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red semántica
-
-    if (data.syntax) {
-        // Visualización del Análisis Sintáctico
-        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
-    }
 
     if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
         // Visualización del Análisis Semántico (Grafo)
