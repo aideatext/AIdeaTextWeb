@@ -54,8 +54,6 @@ body, html {
 
 /* Área de entrada de texto */
 .text-input-section-1 {
-    display: flex; /* Alinea los elementos internos en una fila */
-    align-items: center; /* Centra verticalmente los elementos en el contenedor */
     padding: 20px;
     border: 1px solid #ccc;
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
