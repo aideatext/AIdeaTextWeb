@@ -234,48 +234,70 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("width", width)
         .attr("height", height);
 
-    // Renderizar los rectángulos del treemap y crear la leyenda de colores
-    const cell = svg.selectAll("g")
+    // Prepare a color scale
+    const color = d3.scaleOrdinal()
+        .domain(Object.keys(POSLabels))
+        .range(['#402D54', '#D18975', '#8FD175', '#AEC7E8', '#BCBD22', '#8C564B', '#2CA02C', '#D62728', '#9467BD', '#FF7F0E', '#1F77B4']);
+
+    // And an opacity scale
+    const opacity = d3.scaleLinear()
+        .domain([1, 10]) // Adjust as needed
+        .range([0.5, 1]);
+
+    // Use this information to add rectangles:
+    svg.selectAll("rect")
         .data(root.leaves())
-        .enter().append("g")
-        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+        .join("rect")
+        .attr('x', d => d.x0)
+        .attr('y', d => d.y0)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .style("stroke", "black")
+        .style("fill", d => color(d.data.name))
+        .style("opacity", d => opacity(d.data.value / d.data.name.split(' ').length));
 
-    cell.append("rect")
-        .attr("width", d => d.x1 - d.x0)
-        .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByPOS(d.data.name));
+    // And to add the text labels
+    svg.selectAll("text")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 20)
+        .text(d => d.data.name.split(' ')[0]) // Extracting only the word
+        .attr("font-size", "19px")
+        .attr("fill", "white");
 
-    // Agregar etiquetas de texto a cada cuadrado del treemap
-    cell.append("text")
-        .attr("x", 5)
-        .attr("y", 15)
-        .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
-        .attr("fill", "black"); // Color del texto
+    // And to add the text labels for counts
+    svg.selectAll("vals")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 35)
+        .text(d => `[${d.data.value}]`)
+        .attr("font-size", "11px")
+        .attr("fill", "white");
 
-    // Crear la leyenda horizontal para las categorías gramaticales y colores
-    const legend = svg.append("g")
-        .attr("class", "legend")
-        .attr("transform", `translate(10, ${height - 20})`);
+    // Add title for the 3 groups
+    svg.selectAll("titles")
+        .data(root.descendants().filter(d => d.depth === 1))
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0 + 21)
+        .text(d => d.data.name)
+        .attr("font-size", "19px")
+        .attr("fill", d => color(d.data.name));
 
-    let legendX = 0;
-    for (const pos in POSLabels) {
-        const label = POSLabels[pos];
-        legend.append("rect")
-            .attr("x", legendX)
-            .attr("y", 0)
-            .attr("width", 10)
-            .attr("height", 10)
-            .style("fill", getColorByPOS(pos));
-
-        legend.append("text")
-            .attr("x", legendX + 15)
-            .attr("y", 10)
-            .text(label)
-            .attr("font-size", "10px");
-
-        legendX += label.length * 6 + 40;
-    }
+    // Add title for the treemap
+    svg.append("text")
+        .attr("x", 0)
+        .attr("y", 14)
+        .text("Análisis Sintáctico")
+        .attr("font-size", "19px")
+        .attr("fill", "grey");
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
