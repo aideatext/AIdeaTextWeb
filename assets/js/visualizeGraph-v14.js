@@ -306,79 +306,139 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
      * @param {Object} craData - Los datos de análisis CRA.
      * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
      */
-    function visualizeSemantic(entities, craData, semanticNetworkContainer) {
-        // Limpiamos el contenedor antes de mostrar los resultados
-        semanticNetworkContainer.innerHTML = '';
 
-        // Creamos un elemento de lista para mostrar las entidades nombradas
-        const entityList = document.createElement('ul');
+function visualizeSemantic(semanticData, container) {
+    // Limpiar el contenedor antes de mostrar el grafo
+    container.innerHTML = '';
 
-        // Recorremos las entidades encontradas en el análisis semántico
-        entities.forEach(entity => {
-            // Creamos un elemento de lista para cada entidad
-            const listItem = document.createElement('li');
-            listItem.textContent = entity;
-            entityList.appendChild(listItem);
-        });
+    // Crear un SVG para dibujar el grafo
+    const svg = d3.create("svg")
+        .attr("width", "100%")
+        .attr("height", "100%");
 
-        // Agregamos la lista al contenedor
-        semanticNetworkContainer.appendChild(entityList);
+    // Añadir un grupo principal al SVG
+    const g = svg.append("g")
+        .attr("class", "graph");
 
-        // Visualizamos los resultados del CRA
-        visualizeCRA(craData, semanticNetworkContainer);
+    // Definir el enlace de datos para los bordes
+    const links = semanticData.semantic_analysis.edges.map(d => ({
+        source: d.source.toString(),
+        target: d.target.toString(),
+        relation: d.relation
+    }));
+
+    // Definir el enlace de datos para los nodos
+    const nodes = semanticData.semantic_analysis.nodes.map(d => ({
+        id: d.id.toString(),
+        text: d.text,
+        lemma: d.lemma
+    }));
+
+    // Crear un objeto de conjunto para los nodos
+    const nodeSet = new Set(nodes.map(d => d.id));
+
+    // Filtrar los enlaces que tienen ambos extremos en el conjunto de nodos
+    const filteredLinks = links.filter(link => nodeSet.has(link.source) && nodeSet.has(link.target));
+
+    // Definir la función de enlace
+    const link = g.append("g")
+        .attr("class", "links")
+        .selectAll("line")
+        .data(filteredLinks)
+        .join("line")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6)
+        .attr("stroke-width", 1);
+
+    // Definir la función de nodo
+    const node = g.append("g")
+        .attr("class", "nodes")
+        .selectAll("circle")
+        .data(nodes)
+        .join("circle")
+        .attr("r", 5)
+        .attr("fill", "#1f77b4")
+        .call(drag(simulation));
+
+    // Añadir etiquetas de texto a los nodos
+    node.append("title")
+        .text(d => d.text);
+
+    // Añadir texto a los nodos
+    const text = g.append("g")
+        .attr("class", "texts")
+        .selectAll("text")
+        .data(nodes)
+        .join("text")
+        .text(d => d.text)
+        .attr("font-size", "10px")
+        .attr("fill", "#000")
+        .attr("dy", "0.35em");
+
+    // Definir la simulación de fuerza
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(filteredLinks).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("x", d3.forceX())
+        .force("y", d3.forceY())
+        .on("tick", ticked);
+
+    // Definir la función ticked para actualizar las posiciones de los elementos en cada iteración
+    function ticked() {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+
+        text
+            .attr("x", d => d.x + 7)
+            .attr("y", d => d.y);
     }
 
-    /**
-     * Visualiza el análisis CRA.
-     * @param {Array} craData - Los datos de análisis CRA.
-     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
-     */
-    function visualizeCRA(craData, semanticNetworkContainer) {
-        // Limpiamos el contenedor antes de mostrar los resultados
-        semanticNetworkContainer.innerHTML = '';
+    // Definir la función de arrastre para los nodos
+    function drag(simulation) {
+        function dragstarted(event) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
+        }
 
-        // Configuración del contenedor SVG
-        const width = 1200;
-        const height = 800;
-        const svg = d3.select(semanticNetworkContainer).append("svg")
-            .attr("width", width)
-            .attr("height", height);
+        function dragged(event) {
+            event.subject.fx = event.x;
+            event.subject.fy = event.y;
+        }
 
-        // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
-        const scaleNodeSize = d3.scaleLinear()
-            .domain([0, d3.max(craData.map(node => node.weight))])
-            .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
+        function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+        }
 
-        // Creamos los nodos y los enlaces basados en los datos del CRA
-        const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
-
-        // Creamos la simulación de fuerzas
-        const simulation = d3.forceSimulation(nodes)
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter(width / 2, height / 2));
-
-        // Dibujamos los nodos
-        const node = svg.selectAll("circle")
-            .data(nodes)
-            .enter().append("circle")
-            .attr("r", d => d.size)
-            .attr("fill", "#66ccff"); // Color azul para los nodos
-
-        // Etiquetas de texto para los nodos
-        const text = svg.selectAll("text")
-            .data(nodes)
-            .enter().append("text")
-            .text(d => d.id)
-            .attr("x", 8)
-            .attr("y", "0.31em");
-
-        // Actualizamos la posición de los elementos en cada paso de la simulación
-        simulation.on("tick", () => {
-            node
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
-            text
-                .attr("x", d => d.x + 10)
-                .attr("y", d => d.y);
-        });
+        return d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
     }
+
+    // Añadir el SVG al contenedor
+    container.appendChild(svg.node());
+}
+
+// Obtener el contenedor para mostrar el grafo
+const container = document.getElementById("semantic-network");
+
+// Obtener los datos de análisis semántico del backend
+const semanticDataFromBackend = {
+    semantic_analysis: {
+        nodes: semantic_analysis.nodes,
+        edges: semantic_analysis.edges
+    }
+};
+
+// Visualizar el análisis semántico
+visualizeSemantic(semanticData, container);
