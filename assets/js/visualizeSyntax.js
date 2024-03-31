@@ -136,7 +136,7 @@ function getColorByPOS(pos) {
     };
     return colorMap[pos] || 'lightblue';
 }
-
+syntaxProcess();
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Visualiza el análisis sintáctico utilizando un treemap.
@@ -295,4 +295,4 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("font-size", "19px")
         .attr("fill", "grey");
 }
-syntaxProcess();
+
