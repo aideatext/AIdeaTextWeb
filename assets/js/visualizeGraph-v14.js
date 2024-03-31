@@ -90,9 +90,12 @@ function processText() {
         
             // Visualiza la sintaxis del texto en la página web
             visualizeGraph(data); // Pasamos directamente los datos completos
-            visualizeSemantic(data.entities, semanticNetworkContainer); // Movemos esta llamada aquí
-        } else {  
-            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+            
+            // Llamamos a visualizeSemantic aquí, después de obtener los datos
+            const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
+            visualizeSemantic(data.entities, semanticNetworkContainer); 
+      } else {  
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
     })
     .catch(error => {
@@ -120,11 +123,6 @@ function visualizeGraph(data) {
         visualizeSemantic(data.entities, semanticNetworkContainer);
     }
 }
-
-const semanticNetworkContainer = document.getElementById('semanticNetworkContainer');
-
-
-
 
 
 // Función para asignar colores a las categorías gramaticales
