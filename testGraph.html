@@ -1,1 +1,121 @@
+<!doctype html>
+<html lang="es" class="h-100">
+    <head>
 
+	<meta charset="UTF-8" />
+	<title>AIdeaText</title>
+
+    <meta name="Content-Type" />
+    <meta name="viewport" content= "width=device-width, initial-scale=1" />
+    <meta name="description" content= "AIdeaText
+    AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+    <meta name="author" content= "ManuelVarZen" />
+    <meta name="generator" content= "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+
+	<!-- Twitter Card -->
+	<meta name = "twitter:card" content = "summary_large_image" />
+    <meta name = "twitter:site" content = "https://aideatext.ai" />
+    <meta name = "twitter:creator" content = "@ManuelVarZen">
+    <meta name = "twitter:title" content = "AIdeaText" />
+    <meta name = "twitter:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta name = "twitter:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg"/>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content = "AIdeaText" />
+	<meta property="og:type" content = "website" />
+	<meta property="og:url" content = "https://aideatext.ai" />
+    <meta property="og:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:image:secure_url" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta property="og:image:alt" content="AIdeaText screenshot." />
+
+    <!-- Aquí puedes agregar tus estilos CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+ <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  </head>
+
+  <body>
+<div id="semantic-network" style="width: 800px; height: 600px;"></div>
+
+
+<script>
+// Datos precargados de ejemplo
+const exampleData = {
+    semantic_analysis: {
+        nodes: [
+            { id: "1", text: "Node 1" },
+            { id: "2", text: "Node 2" },
+            { id: "3", text: "Node 3" }
+        ],
+        edges: [
+            { source: "1", target: "2", relation: "related" },
+            { source: "2", target: "3", relation: "related" },
+            { source: "3", target: "1", relation: "related" }
+        ]
+    }
+};
+
+// Contenedor para la red semántica
+const semanticNetworkContainer = document.getElementById("semantic-network");
+
+/**
+ * Obtiene un elemento del DOM por su ID.
+ * @param {string} id - El ID del elemento.
+ * @returns {HTMLElement} - El elemento del DOM.
+ */
+function getContainerElement(id) {
+    return document.getElementById(id);
+}
+
+/**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
+}
+
+/**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} data - Los datos recibidos del backend.
+ */
+function visualizeGraph(data) {
+    semanticNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red semántica
+
+    if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
+        // Visualización del Análisis Semántico (Grafo)
+        visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
+    }
+}
+
+/**
+ * Visualiza el análisis semántico.
+ * @param {Object} semanticData - Los datos de análisis semántico.
+ * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
+ */
+function visualizeSemantic(semanticData, container) {
+    // Limpiar el contenedor antes de mostrar el grafo
+    container.innerHTML = '';
+
+    // Verificar si hay datos válidos de análisis semántico
+    if (!semanticData || !semanticData.nodes || !semanticData.edges) {
+        console.error("Error: No se encontraron datos de análisis semántico válidos.");
+        return;
+    }
+
+    const nodes = semanticData.nodes.map(node => ({ id: node.id }));
+    const links = semanticData.edges.map(edge => ({ source: edge.source, target: edge.target }));
+
+    const svg = ForceGraph({ nodes, links }, { width: "100%", height: "100%" });
+
+    // Añadir el SVG al contenedor
+    container.appendChild(svg);
+}
+
+// Realizar la prueba con los datos precargados de ejemplo
+visualizeGraph(exampleData);
+</script>
+  </body>
+</html> 
