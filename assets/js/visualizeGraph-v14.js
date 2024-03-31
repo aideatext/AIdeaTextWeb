@@ -234,48 +234,47 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("width", width)
         .attr("height", height);
 
-// Renderizar los rectángulos del treemap
-const cell = svg.selectAll("g")
-    .data(root.leaves())
-    .enter().append("g")
-    .attr("transform", d => `translate(${d.x0},${d.y0})`);
+    // Renderizar los rectángulos del treemap y crear la leyenda de colores
+    const cell = svg.selectAll("g")
+        .data(root.leaves())
+        .enter().append("g")
+        .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-cell.append("rect")
-    .attr("width", d => d.x1 - d.x0)
-    .attr("height", d => d.y1 - d.y0)
-    .attr("fill", d => getColorByPOS(d.data.name));
+    cell.append("rect")
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => getColorByPOS(d.data.name));
 
-// Agregar etiquetas de texto a cada cuadrado del treemap
-cell.append("text")
-    .attr("x", 5)
-    .attr("y", 15)
-    .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
-    .attr("fill", "black"); // Color del texto
+    // Agregar etiquetas de texto a cada cuadrado del treemap
+    cell.append("text")
+        .attr("x", 5)
+        .attr("y", 15)
+        .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
+        .attr("fill", "black"); // Color del texto
 
-// Crear la leyenda horizontal para las categorías gramaticales y colores
-const legend = svg.append("g")
-    .attr("class", "legend")
-    .attr("transform", `translate(10, ${height - 20})`);
+    // Crear la leyenda horizontal para las categorías gramaticales y colores
+    const legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", `translate(10, ${height - 20})`);
 
-let legendX = 0;
-for (const pos in POSLabels) {
-    const label = POSLabels[pos];
-    legend.append("rect")
-        .attr("x", legendX)
-        .attr("y", 0)
-        .attr("width", 10)
-        .attr("height", 10)
-        .style("fill", getColorByPOS(pos));
+    let legendX = 0;
+    for (const pos in POSLabels) {
+        const label = POSLabels[pos];
+        legend.append("rect")
+            .attr("x", legendX)
+            .attr("y", 0)
+            .attr("width", 10)
+            .attr("height", 10)
+            .style("fill", getColorByPOS(pos));
 
-    legend.append("text")
-        .attr("x", legendX + 15)
-        .attr("y", 10)
-        .text(label)
-        .attr("font-size", "10px");
+        legend.append("text")
+            .attr("x", legendX + 15)
+            .attr("y", 10)
+            .text(label)
+            .attr("font-size", "10px");
 
-    legendX += label.length * 6 + 40;
-}
-
+        legendX += label.length * 6 + 40;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
