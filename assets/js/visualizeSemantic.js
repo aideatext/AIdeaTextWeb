@@ -199,5 +199,5 @@ function visualizeSemantic(semanticData, container) {
     container.appendChild(svg.node());
 }
 
-// Llamar a la función processSemantic al cargar la página
+// Llamar a la función semanticProcess al cargar la página
 semanticProcess();
