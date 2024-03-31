@@ -117,7 +117,7 @@ function visualizeGraph(data) {
 
     if (data.entities) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
+        visualizeSemantic(data.entities, semanticNetworkContainer);
     }
 }
 
