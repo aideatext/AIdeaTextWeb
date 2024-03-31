@@ -225,7 +225,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         // .attr("fill", "lightblue"); Color de fondo de los rectángulos
-        .attr("fill", d => getColorByPOS(d.data.name)); //Obtener el color según la categoría gramatical
+        .attr("fill", d => getColorByPOS(d.data.name)); // Obtener el color según la categoría gramatical
 
     // Agregar etiquetas de texto a cada cuadrado del treemap
     cell.append("text")
