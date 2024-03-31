@@ -138,6 +138,116 @@ function getColorByPOS(pos) {
     };
     return colorMap[pos] || 'lightblue';
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
+    syntaxNetworkContainer.innerHTML = '';
+
+    if (!syntaxData || !syntaxData.nodes) {
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
+    }
+
+    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
+
+    const wordsByPOS = {};
+
+    filteredWords.forEach(node => {
+        if (wordsByPOS[node.type]) {
+            wordsByPOS[node.type].push(node.text);
+        } else {
+            wordsByPOS[node.type] = [node.text];
+        }
+    });
+
+    const POSLabels = {
+        adp: 'preposición',
+        conj: 'conjunción',
+        sconj: 'conjunción subordinante',
+        adv: 'adverbio',
+        det: 'determinante',
+        noun: 'sustantivo',
+        verb: 'verbo',
+        adj: 'adjetivo',
+        pron: 'pronombre',
+        propn: 'nombre propio'
+    };
+
+    const width = 1200;
+    const height = 600;
+
+    const treemapLayout = d3.treemap()
+        .size([width, height])
+        .padding(2);
+
+    const treemapData = {
+        name: 'syntax',
+        children: []
+    };
+
+    // Ordenar las categorías gramaticales por número de ocurrencias (de mayor a menor)
+    const sortedCategories = Object.keys(wordsByPOS).sort((a, b) => wordsByPOS[b].length - wordsByPOS[a].length);
+
+    // Iterar sobre las categorías gramaticales ordenadas
+    sortedCategories.forEach(pos => {
+        const words = wordsByPOS[pos];
+        const wordCount = words.length;
+
+        const categoryLabel = POSLabels[pos] || pos;
+        const categoryNode = {
+            name: categoryLabel,
+            children: words.map(word => ({ name: word, value: 1 })) // Each word is treated as a separate child node
+        };
+
+        treemapData.children.push(categoryNode);
+    });
+
+    const root = d3.hierarchy(treemapData)
+        .sum(d => d.value);
+
+    treemapLayout(root);
+
+    const svg = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.selectAll("rect")
+        .data(root.leaves())
+        .join("rect")
+        .attr('x', d => d.x0)
+        .attr('y', d => d.y0)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .style("stroke", "black")
+        .style("fill", d => getColorByPOS(d.parent.data.name)) // Use parent category color
+        .style("opacity", d => 0.6 + 0.4 * (d.value / (d.parent.value))); // Adjust opacity based on word count within category
+
+    svg.selectAll("text")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 20)
+        .text(d => d.data.name) // Display word
+        .attr("font-size", "14px")
+        .attr("fill", "white");
+
+    svg.selectAll("titles")
+        .data(root.descendants().filter(d => d.depth === 1))
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0 + 21)
+        .text(d => `${d.data.name} [${d.value}]`) // Display category name and total count
+        .attr("font-size", "14px")
+        .attr("fill", d => getColorByPOS(d.data.name));
+
+    svg.append("text")
+        .attr("x", 0)
+        .attr("y", 14)
+        .text("Análisis Sintáctico")
+        .attr("font-size", "14px")
+        .attr("fill", "grey");
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para análisis semántico en visualize.js
