@@ -138,6 +138,7 @@ function getColorByPOS(pos) {
     };
     return colorMap[pos] || 'lightblue';
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     syntaxNetworkContainer.innerHTML = '';
