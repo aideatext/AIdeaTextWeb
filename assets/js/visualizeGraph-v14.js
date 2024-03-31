@@ -66,15 +66,17 @@ function findLeastCommonWord(nodes) {
     }, nodes[0]);
 }
 
+// Declarar variables globales para contenedores de red sintáctica y semántica
+const syntaxNetworkContainer = document.getElementById("syntax-network");
+const semanticNetworkContainer = document.getElementById("semantic-network");
+
 /**
  * Visualiza los datos recibidos del backend.
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeGraph(data) {
-    const syntaxNetworkContainer = document.getElementById("syntax-network");
-    const semanticNetworkContainer = document.getElementById("semantic-network");
-    syntaxNetworkContainer.innerHTML = '';
-    semanticNetworkContainer.innerHTML = '';
+    syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
+    semanticNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red semántica
 
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
@@ -86,7 +88,6 @@ function visualizeGraph(data) {
         visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
     }
 }
-
 
 /**
  * Procesa el texto ingresado.
