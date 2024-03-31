@@ -66,9 +66,8 @@ function findLeastCommonWord(nodes) {
     }, nodes[0]);
 }
 
-// Declarar variables globales para contenedores de red sintáctica y semántica
+// Declarar variables globales para contenedores de red semántica
 const syntaxNetworkContainer = document.getElementById("syntax-network");
-const semanticNetworkContainer = document.getElementById("semantic-network");
 
 /**
  * Visualiza los datos recibidos del backend.
@@ -76,16 +75,10 @@ const semanticNetworkContainer = document.getElementById("semantic-network");
  */
 function visualizeGraph(data) {
     syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
-    semanticNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red semántica
-
+    
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
         visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
-    }
-
-    if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
-        // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
     }
 }
 
@@ -116,11 +109,6 @@ function syntaxProcess() {
             visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
         } else {  
             console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
-        }
-
-        if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
-            // Visualiza el análisis semántico en la página web
-            visualizeSemantic(data.semantic_analysis, document.getElementById("semantic-network"));
         }
     })
     .catch(error => {
