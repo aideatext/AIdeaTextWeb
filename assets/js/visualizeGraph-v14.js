@@ -67,6 +67,28 @@ function findLeastCommonWord(nodes) {
 }
 
 /**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} data - Los datos recibidos del backend.
+ */
+function visualizeGraph(data) {
+    const syntaxNetworkContainer = document.getElementById("syntax-network");
+    const semanticNetworkContainer = document.getElementById("semantic-network");
+    syntaxNetworkContainer.innerHTML = '';
+    semanticNetworkContainer.innerHTML = '';
+
+    if (data.syntax) {
+        // Visualización del Análisis Sintáctico
+        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+    }
+
+    if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
+        // Visualización del Análisis Semántico (Grafo)
+        visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
+    }
+}
+
+
+/**
  * Procesa el texto ingresado.
  */
 
@@ -104,27 +126,7 @@ function processText() {
         console.error("Error al procesar el texto:", error)
     });
 }
-
-/**
- * Visualiza los datos recibidos del backend.
- * @param {Object} data - Los datos recibidos del backend.
- */
-function visualizeGraph(data) {
-    const syntaxNetworkContainer = document.getElementById("syntax-network");
-    const semanticNetworkContainer = document.getElementById("semantic-network");
-    syntaxNetworkContainer.innerHTML = '';
-    semanticNetworkContainer.innerHTML = '';
-
-    if (data.syntax) {
-        // Visualización del Análisis Sintáctico
-        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
-    }
-
-    if (data.entities) {
-        // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.entities, semanticNetworkContainer);
-    }
-}
+processText();
 
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
