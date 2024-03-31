@@ -62,7 +62,8 @@ body, html {
 }
 
 /* Botón de procesamiento */
-#procesarButton-1 {
+#semanticButton,
+#syntaxButton {
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
     padding: 10px 20px;
     font-size: 14px;
