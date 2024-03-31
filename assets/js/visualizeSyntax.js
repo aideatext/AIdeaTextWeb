@@ -1,6 +1,3 @@
-// Contenedor para la red semántica
-const semanticNetworkContainer = document.getElementById("semantic-network");
-
 // Contenedor para la red sintáctica
 const syntaxNetworkContainer = document.getElementById("syntax-network");
 
