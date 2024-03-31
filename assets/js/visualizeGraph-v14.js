@@ -306,6 +306,14 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("fill", "grey");
 }
 
+     // Declarar la variable simulation antes de su uso
+    // Definir la simulación de fuerza
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(filteredLinks).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("x", d3.forceX())
+        .force("y", d3.forceY())
+        .on("tick", ticked);
 //////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Visualiza el análisis semántico.
@@ -318,14 +326,7 @@ function visualizeSemantic(semanticData, container) {
     // Limpiar el contenedor antes de mostrar el grafo
     container.innerHTML = '';
 
-     // Declarar la variable simulation antes de su uso
-    // Definir la simulación de fuerza
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(filteredLinks).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
-        .on("tick", ticked);
+
 
     // Crear un SVG para dibujar el grafo
     const svg = d3.create("svg")
