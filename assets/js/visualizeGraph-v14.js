@@ -215,67 +215,46 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         .attr("width", width)
         .attr("height", height);
 
-    // Renderizar los rectángulos del treemap
-    const cell = svg.selectAll("g")
-        .data(root.leaves())
-        .enter().append("g")
-        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+// Renderizar los rectángulos del treemap
+const cell = svg.selectAll("g")
+    .data(root.leaves())
+    .enter().append("g")
+    .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-    cell.append("rect")
-        .attr("width", d => d.x1 - d.x0)
-        .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByPOS(d.data.name)); 
+cell.append("rect")
+    .attr("width", d => d.x1 - d.x0)
+    .attr("height", d => d.y1 - d.y0)
+    .attr("fill", d => getColorByPOS(d.data.name));
 
-    // Agregar etiquetas de texto a cada cuadrado del treemap
-    cell.append("text")
-        .attr("x", 5)
-        .attr("y", 15)
-        .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
-        .attr("fill", "black"); // Color del texto
+// Agregar etiquetas de texto a cada cuadrado del treemap
+cell.append("text")
+    .attr("x", 5)
+    .attr("y", 15)
+    .text(d => d.data.name) // Mostrar el nombre de la categoría gramatical o palabra
+    .attr("fill", "black"); // Color del texto
 
-    // Agregar leyenda horizontal
-    const legend = svg.append("g")
-        .attr("class", "legend")
-        .attr("transform", `translate(10, ${height - 20})`);
-    
-     // Iterar sobre las categorías gramaticales y agregar rectángulos y etiquetas de leyenda
-    let legendX = 0;
-    for (const pos in POSLabels) {
-        const label = POSLabels[pos];
-        legend.append("rect")
-            .attr("x", legendX)
-            .attr("y", 0)
-            .attr("width", 10)
-            .attr("height", 10)
-            .style("fill", getColorByPOS(pos));
+// Crear la leyenda horizontal para las categorías gramaticales y colores
+const legend = svg.append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(10, ${height - 20})`);
 
-        legend.append("text")
-            .attr("x", legendX + 15)
-            .attr("y", 10)
-            .text(label)
-            .attr("font-size", "10px");
+let legendX = 0;
+for (const pos in POSLabels) {
+    const label = POSLabels[pos];
+    legend.append("rect")
+        .attr("x", legendX)
+        .attr("y", 0)
+        .attr("width", 10)
+        .attr("height", 10)
+        .style("fill", getColorByPOS(pos));
 
-        legendX += label.length * 6 + 40;
-    }
+    legend.append("text")
+        .attr("x", legendX + 15)
+        .attr("y", 10)
+        .text(label)
+        .attr("font-size", "10px");
 
-
-// Función para asignar colores a las categorías gramaticales
-function getColorByPOS(pos) {
-    // Aquí puedes definir tus propios colores para cada categoría gramatical
-    const colorMap = {
-        'adp': '#1f77b4',
-        'det': '#ff7f0e',
-        'adj': '#2ca02c',
-        'noun': '#d62728',
-        'propn': '#9467bd',
-        'pron': '#8c564b',
-        'verb': '#e377c2',
-        'sconj': '#7f7f7f',
-        'adv': '#bcbd22',
-        'aux': '#17becf',
-        'cconj': '#aec7e8'
-    };
-    return colorMap[pos] || 'lightblue';
+    legendX += label.length * 6 + 40;
 }
 
 }
