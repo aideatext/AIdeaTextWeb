@@ -200,4 +200,4 @@ function visualizeSemantic(semanticData, container) {
 }
 
 // Llamar a la función processSemantic al cargar la página
-processSemantic();
+semanticProcess();
