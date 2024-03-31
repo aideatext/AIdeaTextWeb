@@ -453,12 +453,14 @@ const container = document.getElementById("semantic-network");
 const semanticDataFromBackend = {
     semantic_analysis: {
         nodes: [
-            { id: "1", text: "Node 1", lemma: "lemma 1" },
-            { id: "2", text: "Node 2", lemma: "lemma 2" },
+            { id: 0, text: "Debe", lemma: "deber" },
+            { id: 1, text: "Node 1", lemma: "lemma 1" },
+            { id: 2, text: "Node 2", lemma: "lemma 2" },
             // Agrega más nodos según sea necesario
         ],
         edges: [
-            { source: "1", target: "2", relation: "relation 1-2" },
+            { source: 1, target: 0, relation: "aux" },
+            { source: 1, target: 2, relation: "relation 1-2" },
             // Agrega más relaciones según sea necesario
         ]
     }
