@@ -19,19 +19,6 @@ function clearContainer(container) {
 }
 
 /**
- * Visualiza los datos recibidos del backend.
- * @param {Object} data - Los datos recibidos del backend.
- */
-function visualizeGraph(data) {
-    semanticNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red semántica
-
-    if (data.semantic && data.semantic.nodes && data.semantic.edges) {
-        // Visualización del Análisis Semántico (Grafo)
-        visualizeSemanticGraph(data.semantic, semanticNetworkContainer);
-    }
-}
-
-/**
  * Procesa el texto ingresado para análisis semántico.
  */
 function semanticProcess() {
@@ -52,7 +39,7 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
 
-        if (data.semantic && data.semantic.nodes && data.semantic_analysis.edges) {
+        if (data.semantic && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
             // Visualiza el análisis semántico en la página web
             visualizeSemanticGraph(data.semantic, semanticNetworkContainer);
         } else {  
@@ -64,16 +51,47 @@ function semanticProcess() {
     });
 }
 
+/**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} data - Los datos recibidos del backend.
+ */
+function visualizeGraph(data) {
+    const semanticNetworkContainer = document.getElementById("semantic-network");
+    semanticNetworkContainer.innerHTML = '';
+
+    if (data.entities) {
+        // Visualización del Análisis Semántico (Grafo)
+        visualizeSemantic(data.entities, data.cra, semanticNetworkContainer);
+    }
+}
+
+// Función para asignar colores a las categorías gramaticales
+function getColorByPOS(pos) {
+    const colorMap = {
+        'adp': '#1f77b4',
+        'det': '#ff7f0e',
+        'adj': '#2ca02c',
+        'noun': '#d62728',
+        'propn': '#9467bd',
+        'pron': '#8c564b',
+        'verb': '#e377c2',
+        'sconj': '#7f7f7f',
+        'adv': '#bcbd22',
+        'aux': '#17becf',
+        'cconj': '#aec7e8'
+    };
+    return colorMap[pos] || 'lightblue';
+}
+
 ///////////////////////////////////////////////////////////////////////
 /**
  * Visualiza el análisis semántico utilizando un grafo
  * @param {Object} semanticData - Los datos de análisis semántico.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
  */
-// Función para visualizar el grafo semántico con vis.js
-
-function visualizeSemanticGraph(semanticData, craData, semanticNetworkcontainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
+// Función para visualizar el grafo semántico d3.js}
+function visualizeSemantic(entities, craData, semanticNetworkContainer) {
+        // Limpiamos el contenedor antes de mostrar los resultados
         semanticNetworkContainer.innerHTML = '';
 
         // Creamos un elemento de lista para mostrar las entidades nombradas
@@ -150,8 +168,3 @@ function visualizeSemanticGraph(semanticData, craData, semanticNetworkcontainer)
     }
 
 
-///////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////
-// Llamar a la función semanticProcess al cargar la página
-semanticProcess();
