@@ -27,6 +27,7 @@ body, html {
     padding: 20px; /* Padding izquierdo y derecho */
     border: 1px solid #ccc; /* Borde */
     margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
+    
 }
 
 /* Contenedor-2: ajustes para responsividad y espacio fijo */
@@ -50,6 +51,7 @@ body, html {
     border: 1px solid #ccc; /* Borde opcional */
     margin-top: 20px; /* Espacio entre las cajas */
     height: 100%; /* Cada contenedor ocupa el % del espacio vertical disponible */
+    width: 100%; /* Cada contenedor ocupa el % del espacio vertical disponible */
 }
 
 
