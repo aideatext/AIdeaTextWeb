@@ -102,11 +102,12 @@ function syntaxProcess() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend:", data);
+        console.log("Datos recibidos del backend para el análsis sintáctico:", data);
         
         if (data.syntax && data.syntax.nodes) {
             // Visualiza la sintaxis del texto en la página web
-            visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+             let hierarchyData = buildHierarchy(data.nodes); // Construye la jerarquía con tus nodos
+             visualizeSyntaxCirclePacking(hierarchyData); // Llama al visualizador con los datos estructurados
         } else {  
             console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
