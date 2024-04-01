@@ -80,19 +80,27 @@ function visualizeSemanticEntities(semanticData, semanticNetworkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
-    // Creamos un elemento de lista para mostrar las entidades nombradas
-    const entityList = document.createElement('ul');
+    // Verificar si semanticData.entities está definido
+    if (semanticData && semanticData.entities) {
+        // Creamos un elemento de lista para mostrar las entidades nombradas
+        const entityList = document.createElement('ul');
 
-    // Recorremos las entidades encontradas en el análisis semántico
-    semanticData.entities.forEach(entity => {
-        // Creamos un elemento de lista para cada entidad
-        const listItem = document.createElement('li');
-        listItem.textContent = entity;
-        entityList.appendChild(listItem);
-    });
+        // Recorremos las entidades encontradas en el análisis semántico
+        semanticData.entities.forEach(entity => {
+            // Creamos un elemento de lista para cada entidad
+            const listItem = document.createElement('li');
+            listItem.textContent = entity;
+            entityList.appendChild(listItem);
+        });
 
-    // Agregamos la lista al contenedor
-    semanticNetworkContainer.appendChild(entityList);
+        // Agregamos la lista al contenedor
+        semanticNetworkContainer.appendChild(entityList);
+    } else {
+        // Si no hay datos de entidades, mostramos un mensaje de error
+        const errorMessage = document.createElement('p');
+        errorMessage.textContent = 'No se encontraron entidades en los datos de análisis semántico.';
+        semanticNetworkContainer.appendChild(errorMessage);
+    }
 }
 
 /**
