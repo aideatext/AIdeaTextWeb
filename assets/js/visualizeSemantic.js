@@ -117,54 +117,53 @@ function visualizeSemanticEntities(semanticData, semanticNetworkContainer) {
  * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
  */
 function visualizeCRA(craData, semanticNetworkContainer) {
-    // Limpiamos el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
-
-    // Configuración del contenedor SVG
     const width = 1200;
     const height = 800;
     const svg = d3.select(semanticNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height);
 
-    // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
+    // Asumiendo que craData ya contiene 'weight', calculamos un dominio para el tamaño de los nodos.
+    // Nota: Los valores de 'weight' parecen extremadamente grandes en tu ejemplo; ajusta según sea necesario.
+    const maxWeight = Math.max(...craData.map(node => node.weight));
+    const minWeight = Math.min(...craData.map(node => node.weight));
     const scaleNodeSize = d3.scaleLinear()
-        .domain([0, d3.max(craData.map(node => node.weight))])
-        .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
+        .domain([minWeight, maxWeight])
+        .range([5, 50]); // Ajusta los tamaños mínimos y máximos según necesites
 
-    // Creamos los nodos y los enlaces basados en los datos del CRA
-    const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
+    const nodes = craData.map(node => ({
+        ...node,
+        size: scaleNodeSize(node.weight)
+    }));
 
-    // Creamos la simulación de fuerzas
+    // Sin datos de enlaces, omitimos esa parte. A continuación, creamos la simulación con solo nodos.
     const simulation = d3.forceSimulation(nodes)
-        .force("charge", d3.forceManyBody())
+        .force("charge", d3.forceManyBody().strength(-100))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    // Dibujamos los nodos
     const node = svg.selectAll("circle")
         .data(nodes)
         .enter().append("circle")
         .attr("r", d => d.size)
-        .attr("fill", "#66ccff"); // Color azul para los nodos
+        .attr("fill", "#66ccff");
 
-    // Etiquetas de texto para los nodos
     const text = svg.selectAll("text")
         .data(nodes)
         .enter().append("text")
         .text(d => d.id)
-        .attr("x", 8)
-        .attr("y", "0.31em");
+        .attr("x", d => d.x)
+        .attr("y", d => d.y)
+        .style("font-size", "12px")
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle");
 
-    // Actualizamos la posición de los elementos en cada paso de la simulación
     simulation.on("tick", () => {
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-        text
-            .attr("x", d => d.x + 10)
-            .attr("y", d => d.y);
+        node.attr("cx", d => d.x).attr("cy", d => d.y);
+        text.attr("x", d => d.x).attr("y", d => d.y);
     });
 }
+
 
 // Llamar a la función syntaxProcess al cargar la página
 semanticProcess();
