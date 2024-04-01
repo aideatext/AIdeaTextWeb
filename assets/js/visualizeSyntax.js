@@ -117,7 +117,7 @@ function syntaxProcess() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSyntaxTreemap(syntaxData) {
-    syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor antes de mostrar los resultados
+    clearContainer(syntaxNetworkContainer); // Limpiar el contenedor antes de mostrar los resultados
 
     if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
@@ -125,53 +125,50 @@ function visualizeSyntaxTreemap(syntaxData) {
     }
 
     const hierarchyData = buildHierarchy(syntaxData.nodes);
+    const width = 960, height = 600;
 
-    const width = 960;
-    const height = 600;
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
         .style("font", "12px sans-serif");
 
-    const treemap = d3.treemap()
-        .size([width, height])
-        .paddingOuter(3);
-
-    const root = d3.hierarchy(hierarchyData)
-        .sum(d => d.value)
-        .sort((a, b) => b.height - a.height || b.value - a.value);
+    const treemap = d3.treemap().size([width, height]).paddingOuter(3);
+    const root = d3.hierarchy(hierarchyData).sum(d => d.value).sort((a, b) => b.height - a.height || b.value - a.value);
 
     treemap(root);
 
     // Crea un grupo para cada hoja del treemap
-    const leaf = svg.selectAll("g")
-        .data(root.leaves())
-        .enter().append("g")
-        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+    const leaf = svg.selectAll("g").data(root.leaves()).enter().append("g").attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-    // Añade rectángulos con colores según la categoría gramatical y la frecuencia
     leaf.append("rect")
         .attr("id", d => d.data.id)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name)); // Usa una nueva función para el color
+        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name));
 
-    // Añade el texto de cada palabra y su frecuencia
     leaf.append("text")
         .attr("x", 5)
         .attr("y", 20)
         .text(d => d.data.name + " [" + d.data.value + "]");
 
-    // Añade títulos de categorías gramaticales
-    svg.selectAll("titles")
+    // Títulos de categorías gramaticales
+    svg.selectAll(".category-title")
         .data(root.descendants().filter(d => d.depth === 1))
         .enter().append("text")
-        .attr("x", d => d.x0)
-        .attr("y", d => d.y0 + 20) // Coloca el título en la parte superior izquierda
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 15)
         .text(d => POSLabels[d.data.name] + " [" + d.value + "]")
         .attr("font-weight", "bold");
 
-    // Función para construir la jerarquía basada en las categorías gramaticales y la frecuencia de las palabras
+    function getColorByFrequency(value, pos) {
+        const baseColor = d3.color(getColorByPOS(pos));
+        // Ajusta este rango según las frecuencias de tu dataset
+        const intensity = d3.scaleLinear().domain([1, 10]).range([1, 0.5])(value);
+        return baseColor.darker(intensity);
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Función para construir la jerarquía basada en las categorías gramaticales y la frecuencia de las palabras
     function buildHierarchy(nodes) {
         let root = { name: "root", children: [] };
         let categoryMap = {};
@@ -194,16 +191,7 @@ function visualizeSyntaxTreemap(syntaxData) {
 
         return root;
     }
-}
 
-// Actualiza esta función para retornar colores según la frecuencia de cada palabra dentro de su categoría
-function getColorByFrequency(value, pos) {
-    const posColor = getColorByPOS(pos);
-    // Ajustar la oscuridad según la frecuencia; esto es solo un ejemplo y puede requerir ajustes
-    const scale = d3.scaleLinear().domain([1, 10]).range([0.5, 1]); // Ajusta según tus datos
-    const intensity = scale(value);
-    return d3.color(posColor).darker(intensity);
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
