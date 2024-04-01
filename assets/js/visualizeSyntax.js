@@ -90,7 +90,7 @@ function syntaxProcess() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
-        return; // Detener la ejecución si el texto está vacío
+        return;
     }
 
     fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
@@ -102,14 +102,10 @@ function syntaxProcess() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend para el análisis sintáctico:", data);
-        
         if (data.syntax && Array.isArray(data.syntax.nodes)) {
-            console.log("Verificación previa a visualizeSyntaxCirclePacking:", data.syntax.nodes);
-            // Verifica que data.syntax.nodes es un arreglo antes de proceder
-            visualizeSyntaxCirclePacking(data.syntax.nodes); // Ahora estamos pasando el arreglo de nodos correctamente
-        } else {  
-            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor o los datos no están en el formato esperado.");
+            visualizeSemantic(data.syntax.nodes); // Asumiendo que los datos son los nodos
+        } else {
+            console.error("Error: Datos no válidos.");
         }
     })
     .catch(error => {
