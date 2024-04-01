@@ -73,13 +73,13 @@ function visualizeSemantic(semanticData, container) {
     container.innerHTML = '';
 
     // Verificar si hay datos válidos de análisis semántico
-    if (!semanticData || !semanticData.semantic || !semanticData.semantic.nodes || !semanticData.semantic.edges) {
+    if (!semanticData || !semanticData.nodes || !semanticData.links) {
         console.error("Error: No se encontraron datos de análisis semántico válidos.");
         return;
     }
 
-    const nodes = semanticData.semantic.nodes;
-    const edges = semanticData.semantic.edges;
+    const nodes = semanticData.nodes;
+    const links = semanticData.links;
 
     // set the dimensions and margins of the graph
     const margin = {top: 10, right: 30, bottom: 30, left: 40},
@@ -92,12 +92,11 @@ function visualizeSemantic(semanticData, container) {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform",
-            `translate(${margin.left}, ${margin.top})`);
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     // Initialize the links
     const link = svg.selectAll("line")
-        .data(edges)
+        .data(links)
         .enter().append("line")
         .style("stroke", "#aaa");
 
@@ -109,12 +108,10 @@ function visualizeSemantic(semanticData, container) {
         .style("fill", "#69b3a2");
 
     // Let's list the force we wanna apply on the network
-    // Remove the declaration of the 'simulation' variable since it is not being used
-    // const simulation = d3.forceSimulation(nodes)
     d3.forceSimulation(nodes)
         .force("link", d3.forceLink()
-            .id(function(d) { return d.id; })
-            .links(edges)
+            .id(function(d) { return d.name; })
+            .links(links)
         )
         .force("charge", d3.forceManyBody().strength(-400))
         .force("center", d3.forceCenter(width / 2, height / 2))
