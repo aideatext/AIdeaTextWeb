@@ -105,6 +105,7 @@ function syntaxProcess() {
         console.log("Datos recibidos del backend para el análisis sintáctico:", data);
         
         if (data.syntax && Array.isArray(data.syntax.nodes)) {
+            console.log("Verificación previa a visualizeSyntaxCirclePacking:", data.syntax.nodes);
             // Verifica que data.syntax.nodes es un arreglo antes de proceder
             visualizeSyntaxCirclePacking(data.syntax.nodes); // Ahora estamos pasando el arreglo de nodos correctamente
         } else {  
@@ -136,6 +137,7 @@ const POSLabels = {
 
 // Función para visualizar el análisis sintáctico usando Circle Packing
 function visualizeSyntaxCirclePacking(syntaxData) {
+    console.log("Datos recibidos en visualizeSyntaxCirclePacking:", syntaxData);
     // Primero, asegurémonos de que syntaxData es realmente un arreglo
     if (Array.isArray(syntaxData)) {
         // Solo si syntaxData es un arreglo, procedemos a construir la jerarquía y a visualizar
@@ -189,6 +191,7 @@ function visualizeSyntaxCirclePacking(syntaxData) {
 
     // Función para construir la jerarquía de datos a partir de los nodos de análisis sintáctico
     function buildHierarchy(nodes) {
+        console.log("Construyendo jerarquía con:", nodes);
         let categories = {};
         nodes.forEach(node => {
             if (!categories[POSLabels[node.type] || node.type]) {
