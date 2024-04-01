@@ -49,7 +49,7 @@ body, html {
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
     margin-top: 20px; /* Espacio entre las cajas */
-    height: 50%; /* Cada contenedor ocupa el 50% del espacio vertical disponible */
+    height: 100%; /* Cada contenedor ocupa el % del espacio vertical disponible */
 }
 
 
