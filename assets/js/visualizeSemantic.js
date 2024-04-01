@@ -152,9 +152,6 @@ function visualizeSemanticGraph(semanticData, craData, semanticNetworkcontainer)
 
 ///////////////////////////////////////////////////////////////////////
 
-// Llamar a la función para visualizar el grafo semántico
-visualizeSemanticGraph(semantic_analysis, semanticNetworkContainer);
-
 ///////////////////////////////////////////////////////////////////////
 // Llamar a la función semanticProcess al cargar la página
 semanticProcess();
