@@ -61,20 +61,19 @@ function visualizeSemantic(semanticData, craData, semanticNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
-    // Visualizar el análisis semántico
-    visualizeSemantic(semanticData, semanticNetworkContainer);
+    // Visualizar el análisis semántico de las entidades
+    visualizeSemanticEntities(semanticData, semanticNetworkContainer);
 
     // Visualizar el análisis CRA
     visualizeCRA(craData, semanticNetworkContainer);
 }
 
 /**
- * Visualiza el análisis semántico utilizando un grafo
+ * Visualiza el análisis semántico utilizando una lista de entidades.
  * @param {Object} semanticData - Los datos de análisis semántico.
- * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
+ * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
  */
-// Función para visualizar el grafo semántico d3.js}
-function visualizeSemantic(semanticData, semanticNetworkContainer) {
+function visualizeSemanticEntities(semanticData, semanticNetworkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
