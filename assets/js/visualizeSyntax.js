@@ -78,7 +78,7 @@ function visualizeGraph(data) {
     
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSemantic(data.syntax, syntaxNetworkContainer);
+        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
     }
 }
 
@@ -90,7 +90,7 @@ function syntaxProcess() {
     var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
-        return;
+        return; // Detener la ejecución si el texto está vacío
     }
 
     fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
@@ -102,90 +102,196 @@ function syntaxProcess() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.syntax && Array.isArray(data.syntax.nodes)) {
-            visualizeSemantic(data.syntax.nodes); // Asumiendo que los datos son los nodos
-        } else {
-            console.error("Error: Datos no válidos.");
+        console.log("Datos recibidos del backend:", data);
+        
+        if (data.syntax && data.syntax.nodes) {
+            // Visualiza la sintaxis del texto en la página web
+            visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+        } else {  
+            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
     })
     .catch(error => {
-        console.error("Error al procesar el texto:", error);
+        console.error("Error al procesar el texto:", error)
     });
 }
 
+// Función para asignar colores a las categorías gramaticales
+function getColorByPOS(pos) {
+    const colorMap = {
+        'adp': '#1f77b4',
+        'det': '#ff7f0e',
+        'adj': '#2ca02c',
+        'noun': '#d62728',
+        'propn': '#9467bd',
+        'pron': '#8c564b',
+        'verb': '#e377c2',
+        'sconj': '#7f7f7f',
+        'adv': '#bcbd22',
+        'aux': '#17becf',
+        'cconj': '#aec7e8'
+    };
+    return colorMap[pos] || 'lightblue';
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Definir etiquetas en español 
- * @param {Object} POSLabes 
+ * Visualiza el análisis sintáctico utilizando un treemap.
+ * @param {Object} syntaxData - Los datos de análisis sintáctico.
+ * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
  */
-const POSLabels = {
-    adp: 'preposición',
-    conj: 'conjunción',
-    sconj: 'conjunción subordinante',
-    adv: 'adverbio',
-    det: 'determinante',
-    noun: 'sustantivo',
-    verb: 'verbo',
-    adj: 'adjetivo',
-    pron: 'pronombre',
-    propn: 'nombre propio'
-};
+function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
+    // Limpiar el contenedor antes de mostrar los resultados
+    syntaxNetworkContainer.innerHTML = '';
 
-function visualizeSemantic(data) {
-    // Asegurarse de que data es un array y cada elemento tiene una frecuencia numérica
-    data.forEach(d => {
-        d.frequency = +d.frequency; // Convertir la frecuencia a número
+    // Verificar si hay datos válidos de análisis sintáctico
+    if (!syntaxData || !syntaxData.nodes) {
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
+    }
+
+    // Filtrar palabras, excluyendo signos de puntuación y números
+    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
+
+    // Agrupar palabras por categoría gramatical y calcular proporciones
+    const wordsByPOS = {};
+
+    // Iterar sobre las palabras filtradas y agruparlas por categoría gramatical
+    filteredWords.forEach(node => {
+        if (wordsByPOS[node.type]) {
+            wordsByPOS[node.type].push(node.text);
+        } else {
+            wordsByPOS[node.type] = [node.text];
+        }
     });
 
-    const width = 928;
+    // Definir etiquetas completas para las categorías gramaticales en español
+    const POSLabels = {
+        adp: 'preposición',
+        conj: 'conjunción',
+        sconj: 'conjunción subordinante',
+        adv: 'adverbio',
+        det: 'determinante',
+        noun: 'sustantivo',
+        verb: 'verbo',
+        adj: 'adjetivo',
+        pron: 'pronombre',
+        propn: 'nombre propio'
+    };
+
+    // Configurar el tamaño del treemap
+    const width = 800;
     const height = 600;
-    const margin = 1;
 
-    const format = d3.format(",d");
-    const color = d3.scaleOrdinal(d3.schemeTableau10);
+    // Crear el layout del treemap
+    const treemapLayout = d3.treemap()
+        .size([width, height])
+        .padding(2);
 
-    const pack = d3.pack()
-        .size([width - margin * 2, height - margin * 2])
-        .padding(3);
+    // Crear un conjunto de datos para el treemap
+    const treemapData = {
+        name: 'syntax',
+        children: []
+    };
 
-    // Asegúrate de que estás sumando los valores correctos
-    const root = pack(d3.hierarchy({children: data})
-        .sum(d => d.frequency));
+    // Iterar sobre las categorías gramaticales y sus palabras asociadas
+    for (const pos in wordsByPOS) {
+        const words = wordsByPOS[pos];
+        const wordCount = words.length;
 
+        // Agregar la etiqueta completa de la categoría gramatical
+        const categoryLabel = POSLabels[pos] || pos;
+        const categoryNode = {
+            name: categoryLabel,
+            children: []
+        };
+
+        // Agregar cada palabra y su frecuencia de aparición
+        words.forEach(word => {
+            categoryNode.children.push({
+                name: `${word} [${wordCount}]`,
+                value: wordCount // Usar el número de repeticiones como valor
+            });
+        });
+         // Agregar el nodo de categoría gramatical al conjunto de datos del treemap
+        treemapData.children.push(categoryNode);
+    }
+
+    // Convertir los datos en una jerarquía de d3
+    const root = d3.hierarchy(treemapData)
+        .sum(d => d.value);
+
+    // Calcular la posición y tamaño de cada rectángulo en el treemap
+    treemapLayout(root);
+
+    // Crear el contenedor SVG para el treemap
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [-margin, -margin, width, height])
-        .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;")
-        .attr("text-anchor", "middle");
+        .attr("height", height);
 
-    const node = svg.append("g")
-        .selectAll("g")
+    // Prepare a color scale
+    const color = d3.scaleOrdinal()
+        .domain(Object.keys(POSLabels))
+        .range(['#402D54', '#D18975', '#8FD175', '#AEC7E8', '#BCBD22', '#8C564B', '#2CA02C', '#D62728', '#9467BD', '#FF7F0E', '#1F77B4']);
+
+    // And an opacity scale
+    const opacity = d3.scaleLinear()
+        .domain([1, 10]) // Adjust as needed
+        .range([0.5, 1]);
+
+    // Use this information to add rectangles:
+    svg.selectAll("rect")
         .data(root.leaves())
-        .join("g")
-        .attr("transform", d => `translate(${d.x},${d.y})`);
+        .join("rect")
+        .attr('x', d => d.x0)
+        .attr('y', d => d.y0)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .style("stroke", "black")
+        .style("fill", d => color(d.data.name))
+        .style("opacity", d => opacity(d.data.value / d.data.name.split(' ').length));
 
-    node.append("circle")
-        .attr("fill-opacity", 0.7)
-        .attr("fill", d => color(POSLabels[d.data.type]))
-        .attr("r", d => d.r);
+    // And to add the text labels
+    svg.selectAll("text")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 20)
+        .text(d => d.data.name.split(' ')[0]) // Extracting only the word
+        .attr("font-size", "19px")
+        .attr("fill", "white");
 
-    node.append("text")
-        .selectAll("tspan")
-        // Asegúrate de acceder correctamente a los datos
-        .data(d => [`${d.data.text} [${d.data.frequency}]`, `${POSLabels[d.data.type] || d.data.type}`])
-        .join("tspan")
+    // And to add the text labels for counts
+    svg.selectAll("vals")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 35)
+        .text(d => `[${d.data.value}]`)
+        .attr("font-size", "11px")
+        .attr("fill", "white");
+
+    // Add title for the 3 groups
+    svg.selectAll("titles")
+        .data(root.descendants().filter(d => d.depth === 1))
+        .enter()
+        .append("text")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0 + 21)
+        .text(d => d.data.name)
+        .attr("font-size", "19px")
+        .attr("fill", d => color(d.data.name));
+
+    // Add title for the treemap
+    svg.append("text")
         .attr("x", 0)
-        // Ajustar la posición vertical de los tspans
-        .attr("y", (d, i, nodes) => `${1.5 - nodes.length / 2 + i * 1.1}em`)
-        .attr("font-size", "10px")
-        .attr("fill-opacity", (d, i) => i ? 0.7 : 1)
-        .text(d => d);
-
-    return svg.node();
+        .attr("y", 14)
+        .text("Análisis Sintáctico")
+        .attr("font-size", "19px")
+        .attr("fill", "grey");
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 syntaxProcess();
