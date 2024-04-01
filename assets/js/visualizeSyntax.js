@@ -132,7 +132,7 @@ const POSLabels = {
 };
 
 // Función para visualizar el análisis sintáctico usando Circle Packing
-function visualizeSyntaxCirclePacking(nodes) {
+function visualizeSyntaxCirclePacking(syntax.Data) {
     const diameter = 600; // Diámetro del círculo principal
     const margin = 20;   // Margen alrededor del círculo
 
