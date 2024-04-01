@@ -116,59 +116,6 @@ function syntaxProcess() {
     });
 }
 
-// Función para asignar colores a las categorías gramaticales
-function getColorByPOS(pos) {
-    const colorMap = {
-        'adp': '#1f77b4',
-        'det': '#ff7f0e',
-        'adj': '#2ca02c',
-        'noun': '#d62728',
-        'propn': '#9467bd',
-        'pron': '#8c564b',
-        'verb': '#e377c2',
-        'sconj': '#7f7f7f',
-        'adv': '#bcbd22',
-        'aux': '#17becf',
-        'cconj': '#aec7e8'
-    };
-    return colorMap[pos] || 'lightblue';
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * Visualiza el análisis sintáctico utilizando un treemap.
- * @param {Object} syntaxData - Los datos de análisis sintáctico.
- * @param {HTMLElement} syntaxNetworkContainer - El contenedor para mostrar el treemap.
- */
-function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
-    // Limpiar el contenedor antes de mostrar los resultados
-    syntaxNetworkContainer.innerHTML = '';
-
-    // Verificar si hay datos válidos de análisis sintáctico
-    if (!syntaxData || !syntaxData.nodes) {
-        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
-        return;
-    }
-
-    // Filtrar palabras, excluyendo signos de puntuación y números
-    const filteredWords = syntaxData.nodes.filter(node => node.type !== 'PUNCT' && node.type !== 'NUM');
-
-    // Agrupar palabras por categoría gramatical y calcular proporciones
-    const wordsByPOS = {};
-
-    // Iterar sobre las palabras filtradas y agruparlas por categoría gramatical
-    filteredWords.forEach(node => {
-        if (wordsByPOS[node.type]) {
-            wordsByPOS[node.type].push(node.text);
-        } else {
-            wordsByPOS[node.type] = [node.text];
-        }
-    });
-
-// Suponiendo que tienes acceso a D3 y has definido variables como 'diameter' y 'margin'
-const diameter = 600; // Esto establece el diámetro total de la visualización a 600 píxeles.
-const margin = 20;   // Esto establece un margen de 20 píxeles alrededor de los círculos.
-
 // Definir etiquetas completas para las categorías gramaticales en español
 const POSLabels = {
     adp: 'preposición',
@@ -182,54 +129,41 @@ const POSLabels = {
     pron: 'pronombre',
     propn: 'nombre propio'
 };
-    
-// Función de visualización que utiliza POSLabels
-function visualizeSyntaxCirclePacking(syntaxData) {
-    // Procesamiento de datos aquí, utilizando POSLabels para mapear códigos a nombres completos
-    // Ejemplo: 
-    syntaxData.nodes.forEach(node => {
-        node.label = POSLabels[node.type] || node.type; // Asigna etiquetas en español
-    });
-
-
-// Preparar el contenedor SVG
-const diameter = 600; // Diámetro del círculo principal
-const margin = 20; // Margen alrededor del círculo
-const svg = d3.select("#semantic-network").append("svg")
-    .attr("width", diameter)
-    .attr("height", diameter)
-    .append("g")
-    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
-
-// Definir el esquema de colores para las categorías gramaticales
-const color = d3.scaleOrdinal()
-    .domain(['adp', 'conj', 'sconj', 'adv', 'det', 'noun', 'verb', 'adj', 'pron', 'propn'])
-    .range(['#402D54', '#D18975', '#8FD175', '#AEC7E8', '#BCBD22', '#8C564B', '#2CA02C', '#D62728', '#9467BD', '#FF7F0E', '#1F77B4']);
-
-// Función para construir la jerarquía de datos a partir de los nodos de análisis sintáctico
-function buildHierarchy(nodes) {
-    let categories = {};
-    nodes.forEach(node => {
-        if (!categories[node.type]) {
-            categories[node.type] = { name: node.type, children: [] };
-        }
-        let wordExists = categories[node.type].children.find(child => child.name === node.text);
-        if (wordExists) {
-            wordExists.value += 1;
-        } else {
-            categories[node.type].children.push({ name: node.text, value: 1 });
-        }
-    });
-
-    let hierarchy = { name: "root", children: [] };
-    for (let key in categories) {
-        hierarchy.children.push(categories[key]);
-    }
-    return hierarchy;
-}
 
 // Función para visualizar el análisis sintáctico usando Circle Packing
 function visualizeSyntaxCirclePacking(syntaxData) {
+    const diameter = 600; // Diámetro del círculo principal
+    const margin = 20;   // Margen alrededor del círculo
+
+    // Preparar el contenedor SVG
+    const svg = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", diameter)
+        .attr("height", diameter)
+        .append("g")
+        .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+    // Función para construir la jerarquía de datos a partir de los nodos de análisis sintáctico
+    function buildHierarchy(nodes) {
+        let categories = {};
+        nodes.forEach(node => {
+            if (!categories[POSLabels[node.type] || node.type]) {
+                categories[POSLabels[node.type] || node.type] = { name: POSLabels[node.type] || node.type, children: [] };
+            }
+            let wordExists = categories[POSLabels[node.type] || node.type].children.find(child => child.name === node.text);
+            if (wordExists) {
+                wordExists.value += 1;
+            } else {
+                categories[POSLabels[node.type] || node.type].children.push({ name: node.text, value: 1 });
+            }
+        });
+
+        let hierarchy = { name: "root", children: [] };
+        for (let key in categories) {
+            hierarchy.children.push(categories[key]);
+        }
+        return hierarchy;
+    }
+
     const hierarchyData = buildHierarchy(syntaxData.nodes); // Asume que 'syntaxData.nodes' es tu array de nodos
     const root = d3.hierarchy(hierarchyData)
         .sum(d => d.value)
@@ -239,7 +173,6 @@ function visualizeSyntaxCirclePacking(syntaxData) {
         .size([diameter - margin, diameter - margin])
         .padding(2);
 
-    root.sum(d => d.value); // Recalcular los valores para el packing
     pack(root);
 
     const node = svg.selectAll(".node")
@@ -250,18 +183,27 @@ function visualizeSyntaxCirclePacking(syntaxData) {
 
     node.append("circle")
         .attr("r", d => d.r)
-        .style("fill", d => color(d.data.name));
+        .style("fill", d => d.depth === 1 ? color(d.data.name) : "lightgrey")
+        .style("opacity", 0.7);
 
-    node.append("text")
-        .selectAll("tspan")
-        .data(d => d.children ? [d.data.name] : [d.data.name, d.data.value])
-        .enter().append("tspan")
-        .attr("x", 0)
-        .attr("y", (d, i, nodes) => 13 + (i - nodes.length / 2 - 0.5) * 10)
-        .text(d => d)
-        .attr("fill-opacity", (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null)
-        .style("text-anchor", "middle");
+    node.filter(d => !d.children)
+        .append("text")
+        .attr("dy", "0.3em")
+        .style("text-anchor", "middle")
+        .text(d => `${d.data.name.substring(0, d.r / 3)}`);
+
+    // Define el color para cada categoría gramatical
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 }
+
+// Llamar a la función visualizeSyntaxCirclePacking con los datos de análisis sintáctico
+function syntaxProcess() {
+    // Aquí, realizar la llamada AJAX para obtener los datos de análisis sintáctico
+    // y luego llamar a visualizeSyntaxCirclePacking(data) con esos datos
+    const mockSyntaxData = {/* simulación de datos sintácticos */};
+    visualizeSyntaxCirclePacking(mockSyntaxData);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 syntaxProcess();
