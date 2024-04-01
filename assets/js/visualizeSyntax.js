@@ -138,34 +138,37 @@ function visualizeSyntaxTreemap(syntaxData) {
         .paddingOuter(3);
 
     const root = d3.hierarchy(hierarchyData)
-        .sum(d => d.value) // aquí se define el tamaño de las cajas según el valor
+        .sum(d => d.value)
         .sort((a, b) => b.height - a.height || b.value - a.value);
 
     treemap(root);
 
-    const cell = svg.selectAll("g")
+    // Crea un grupo para cada hoja del treemap
+    const leaf = svg.selectAll("g")
         .data(root.leaves())
         .enter().append("g")
         .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-    cell.append("rect")
+    // Añade rectángulos con colores según la categoría gramatical y la frecuencia
+    leaf.append("rect")
         .attr("id", d => d.data.id)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByPOS(d.parent.data.name)); // Asignar color según categoría gramatical
+        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name)); // Usa una nueva función para el color
 
-    cell.append("text")
+    // Añade el texto de cada palabra y su frecuencia
+    leaf.append("text")
         .attr("x", 5)
         .attr("y", 20)
-        .text(d => d.data.name + " [" + d.data.value + "]"); // Nombre de la palabra y cantidad de repeticiones
+        .text(d => d.data.name + " [" + d.data.value + "]");
 
-    // Título para cada categoría gramatical
-    svg.selectAll(".title")
-        .data(root.descendants().filter(d => d.depth == 1))
+    // Añade títulos de categorías gramaticales
+    svg.selectAll("titles")
+        .data(root.descendants().filter(d => d.depth === 1))
         .enter().append("text")
-        .attr("x", d => d.x0 + 5)
-        .attr("y", d => d.y0 + 15)
-        .text(d => d.data.name + " [" + d.value + "]")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0 + 20) // Coloca el título en la parte superior izquierda
+        .text(d => POSLabels[d.data.name] + " [" + d.value + "]")
         .attr("font-weight", "bold");
 
     // Función para construir la jerarquía basada en las categorías gramaticales y la frecuencia de las palabras
@@ -191,6 +194,15 @@ function visualizeSyntaxTreemap(syntaxData) {
 
         return root;
     }
+}
+
+// Actualiza esta función para retornar colores según la frecuencia de cada palabra dentro de su categoría
+function getColorByFrequency(value, pos) {
+    const posColor = getColorByPOS(pos);
+    // Ajustar la oscuridad según la frecuencia; esto es solo un ejemplo y puede requerir ajustes
+    const scale = d3.scaleLinear().domain([1, 10]).range([0.5, 1]); // Ajusta según tus datos
+    const intensity = scale(value);
+    return d3.color(posColor).darker(intensity);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
