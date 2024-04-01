@@ -37,17 +37,20 @@ function semanticProcess() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend:", data);
+        console.log("Datos recibidos del backend para análisis semántico:", data);
 
-        if (data.semantic) {
-            // Visualiza el análisis semántico en la página web
+        // Asegúrate de que data.semantic y sus subcampos esperados existan
+        if (data.semantic && data.semantic.entities && data.semantic.cra){
+            // Si existe, visualiza el análisis semántico en la página web
             visualizeSemantic(data.semantic, semanticNetworkContainer);
         } else {  
+            // Si no, muestra un mensaje de error en la consola y opcionalmente en la interfaz de usuario
             console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
+            // Aquí puedes agregar una alerta en la interfaz de usuario o alguna otra forma de mostrar el error al usuario
         }
     })
     .catch(error => {
-        console.error("Error al procesar el texto:", error)
+        console.error("Error al procesar el texto para el análisis semántico:", error)
     });
 }
 
