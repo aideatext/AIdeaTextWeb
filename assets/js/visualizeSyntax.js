@@ -68,7 +68,7 @@ function findLeastCommonWord(nodes) {
         return node.frequency < min.frequency ? node : min;
     }, nodes[0]);
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Visualiza los datos recibidos del backend.
  * @param {Object} data - Los datos recibidos del backend.
@@ -81,7 +81,7 @@ function visualizeGraph(data) {
         visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
     }
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Procesa el texto ingresado.
  */
@@ -116,86 +116,83 @@ function syntaxProcess() {
     });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Función para visualizar el análisis sintáctico utilizando un treemap
-function visualizeSyntaxTreemap(nodes) {
-    clearContainer(syntaxNetworkContainer); // Limpiar el contenedor antes de la visualización
+function visualizeSyntaxTreemap(syntaxData) {
+    syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor antes de mostrar los resultados
 
-    const hierarchyData = buildHierarchy(nodes);
+    if (!syntaxData || !syntaxData.nodes) {
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
+    }
+
+    const hierarchyData = buildHierarchy(syntaxData.nodes);
 
     const width = 960;
     const height = 600;
-
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
-        .style("font", "10px sans-serif");
+        .style("font", "12px sans-serif");
 
     const treemap = d3.treemap()
         .size([width, height])
-        .paddingInner(1);
+        .paddingOuter(3);
 
     const root = d3.hierarchy(hierarchyData)
-        .sum(d => d.value)
-        .sort((a, b) => b.value - a.value);
+        .sum(d => d.value) // aquí se define el tamaño de las cajas según el valor
+        .sort((a, b) => b.height - a.height || b.value - a.value);
 
     treemap(root);
 
-    const leaf = svg.selectAll("g")
+    const cell = svg.selectAll("g")
         .data(root.leaves())
         .enter().append("g")
         .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-    leaf.append("rect")
-        .attr("fill", d => getColorByPOS(d.parent.data.name))
+    cell.append("rect")
+        .attr("id", d => d.data.id)
         .attr("width", d => d.x1 - d.x0)
-        .attr("height", d => d.y1 - d.y0);
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => getColorByPOS(d.parent.data.name)); // Asignar color según categoría gramatical
 
-    leaf.append("text")
-        .selectAll("tspan")
-        .data(d => [d.data.name.split(' ')[0], `[${d.value}]`])
-        .enter().append("tspan")
-        .attr("x", 3)
-        .attr("y", (d, i) => 13 + i * 10)
-        .text(d => d);
+    cell.append("text")
+        .attr("x", 5)
+        .attr("y", 20)
+        .text(d => d.data.name + " [" + d.data.value + "]"); // Nombre de la palabra y cantidad de repeticiones
 
+    // Título para cada categoría gramatical
+    svg.selectAll(".title")
+        .data(root.descendants().filter(d => d.depth == 1))
+        .enter().append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 15)
+        .text(d => d.data.name + " [" + d.value + "]")
+        .attr("font-weight", "bold");
+
+    // Función para construir la jerarquía basada en las categorías gramaticales y la frecuencia de las palabras
     function buildHierarchy(nodes) {
-        let root = {name: "root", children: []};
+        let root = { name: "root", children: [] };
+        let categoryMap = {};
+
         nodes.forEach(node => {
-            let sequence = node.type;
-            let size = node.frequency;
-            let parts = sequence.split(".");
-            let currentNode = root;
-            for (let i = 0; i < parts.length; i++) {
-                let children = currentNode["children"];
-                let nodeName = parts[i];
-                let childNode;
-                if (i + 1 < parts.length) {
-                 // Not yet at the end of the sequence; move down the tree.
-                  let foundChild = false;
-                  for (let j = 0; j < children.length; j++) {
-                    if (children[j]["name"] == nodeName) {
-                      childNode = children[j];
-                      foundChild = true;
-                      break;
-                    }
-                  }
-                  // If we don't already have a child node for this branch, create it.
-                  if (!foundChild) {
-                    childNode = {"name": nodeName, "children": []};
-                    children.push(childNode);
-                  }
-                  currentNode = childNode;
-                } else {
-                  // Reached the end of the sequence; create a leaf node.
-                  childNode = {"name": nodeName, "value": size};
-                  children.push(childNode);
-                }
+            if (!categoryMap[node.type]) {
+                categoryMap[node.type] = { name: node.type, children: [] };
+            }
+            let child = categoryMap[node.type].children.find(child => child.name === node.text);
+            if (child) {
+                child.value += 1; // Si la palabra ya existe, incrementar el contador
+            } else {
+                categoryMap[node.type].children.push({ name: node.text, value: 1 }); // Si no, agregarla nueva
             }
         });
+
+        Object.values(categoryMap).forEach(category => {
+            root.children.push(category);
+        });
+
         return root;
     }
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
     const colorMap = {
@@ -213,7 +210,7 @@ function getColorByPOS(pos) {
     };
     return colorMap[pos] || 'lightblue';
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Definir etiquetas completas para las categorías gramaticales en español
 const POSLabels = {
     'adp': 'Preposición',
@@ -229,6 +226,6 @@ const POSLabels = {
     'aux': 'Auxiliar',
     'cconj': 'Conjunción Coordinante'
 };
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 syntaxProcess();
