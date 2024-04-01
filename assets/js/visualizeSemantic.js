@@ -93,8 +93,8 @@ const data = {
     })).filter(link => link.source !== -1 && link.target !== -1) // Filtramos enlaces inválidos
 };
     //Definir espacio de visualización
-    const width = 800;
-    const height = 600;
+    const width = 1000;
+    const height = 300;
     const svg = d3.select("#semantic-network").append("svg")
         .attr("width", width)
         .attr("height", height);
