@@ -51,7 +51,7 @@ function semanticProcess() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data);
-        
+
         if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
             // Visualiza el análisis semántico en la página web
             visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
@@ -109,7 +109,9 @@ function visualizeSemantic(semanticData, container) {
         .style("fill", "#69b3a2");
 
     // Let's list the force we wanna apply on the network
-    const simulation = d3.forceSimulation(nodes)
+    // Remove the declaration of the 'simulation' variable since it is not being used
+    // const simulation = d3.forceSimulation(nodes)
+    d3.forceSimulation(nodes)
         .force("link", d3.forceLink()
             .id(function(d) { return d.id; })
             .links(edges)
