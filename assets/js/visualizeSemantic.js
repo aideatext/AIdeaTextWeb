@@ -59,14 +59,16 @@ function semanticProcess() {
  * Visualiza los datos recibidos del backend.
  * @param {Object} semanticData - Los datos de análisis semántico.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
- */
+ 
+
 function visualizeSemantic(semanticData, semanticNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
     // La comprobación anterior a la visualización estaba redundante,
     // ya que semanticData ya es el objeto que contiene a entities y cra directamente.
-    if (semanticData && semanticData.entities) {
+    
+    if (semanticData &&semanticData.entities) {
         // Visualizar el análisis semántico de las entidades
         visualizeSemanticEntities(semanticData.entities, semanticNetworkContainer);
 
@@ -78,12 +80,73 @@ function visualizeSemantic(semanticData, semanticNetworkContainer) {
         console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
     }
 }
+*/
+
+/**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} semanticData - Los datos de análisis semántico.
+ * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
+ */
+
+function visualizeSemantic(semanticData, semanticNetworkContainer) {
+    // Limpiar el contenedor antes de mostrar los resultados
+    semanticNetworkContainer.innerHTML = '';
+
+    // La comprobación anterior a la visualización estaba redundante,
+    // ya que semanticData ya es el objeto que contiene a entities y cra directamente.
+    
+    if (semanticData.entities) {
+        // Visualizar el análisis semántico de las entidades
+        visualizeSemanticEntities(semanticData.entities, semanticNetworkContainer);
+
+        // Ahora esta comprobación es correcta, ya que estamos accediendo directamente a semanticData.cra
+    if (semanticData.dependencies) {
+        visualizeDependencies(semanticData.dependencies, semanticNetworkContainer);
+        }
+    } else {  
+        console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
+    }
+}
+
+/**
+ * Visualiza el análisis de dependencias.
+ * @param {Array} dependencies - Los datos de análisis de dependencias.
+ * @param {HTMLElement} container - El contenedor para mostrar el análisis.
+ */
+function visualizeDependencies(dependencies, container) {
+    // Asumiendo que `dependencies` es un array de objetos con propiedades como 'text', 'dep', y 'head'.
+    // Limpiar el contenedor antes de mostrar los resultados
+    container.innerHTML = '';
+
+    // Crear un elemento SVG para dibujar el grafo de dependencias
+    const svg = d3.select(container).append("svg")
+        .attr("width", "100%")
+        .attr("height", 600)
+        .style("font", "10px sans-serif");
+
+    // Aquí deberías implementar la lógica para crear los nodos y las líneas/aristas que los conectan
+    // basado en las relaciones de dependencia. Esto podría implicar calcular posiciones para cada nodo,
+    // dibujar líneas entre nodos para representar las dependencias, y añadir etiquetas a los nodos y líneas.
+    
+    // Este es un ejemplo muy básico de cómo podrías comenzar:
+    dependencies.forEach((dep, index) => {
+        // Por simplificación, esto solo añade los textos de los tokens al SVG. 
+        // Necesitarás una lógica más compleja para visualizar las relaciones reales.
+        svg.append("text")
+            .attr("x", 10) // Esta posición debería calcularse basada en la estructura del grafo
+            .attr("y", 20 + index * 20) // Posiciona cada token verticalmente
+            .text(`${dep.text} (${dep.dep} de ${dep.head})`);
+    });
+}
+
+
+
 
 /**
  * Visualiza el análisis semántico utilizando una lista de entidades.
  * @param {Object} semanticData - Los datos de análisis semántico.
  * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
- */
+
 function visualizeSemanticEntities(semanticData, semanticNetworkContainer) {
     // Limpiamos el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
@@ -110,12 +173,13 @@ function visualizeSemanticEntities(semanticData, semanticNetworkContainer) {
         semanticNetworkContainer.appendChild(errorMessage);
     }
 }
+ */
 
 /**
  * Visualiza el análisis CRA.
  * @param {Array} craData - Los datos de análisis CRA.
  * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
- */
+
 function visualizeCRA(craData, semanticNetworkContainer) {
     semanticNetworkContainer.innerHTML = '';
     const width = 1200;
@@ -163,7 +227,7 @@ function visualizeCRA(craData, semanticNetworkContainer) {
         text.attr("x", d => d.x).attr("y", d => d.y);
     });
 }
-
+ */
 
 // Llamar a la función syntaxProcess al cargar la página
 semanticProcess();
