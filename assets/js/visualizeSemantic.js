@@ -55,21 +55,26 @@ function semanticProcess() {
 /**
  * Visualiza los datos recibidos del backend.
  * @param {Object} semanticData - Los datos de análisis semántico.
- * @param {Object} craData - Los datos de análisis CRA.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
  */
 function visualizeSemantic(semanticData, semanticNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
-    // Visualizar el análisis semántico de las entidades
-    visualizeSemanticEntities(semanticData.entities, semanticNetworkContainer);
+    // Verificar si semanticData.semantic.entities está definido
+    if (semanticData && semanticData.semantic && semanticData.semantic.entities) {
+        // Visualizar el análisis semántico de las entidades
+        visualizeSemanticEntities(semanticData.semantic.entities, semanticNetworkContainer);
 
-    // Visualizar el análisis CRA (si es necesario)
-    if (semanticData.cra) {
-        visualizeCRA(semanticData.cra, semanticNetworkContainer);
+        // Visualizar el análisis CRA (si es necesario)
+        if (semanticData.semantic.cra) {
+            visualizeCRA(semanticData.semantic.cra, semanticNetworkContainer);
+        }
+    } else {  
+        console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
     }
 }
+
 
 /**
  * Visualiza el análisis semántico utilizando una lista de entidades.
