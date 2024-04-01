@@ -1,20 +1,3 @@
-d3 = require('d3@7');
-require('d3-transition');
-require('d3-selection-multi');
-require('d3-drag');
-require('d3-force');
-require('d3-scale');
-require('d3-scale-chromatic');
-require('d3-selection');
-require('d3-shape');
-require('d3-zoom');
-require('d3-color');
-require('d3-ease');
-require('d3-timer');
-require('d3-transition');
-require('d3-ease');
-require('d3-timer');
-
 // Contenedor para la red semántica
 const semanticNetworkContainer = document.getElementById("semantic-network");
 
@@ -85,9 +68,10 @@ function semanticProcess() {
  * @param {Object} semanticData - Los datos de análisis semántico.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
  */
+// Función para visualizar el grafo semántico con vis.js
 function visualizeSemantic(semanticData, container) {
     // Limpiar el contenedor antes de mostrar el grafo
-    container.innerHTML = '';
+    clearContainer(container);
 
     // Verificar si hay datos válidos de análisis semántico
     if (!semanticData || !semanticData.nodes || !semanticData.links) {
@@ -95,56 +79,48 @@ function visualizeSemantic(semanticData, container) {
         return;
     }
 
-    const nodes = semanticData.nodes;
-    const links = semanticData.links;
+    const nodes = semanticData.nodes.map(node => {
+        return { id: node.id.toString(), label: node.text };
+    });
 
-    // set the dimensions and margins of the graph
-    const margin = {top: 10, right: 30, bottom: 30, left: 40},
-        width = container.clientWidth - margin.left - margin.right,
-        height = container.clientHeight - margin.top - margin.bottom;
+    const edges = semanticData.links.map(link => {
+        return { from: link.source.toString(), to: link.target.toString(), label: link.relation };
+    });
 
-    // append the svg object to the container
-    const svg = d3.select(container)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    const data = {
+        nodes: nodes,
+        edges: edges
+    };
 
-    // Initialize the links
-    const link = svg.selectAll("line")
-        .data(links)
-        .enter().append("line")
-        .style("stroke", "#aaa");
+    const options = {
+        nodes: {
+            shape: 'dot',
+            size: 20,
+            font: {
+                size: 20,
+                color: '#000000'
+            },
+            borderWidth: 2
+        },
+        edges: {
+            font: {
+                size: 16,
+                color: '#000000'
+            },
+            width: 2
+        },
+        physics: {
+            enabled: true
+        }
+    };
 
-    // Initialize the nodes
-    const node = svg.selectAll("circle")
-        .data(nodes)
-        .enter().append("circle")
-        .attr("r", 20)
-        .style("fill", "#69b3a2");
-
-    // Let's list the force we wanna apply on the network
-    d3.forceSimulation(nodes)
-        .force("link", d3.forceLink()
-            .id(function(d) { return d.name; })
-            .links(links)
-        )
-        .force("charge", d3.forceManyBody().strength(-400))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .on("tick", ticked);
-
-    // This function is run at each iteration of the force algorithm, updating the nodes position.
-    function ticked() {
-        link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-
-        node.attr("cx", function (d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
-    }
+    // Crear una nueva red utilizando vis.js
+    const network = new vis.Network(container, data, options);
 }
+
+// Llamar a la función para visualizar el grafo semántico
+visualizeSemantic(datos_del_backend.semantic.semantic, semanticNetworkContainer);
+
 ///////////////////////////////////////////////////////////////////////
 // Llamar a la función semanticProcess al cargar la página
 semanticProcess();
