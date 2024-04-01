@@ -58,15 +58,17 @@ function semanticProcess() {
  * @param {Object} craData - Los datos de análisis CRA.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
  */
-function visualizeSemantic(semanticData, craData, semanticNetworkContainer) {
+function visualizeSemantic(semanticData, semanticNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
     // Visualizar el análisis semántico de las entidades
-    visualizeSemanticEntities(semanticData, semanticNetworkContainer);
+    visualizeSemanticEntities(semanticData.entities, semanticNetworkContainer);
 
-    // Visualizar el análisis CRA
-    visualizeCRA(craData, semanticNetworkContainer);
+    // Visualizar el análisis CRA (si es necesario)
+    if (semanticData.cra) {
+        visualizeCRA(semanticData.cra, semanticNetworkContainer);
+    }
 }
 
 /**
