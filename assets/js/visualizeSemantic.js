@@ -54,7 +54,8 @@ function semanticProcess() {
 
         if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
             // Visualiza el análisis semántico en la página web
-            visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
+            // visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
+             visualizeGraph(data);
         }
     })
     .catch(error => {
