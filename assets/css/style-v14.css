@@ -40,17 +40,18 @@ body, html {
     height: calc(100vh - 120px - 40px); /* Altura: 100% de la altura de la ventana menos la altura del footer y el padding */
 }
 
+/* Ajuste para cajas en contenedor-2 */
 .containerUp,
 .containerDown {
-    flex: none; /* Anula la propiedad flex si estaba establecida anteriormente */
+    flex: 1; /* Expande para ocupar todo el espacio disponible */
     overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
     margin-top: 20px; /* Espacio entre las cajas */
-    height: 1000px; /* Altura fija de 300px para cada contenedor */
-    width: 300px; /* Altura fija de 300px para cada contenedor
+    height: 50%; /* Cada contenedor ocupa el 50% del espacio vertical disponible */
 }
+
 
 /* Área de entrada de texto */
 .text-input-section-1 {
