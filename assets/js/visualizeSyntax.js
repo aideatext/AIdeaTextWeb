@@ -125,7 +125,7 @@ function visualizeSyntaxTreemap(syntaxData) {
     }
 
     const hierarchyData = buildHierarchy(syntaxData.nodes);
-    const width = 1280, height = 720;
+    const width = 960, height = 540;
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
