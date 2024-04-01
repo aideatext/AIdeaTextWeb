@@ -64,20 +64,20 @@ function visualizeSemantic(semanticData, semanticNetworkContainer) {
     // Limpiar el contenedor antes de mostrar los resultados
     semanticNetworkContainer.innerHTML = '';
 
-    // Verificar si semanticData.semantic.entities está definido
-    if (semanticData && semanticData.semantic && semanticData.semantic.entities) {
+    // La comprobación anterior a la visualización estaba redundante,
+    // ya que semanticData ya es el objeto que contiene a entities y cra directamente.
+    if (semanticData && semanticData.entities) {
         // Visualizar el análisis semántico de las entidades
-        visualizeSemanticEntities(semanticData.semantic.entities, semanticNetworkContainer);
+        visualizeSemanticEntities(semanticData.entities, semanticNetworkContainer);
 
-        // Visualizar el análisis CRA (si es necesario)
-        if (semanticData.semantic.cra) {
-            visualizeCRA(semanticData.semantic.cra, semanticNetworkContainer);
+        // Ahora esta comprobación es correcta, ya que estamos accediendo directamente a semanticData.cra
+        if (semanticData.cra) {
+            visualizeCRA(semanticData.cra, semanticNetworkContainer);
         }
     } else {  
         console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
     }
 }
-
 
 /**
  * Visualiza el análisis semántico utilizando una lista de entidades.
