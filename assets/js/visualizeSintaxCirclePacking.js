@@ -78,7 +78,7 @@ function visualizeGraph(data) {
     
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+        visualizeSyntaxCirclePacking(data.syntax, syntaxNetworkContainer);
     }
 }
 
