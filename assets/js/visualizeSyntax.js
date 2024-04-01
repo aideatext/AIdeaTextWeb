@@ -180,7 +180,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
     };
 
     // Configurar el tamaño del treemap
-    const width = 900;
+    const width = 1000;
     const height = 300;
 
     // Crear el layout del treemap
