@@ -132,7 +132,7 @@ const POSLabels = {
 };
 
 // Función para visualizar el análisis sintáctico usando Circle Packing
-function visualizeSyntaxCirclePacking(syntaxData) {
+function visualizeSyntaxCirclePacking(nodes) {
     const diameter = 600; // Diámetro del círculo principal
     const margin = 20;   // Margen alrededor del círculo
 
@@ -165,7 +165,7 @@ function visualizeSyntaxCirclePacking(syntaxData) {
         return hierarchy;
     }
 
-    const hierarchyData = buildHierarchy(syntaxData.nodes); // Asume que 'syntaxData.nodes' es tu array de nodos
+    const hierarchyData = buildHierarchy(nodes); // Asume que 'syntaxData.nodes' es tu array de nodos
     const root = d3.hierarchy(hierarchyData)
         .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
