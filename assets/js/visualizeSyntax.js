@@ -135,91 +135,61 @@ const POSLabels = {
     propn: 'nombre propio'
 };
 
-// Función para visualizar el análisis sintáctico usando Circle Packing
-function visualizeSyntaxCirclePacking(syntaxData) {
-    console.log("Datos recibidos en visualizeSyntaxCirclePacking:", syntaxData);
-    // Primero, asegurémonos de que syntaxData es realmente un arreglo
-    if (Array.isArray(syntaxData)) {
-        // Solo si syntaxData es un arreglo, procedemos a construir la jerarquía y a visualizar
-        const diameter = 600; // Diámetro del círculo principal
-        const margin = 20;   // Margen alrededor del círculo
+function visualizeSemantic(data) {
+    // Definir dimensiones y margen
+    const width = 928;
+    const height = 600;
+    const margin = 1;
 
-        // Preparar el contenedor SVG
-        const svg = d3.select(syntaxNetworkContainer).append("svg")
-            .attr("width", diameter)
-            .attr("height", diameter)
-            .append("g")
-            .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+    // Formato para valores
+    const format = d3.format(",d");
 
-        // Aquí es donde se construye la jerarquía de datos
-        const hierarchyData = buildHierarchy(syntaxData); // Pasamos el arreglo de nodos
-        const root = d3.hierarchy(hierarchyData)
-            .sum(d => d.value)
-            .sort((a, b) => b.value - a.value);
+    // Escala de colores basada en categorías gramaticales
+    const color = d3.scaleOrdinal(d3.schemeTableau10);
 
-        // Configuración del layout de empaquetamiento
-        const pack = d3.pack()
-            .size([diameter - margin, diameter - margin])
-            .padding(2);
+    // Preparar el layout de empaquetamiento
+    const pack = d3.pack()
+        .size([width - margin * 2, height - margin * 2])
+        .padding(3);
 
-        pack(root);
+    // Calcular la jerarquía y aplicar el layout de empaquetamiento
+    const root = pack(d3.hierarchy({children: data})
+        .sum(d => d.frequency));
 
-        // Creación y estilización de nodos
-        const node = svg.selectAll(".node")
-            .data(root.descendants())
-            .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", d => `translate(${d.x},${d.y})`);
+    // Crear contenedor SVG
+    const svg = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [-margin, -margin, width, height])
+        .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;")
+        .attr("text-anchor", "middle");
 
-        node.append("circle")
-            .attr("r", d => d.r)
-            .style("fill", d => d.depth === 1 ? color(d.data.name) : "lightgrey")
-            .style("opacity", 0.7);
+    // Posicionar cada nodo
+    const node = svg.append("g")
+        .selectAll("g")
+        .data(root.leaves())
+        .join("g")
+        .attr("transform", d => `translate(${d.x},${d.y})`);
 
-        node.filter(d => !d.children)
-            .append("text")
-            .attr("dy", "0.3em")
-            .style("text-anchor", "middle")
-            .text(d => `${d.data.name.substring(0, d.r / 3)}`);
+    // Añadir círculos
+    node.append("circle")
+        .attr("fill-opacity", 0.7)
+        .attr("fill", d => color(d.data.type)) // Usar categoría gramatical para color
+        .attr("r", d => d.r);
 
-        // Aquí deberías definir la escala de colores como antes
-        const color = d3.scaleOrdinal(d3.schemeCategory10);
-    } else {
-        console.error('El argumento syntaxData debe ser un arreglo');
-    }
+    // Añadir etiquetas de texto
+    node.append("text")
+        .selectAll("tspan")
+        .data(d => [`${d.data.text} [${d.data.frequency}]`, `${POSLabels[d.data.type]}`]) // Mostrar información
+        .join("tspan")
+        .attr("x", 0)
+        .attr("y", (d, i) => `${i * 1.2}em`)
+        .attr("font-size", "12px")
+        .attr("fill-opacity", (d, i) => i ? 0.7 : 1)
+        .text(d => d);
+
+    return svg.node();
 }
-
-    // Función para construir la jerarquía de datos a partir de los nodos de análisis sintáctico
-    function buildHierarchy(nodes) {
-        console.log("Construyendo jerarquía con:", nodes);
-        let categories = {};
-        nodes.forEach(node => {
-            if (!categories[POSLabels[node.type] || node.type]) {
-                categories[POSLabels[node.type] || node.type] = { name: POSLabels[node.type] || node.type, children: [] };
-            }
-            let wordExists = categories[POSLabels[node.type] || node.type].children.find(child => child.name === node.text);
-            if (wordExists) {
-                wordExists.value += 1;
-            } else {
-                categories[POSLabels[node.type] || node.type].children.push({ name: node.text, value: 1 });
-            }
-        });
-
-        let hierarchy = { name: "root", children: [] };
-        for (let key in categories) {
-            hierarchy.children.push(categories[key]);
-        }
-        return hierarchy;
-    }
-
-// Llamar a la función visualizeSyntaxCirclePacking con los datos de análisis sintáctico
-function syntaxProcess() {
-    // Aquí, realizar la llamada AJAX para obtener los datos de análisis sintáctico
-    // y luego llamar a visualizeSyntaxCirclePacking(data) con esos datos
-    const mockSyntaxData = {/* simulación de datos sintácticos */};
-    visualizeSyntaxCirclePacking(mockSyntaxData);
-}
-
 /////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 syntaxProcess();
