@@ -62,6 +62,7 @@ function semanticProcess() {
     });
 }
 
+///////////////////////////////////////////////////////////////////////
 /**
  * Visualiza el análisis semántico.
  * @param {Object} semanticData - Los datos de análisis semántico.
@@ -72,19 +73,62 @@ function visualizeSemantic(semanticData, container) {
     container.innerHTML = '';
 
     // Verificar si hay datos válidos de análisis semántico
-    if (!semanticData || !semanticData.nodes || !semanticData.edges) {
+    if (!semanticData || !semanticData.semantic || !semanticData.semantic.nodes || !semanticData.semantic.edges) {
         console.error("Error: No se encontraron datos de análisis semántico válidos.");
         return;
     }
 
-    const nodes = semanticData.nodes.map(node => ({ id: node.id }));
-    const links = semanticData.edges.map(edge => ({ source: edge.source, target: edge.target }));
+    const nodes = semanticData.semantic.nodes;
+    const edges = semanticData.semantic.edges;
 
-    const svg = ForceGraph({ nodes, links }, { width: "100%", height: "100%" });
+    // set the dimensions and margins of the graph
+    const margin = {top: 10, right: 30, bottom: 30, left: 40},
+        width = container.clientWidth - margin.left - margin.right,
+        height = container.clientHeight - margin.top - margin.bottom;
 
-    // Añadir el SVG al contenedor
-    container.appendChild(svg);
+    // append the svg object to the container
+    const svg = d3.select(container)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            `translate(${margin.left}, ${margin.top})`);
+
+    // Initialize the links
+    const link = svg.selectAll("line")
+        .data(edges)
+        .enter().append("line")
+        .style("stroke", "#aaa");
+
+    // Initialize the nodes
+    const node = svg.selectAll("circle")
+        .data(nodes)
+        .enter().append("circle")
+        .attr("r", 20)
+        .style("fill", "#69b3a2");
+
+    // Let's list the force we wanna apply on the network
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink()
+            .id(function(d) { return d.id; })
+            .links(edges)
+        )
+        .force("charge", d3.forceManyBody().strength(-400))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .on("tick", ticked);
+
+    // This function is run at each iteration of the force algorithm, updating the nodes position.
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        node.attr("cx", function (d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
 }
-
+///////////////////////////////////////////////////////////////////////
 // Llamar a la función semanticProcess al cargar la página
 semanticProcess();
