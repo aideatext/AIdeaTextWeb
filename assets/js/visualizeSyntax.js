@@ -204,7 +204,7 @@ function getColorByPOS(pos) {
         'CCONJ': '#ffb9b9',  // rojo
         'SCONJ': '#ffd3d3',  // rojo
         'ADJ': '#ffd3d3', // amarillo
-        'ADV': '##cccc00', // amarillo
+        'ADV': '#cccc00', // amarillo
         'NOUN': '#006700', // verde
         'VERB': '#008000',     // verde
         'PROPN': '#009a00',     // verde
