@@ -27,7 +27,7 @@ function visualizeGraph(data) {
 
     if (data.semantic && data.semantic.nodes && data.semantic.edges) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.semantic, semanticNetworkContainer);
+        visualizeSemanticGraph(data.semantic, semanticNetworkContainer);
     }
 }
 
@@ -52,10 +52,11 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
 
-        if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
+        if (data.semantic && data.semantic.nodes && data.semantic_analysis.edges) {
             // Visualiza el análisis semántico en la página web
-            visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
-            //visualizeGraph(data);
+            visualizeSemanticGraph(data.semantic, semanticNetworkContainer);
+        } else {  
+            console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
         }
     })
     .catch(error => {
@@ -65,57 +66,94 @@ function semanticProcess() {
 
 ///////////////////////////////////////////////////////////////////////
 /**
- * Visualiza el análisis semántico.
+ * Visualiza el análisis semántico utilizando un grafo
  * @param {Object} semanticData - Los datos de análisis semántico.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
  */
 // Función para visualizar el grafo semántico con vis.js
 
-function visualizeSemantic(semanticData, container) {
-    // Limpiar el contenedor antes de mostrar el grafo
-    clearContainer(container);
+function visualizeSemanticGraph(semanticData, craData, semanticNetworkcontainer) {
+    // Limpiamos el contenedor antes de mostrar los resultados
+        semanticNetworkContainer.innerHTML = '';
 
-    // Verificar si hay datos válidos de análisis semántico
-    if (!semanticData || !semanticData.nodes || !semanticData.edges) {
-        console.error("Error: No se encontraron datos de análisis semántico válidos.");
-        return;
+        // Creamos un elemento de lista para mostrar las entidades nombradas
+        const entityList = document.createElement('ul');
+
+        // Recorremos las entidades encontradas en el análisis semántico
+        entities.forEach(entity => {
+            // Creamos un elemento de lista para cada entidad
+            const listItem = document.createElement('li');
+            listItem.textContent = entity;
+            entityList.appendChild(listItem);
+        });
+
+        // Agregamos la lista al contenedor
+        semanticNetworkContainer.appendChild(entityList);
+
+        // Visualizamos los resultados del CRA
+        visualizeCRA(craData, semanticNetworkContainer);
     }
 
-    // Crear una nueva red utilizando vis.js
-    const data = {
-        nodes: new vis.DataSet(semanticData.nodes.map(node => ({ id: node.id.toString(), label: node.text }))),
-        edges: new vis.DataSet(semanticData.edges.map(edge => ({ from: edge.source.toString(), to: edge.target.toString(), label: edge.relation })))
-    };
-    const options = {
-        nodes: {
-            shape: 'box',
-            font: {
-                size: 20,
-                color: 'white'
-            }
-        },
-        edges: {
-            arrows: 'to',
-            font: {
-                align: 'middle'
-            }
-        },
-        layout: {
-            hierarchical: {
-                direction: 'UD',
-                sortMethod: 'directed'
-            }
-        },
-        physics: {
-            enabled: false
-        }
-    };
-    const network = new vis.Network(container, data, options);
-}
+    /**
+     * Visualiza el análisis CRA.
+     * @param {Array} craData - Los datos de análisis CRA.
+     * @param {HTMLElement} semanticNetworkContainer - El contenedor para mostrar la red semántica.
+     */
+    function visualizeCRA(craData, semanticNetworkContainer) {
+        // Limpiamos el contenedor antes de mostrar los resultados
+        semanticNetworkContainer.innerHTML = '';
+
+        // Configuración del contenedor SVG
+        const width = 1200;
+        const height = 800;
+        const svg = d3.select(semanticNetworkContainer).append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Escalador para asignar tamaños proporcionales a los nodos basados en su importancia
+        const scaleNodeSize = d3.scaleLinear()
+            .domain([0, d3.max(craData.map(node => node.weight))])
+            .range([5, 30]); // Tamaño del nodo entre 5 y 30 píxeles
+
+        // Creamos los nodos y los enlaces basados en los datos del CRA
+        const nodes = craData.map(node => ({ id: node.id, size: scaleNodeSize(node.weight) }));
+
+        // Creamos la simulación de fuerzas
+        const simulation = d3.forceSimulation(nodes)
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        // Dibujamos los nodos
+        const node = svg.selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("r", d => d.size)
+            .attr("fill", "#66ccff"); // Color azul para los nodos
+
+        // Etiquetas de texto para los nodos
+        const text = svg.selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .text(d => d.id)
+            .attr("x", 8)
+            .attr("y", "0.31em");
+
+        // Actualizamos la posición de los elementos en cada paso de la simulación
+        simulation.on("tick", () => {
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+            text
+                .attr("x", d => d.x + 10)
+                .attr("y", d => d.y);
+        });
+    }
+
+
 ///////////////////////////////////////////////////////////////////////
 
 // Llamar a la función para visualizar el grafo semántico
-visualizeSemantic(semantic_analysis, semanticNetworkContainer);
+visualizeSemanticGraph(semantic_analysis, semanticNetworkContainer);
 
 ///////////////////////////////////////////////////////////////////////
 // Llamar a la función semanticProcess al cargar la página
