@@ -1,3 +1,20 @@
+d3 = require('d3@7');
+require('d3-transition');
+require('d3-selection-multi');
+require('d3-drag');
+require('d3-force');
+require('d3-scale');
+require('d3-scale-chromatic');
+require('d3-selection');
+require('d3-shape');
+require('d3-zoom');
+require('d3-color');
+require('d3-ease');
+require('d3-timer');
+require('d3-transition');
+require('d3-ease');
+require('d3-timer');
+
 // Contenedor para la red semántica
 const semanticNetworkContainer = document.getElementById("semantic-network");
 
