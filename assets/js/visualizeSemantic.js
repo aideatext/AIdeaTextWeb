@@ -39,9 +39,9 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
 
-        if (data.semantic && data.semantic_analysis) {
+        if (data.semantic) {
             // Visualiza el análisis semántico en la página web
-            visualizeSemantic(data.semantic, data.semantic_analysis, semanticNetworkContainer);
+            visualizeSemantic(data.semantic, semanticNetworkContainer);
         } else {  
             console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
         }
@@ -50,6 +50,7 @@ function semanticProcess() {
         console.error("Error al procesar el texto:", error)
     });
 }
+
 
 /**
  * Visualiza los datos recibidos del backend.
