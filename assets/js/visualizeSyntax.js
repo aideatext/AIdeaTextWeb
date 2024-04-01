@@ -165,133 +165,103 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
         }
     });
 
-    // Definir etiquetas completas para las categorías gramaticales en español
-    const POSLabels = {
-        adp: 'preposición',
-        conj: 'conjunción',
-        sconj: 'conjunción subordinante',
-        adv: 'adverbio',
-        det: 'determinante',
-        noun: 'sustantivo',
-        verb: 'verbo',
-        adj: 'adjetivo',
-        pron: 'pronombre',
-        propn: 'nombre propio'
-    };
+// Suponiendo que tienes acceso a D3 y has definido variables como 'diameter' y 'margin'
+const diameter = 600; // Esto establece el diámetro total de la visualización a 600 píxeles.
+const margin = 20;   // Esto establece un margen de 20 píxeles alrededor de los círculos.
 
-    // Configurar el tamaño del treemap
-    const width = 800;
-    const height = 600;
+// Definir etiquetas completas para las categorías gramaticales en español
+const POSLabels = {
+    adp: 'preposición',
+    conj: 'conjunción',
+    sconj: 'conjunción subordinante',
+    adv: 'adverbio',
+    det: 'determinante',
+    noun: 'sustantivo',
+    verb: 'verbo',
+    adj: 'adjetivo',
+    pron: 'pronombre',
+    propn: 'nombre propio'
+};
+    
+// Función de visualización que utiliza POSLabels
+function visualizeSyntaxCirclePacking(syntaxData) {
+    // Procesamiento de datos aquí, utilizando POSLabels para mapear códigos a nombres completos
+    // Ejemplo: 
+    syntaxData.nodes.forEach(node => {
+        node.label = POSLabels[node.type] || node.type; // Asigna etiquetas en español
+    });
 
-    // Crear el layout del treemap
-    const treemapLayout = d3.treemap()
-        .size([width, height])
-        .padding(2);
 
-    // Crear un conjunto de datos para el treemap
-    const treemapData = {
-        name: 'syntax',
-        children: []
-    };
+// Preparar el contenedor SVG
+const diameter = 600; // Diámetro del círculo principal
+const margin = 20; // Margen alrededor del círculo
+const svg = d3.select("#semantic-network").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter)
+    .append("g")
+    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-    // Iterar sobre las categorías gramaticales y sus palabras asociadas
-    for (const pos in wordsByPOS) {
-        const words = wordsByPOS[pos];
-        const wordCount = words.length;
+// Definir el esquema de colores para las categorías gramaticales
+const color = d3.scaleOrdinal()
+    .domain(['adp', 'conj', 'sconj', 'adv', 'det', 'noun', 'verb', 'adj', 'pron', 'propn'])
+    .range(['#402D54', '#D18975', '#8FD175', '#AEC7E8', '#BCBD22', '#8C564B', '#2CA02C', '#D62728', '#9467BD', '#FF7F0E', '#1F77B4']);
 
-        // Agregar la etiqueta completa de la categoría gramatical
-        const categoryLabel = POSLabels[pos] || pos;
-        const categoryNode = {
-            name: categoryLabel,
-            children: []
-        };
+// Función para construir la jerarquía de datos a partir de los nodos de análisis sintáctico
+function buildHierarchy(nodes) {
+    let categories = {};
+    nodes.forEach(node => {
+        if (!categories[node.type]) {
+            categories[node.type] = { name: node.type, children: [] };
+        }
+        let wordExists = categories[node.type].children.find(child => child.name === node.text);
+        if (wordExists) {
+            wordExists.value += 1;
+        } else {
+            categories[node.type].children.push({ name: node.text, value: 1 });
+        }
+    });
 
-        // Agregar cada palabra y su frecuencia de aparición
-        words.forEach(word => {
-            categoryNode.children.push({
-                name: `${word} [${wordCount}]`,
-                value: wordCount // Usar el número de repeticiones como valor
-            });
-        });
-         // Agregar el nodo de categoría gramatical al conjunto de datos del treemap
-        treemapData.children.push(categoryNode);
+    let hierarchy = { name: "root", children: [] };
+    for (let key in categories) {
+        hierarchy.children.push(categories[key]);
     }
-
-    // Convertir los datos en una jerarquía de d3
-    const root = d3.hierarchy(treemapData)
-        .sum(d => d.value);
-
-    // Calcular la posición y tamaño de cada rectángulo en el treemap
-    treemapLayout(root);
-
-    // Crear el contenedor SVG para el treemap
-    const svg = d3.select(syntaxNetworkContainer).append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-    // Prepare a color scale
-    const color = d3.scaleOrdinal()
-        .domain(Object.keys(POSLabels))
-        .range(['#402D54', '#D18975', '#8FD175', '#AEC7E8', '#BCBD22', '#8C564B', '#2CA02C', '#D62728', '#9467BD', '#FF7F0E', '#1F77B4']);
-
-    // And an opacity scale
-    const opacity = d3.scaleLinear()
-        .domain([1, 10]) // Adjust as needed
-        .range([0.5, 1]);
-
-    // Use this information to add rectangles:
-    svg.selectAll("rect")
-        .data(root.leaves())
-        .join("rect")
-        .attr('x', d => d.x0)
-        .attr('y', d => d.y0)
-        .attr('width', d => d.x1 - d.x0)
-        .attr('height', d => d.y1 - d.y0)
-        .style("stroke", "black")
-        .style("fill", d => color(d.data.name))
-        .style("opacity", d => opacity(d.data.value / d.data.name.split(' ').length));
-
-    // And to add the text labels
-    svg.selectAll("text")
-        .data(root.leaves())
-        .enter()
-        .append("text")
-        .attr("x", d => d.x0 + 5)
-        .attr("y", d => d.y0 + 20)
-        .text(d => d.data.name.split(' ')[0]) // Extracting only the word
-        .attr("font-size", "19px")
-        .attr("fill", "white");
-
-    // And to add the text labels for counts
-    svg.selectAll("vals")
-        .data(root.leaves())
-        .enter()
-        .append("text")
-        .attr("x", d => d.x0 + 5)
-        .attr("y", d => d.y0 + 35)
-        .text(d => `[${d.data.value}]`)
-        .attr("font-size", "11px")
-        .attr("fill", "white");
-
-    // Add title for the 3 groups
-    svg.selectAll("titles")
-        .data(root.descendants().filter(d => d.depth === 1))
-        .enter()
-        .append("text")
-        .attr("x", d => d.x0)
-        .attr("y", d => d.y0 + 21)
-        .text(d => d.data.name)
-        .attr("font-size", "19px")
-        .attr("fill", d => color(d.data.name));
-
-    // Add title for the treemap
-    svg.append("text")
-        .attr("x", 0)
-        .attr("y", 14)
-        .text("Análisis Sintáctico")
-        .attr("font-size", "19px")
-        .attr("fill", "grey");
+    return hierarchy;
 }
 
+// Función para visualizar el análisis sintáctico usando Circle Packing
+function visualizeSyntaxCirclePacking(syntaxData) {
+    const hierarchyData = buildHierarchy(syntaxData.nodes); // Asume que 'syntaxData.nodes' es tu array de nodos
+    const root = d3.hierarchy(hierarchyData)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value);
+
+    const pack = d3.pack()
+        .size([diameter - margin, diameter - margin])
+        .padding(2);
+
+    root.sum(d => d.value); // Recalcular los valores para el packing
+    pack(root);
+
+    const node = svg.selectAll(".node")
+        .data(root.descendants())
+        .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+
+    node.append("circle")
+        .attr("r", d => d.r)
+        .style("fill", d => color(d.data.name));
+
+    node.append("text")
+        .selectAll("tspan")
+        .data(d => d.children ? [d.data.name] : [d.data.name, d.data.value])
+        .enter().append("tspan")
+        .attr("x", 0)
+        .attr("y", (d, i, nodes) => 13 + (i - nodes.length / 2 - 0.5) * 10)
+        .text(d => d)
+        .attr("fill-opacity", (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null)
+        .style("text-anchor", "middle");
+}
+/////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 syntaxProcess();
