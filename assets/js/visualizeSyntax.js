@@ -102,21 +102,25 @@ function syntaxProcess() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend para el análsis sintáctico:", data);
+        console.log("Datos recibidos del backend para el análisis sintáctico:", data);
         
-        if (data.syntax && data.syntax.nodes) {
-            // Visualiza la sintaxis del texto en la página web
-             visualizeSyntaxCirclePacking(data.syntax.nodes); // Llama al visualizador con los datos estructurados
+        if (data.syntax && Array.isArray(data.syntax.nodes)) {
+            // Verifica que data.syntax.nodes es un arreglo antes de proceder
+            visualizeSyntaxCirclePacking(data.syntax.nodes); // Ahora estamos pasando el arreglo de nodos correctamente
         } else {  
-            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor o los datos no están en el formato esperado.");
         }
     })
     .catch(error => {
-        console.error("Error al procesar el texto:", error)
+        console.error("Error al procesar el texto:", error);
     });
 }
 
-// Definir etiquetas completas para las categorías gramaticales en español
+
+/**
+ * Definir etiquetas en español 
+ * @param {Object} POSLabes 
+ */
 const POSLabels = {
     adp: 'preposición',
     conj: 'conjunción',
