@@ -106,8 +106,7 @@ function syntaxProcess() {
         
         if (data.syntax && data.syntax.nodes) {
             // Visualiza la sintaxis del texto en la página web
-             let hierarchyData = buildHierarchy(data.syntax.nodes); // Construye la jerarquía con tus nodos
-             visualizeSyntaxCirclePacking(hierarchyData); // Llama al visualizador con los datos estructurados
+             visualizeSyntaxCirclePacking(data.syntax.nodes); // Llama al visualizador con los datos estructurados
         } else {  
             console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
