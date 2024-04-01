@@ -43,9 +43,9 @@ body, html {
 /* Ajuste para cajas en contenedor-2 */
 .containerUp,
 .containerDown {
-    flex: 1; /* Expande para ocupar todo el espacio disponible */
-    overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
-    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    /* flex: 1; Expande para ocupar todo el espacio disponible */
+    /* overflow-y: auto;  Permite desplazamiento vertical si es necesario */
+    /* overflow-x: hidden; Evita el desplazamiento horizontal */
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
     margin-top: 20px; /* Espacio entre las cajas */
