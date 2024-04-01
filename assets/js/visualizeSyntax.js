@@ -181,7 +181,7 @@ function visualizeSyntaxTreemap(syntaxData, syntaxNetworkContainer) {
 
     // Configurar el tamaño del treemap
     const width = 1200;
-    const height = 600;
+    const height = 800;
 
     // Crear el layout del treemap
     const treemapLayout = d3.treemap()
