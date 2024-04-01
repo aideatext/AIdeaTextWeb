@@ -70,6 +70,7 @@ function semanticProcess() {
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
  */
 // Función para visualizar el grafo semántico con vis.js
+
 function visualizeSemantic(semanticData, container) {
     // Limpiar el contenedor antes de mostrar el grafo
     clearContainer(container);
@@ -80,56 +81,75 @@ function visualizeSemantic(semanticData, container) {
         return;
     }
 
-        // Crear los nodos y enlaces del grafo semántico con los datos recibidos del backend.
-    semanticData.nodes.forEach(node => {
-        node.id = node.id.toString();
-    }   );
-    semanticData.edges.forEach(link => {
-        link.source = link.source.toString();
-        link.target = link.target.toString();
-    });
+    //Definir semancticData como un objeto con nodos y enlaces
+    semanticData = {
+        nodes: semanticData.nodes,
+        edges: semanticData.edges
+    };
     console.log(semanticData);
     console.log(semanticData.nodes);
     console.log(semanticData.edges);
+    console.log(semanticData.nodes.length);
+    console.log(semanticData.edges.length);
+    console.log(semanticData.nodes[0].id);
+    console.log(semanticData.nodes[0].text);
+    console.log(semanticData.edges[0].source);
+    console.log(semanticData.edges[0].target);
+    console.log(semanticData.edges[0].relation);
 
-    const nodes = semanticData.nodes.map(node => {
-        return { id: node.id.toString(), label: node.text };
-    });
-
-    const edges = semanticData.edges.map(link => {
-        return { from: link.source.toString(), to: link.target.toString(), label: link.relation };
-    });
-
-    const data = {
-        nodes: nodes,
-        edges: edges
-    };
-
-    const options = {
-        nodes: {
-            shape: 'dot',
-            size: 20,
-            font: {
-                size: 20,
-                color: '#000000'
-            },
-            borderWidth: 2
-        },
-        edges: {
-            font: {
-                size: 16,
-                color: '#000000'
-            },
-            width: 2
-        },
-        physics: {
-            enabled: true
-        }
-    };
+    console.log(semanticData.nodes[0].id.toString());
+    console.log(semanticData.nodes[0].text);
+    console.log(semanticData.edges[0].source.toString());
+    console.log(semanticData.edges[0].target.toString());
+    console.log(semanticData.edges[0].relation);
 
     // Crear una nueva red utilizando vis.js
+    const data = {
+        nodes: semanticData.nodes,
+        edges: semanticData.edges
+    };
+    const options = {
+        nodes: {
+            shape: 'box',
+            font: {
+                size: 20,
+                color: 'white'
+            }
+        },
+        edges: {
+            arrows: 'to',
+            font: {
+                align: 'middle'
+            }
+        },
+        layout: {
+            hierarchical: {
+                direction: 'UD',
+                sortMethod: 'directed'
+            }
+        },
+        physics: {
+            enabled: false
+        }
+    };
     const network = new vis.Network(container, data, options);
+    console.log(network);
+    console.log(network.nodes);
+    console.log(network.edges);
+    console.log(network.nodes.length);
+    console.log(network.edges.length);
+    console.log(network.nodes[0].id);
+    console.log(network.nodes[0].text);
+    console.log(network.edges[0].source);
+    console.log(network.edges[0].target);
+    console.log(network.edges[0].relation);
+    console.log(network.nodes[0].id.toString());
+    console.log(network.nodes[0].text);
+    console.log(network.edges[0].source.toString());
+    console.log(network.edges[0].target.toString());
+    console.log(network.edges[0].relation);
 }
+///////////////////////////////////////////////////////////////////////
 
 // Llamar a la función para visualizar el grafo semántico
 visualizeSemantic(semanticData, semanticNetworkContainer);
