@@ -166,5 +166,6 @@ function visualizeSemantic(entities, craData, semanticNetworkContainer) {
                 .attr("y", d => d.y);
         });
     }
-
+// Llamar a la función syntaxProcess al cargar la página
+semanticProcess();
 
