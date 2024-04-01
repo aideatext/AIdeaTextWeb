@@ -198,17 +198,18 @@ function visualizeSyntaxTreemap(syntaxData) {
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
     const colorMap = {
-        'ADP': '#1f77b4',
-        'DET': '#ff7f0e',
-        'ADJ': '#2ca02c',
-        'NOUN': '#d62728',
-        'PROPN': '#9467bd',
-        'PRON': '#8c564b',
-        'VERB': '#e377c2',
-        'SCONJ': '#7f7f7f',
-        'ADV': '#bcbd22',
-        'AUX': '#17becf',
-        'CCONJ': '#aec7e8'
+        'ADP': '#ff6d6d',    //rojo
+        'DET': '#ff8686',    //rojo 
+        'CONJ': '#ffa0a0',     //rojo  
+        'CCONJ': '#ffb9b9',  // rojo
+        'SCONJ': '#ffd3d3',  // rojo
+        'ADJ': '#ffd3d3', // amarillo
+        'ADV': '##cccc00', // amarillo
+        'NOUN': '#006700', // verde
+        'VERB': '#008000',     // verde
+        'PROPN': '#009a00',     // verde
+        'PRON': '#00b300',     // verde
+        'AUX': '#00cd00'     // verde
     };
     return colorMap[pos] || 'lightblue';
 }
@@ -216,14 +217,14 @@ function getColorByPOS(pos) {
 // Definir etiquetas completas para las categorías gramaticales en español
 const POSLabels = {
     'ADP': 'Preposición',
-    'CONJ': 'Conjunción',
-    'SCONJ': 'Conjunción Subordinante',
-    'CCONJ': 'Conjunción Coordinante',
-    'ADV': 'Adverbio',
     'DET': 'Determinante',
+    'CONJ': 'Conjunción',
+    'CCONJ': 'Conjunción Coordinante',
+    'SCONJ': 'Conjunción Subordinante',
+    'ADJ': 'Adjetivo',
+    'ADV': 'Adverbio',
     'NOUN': 'Sustantivo',
     'VERB': 'Verbo',
-    'ADJ': 'Adjetivo',
     'PRON': 'Pronombre',
     'PROPN': 'Nombre Propio',
     'AUX': 'Auxiliar'
