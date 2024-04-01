@@ -164,7 +164,7 @@ function visualizeSyntaxCirclePacking(syntaxData) {
         return hierarchy;
     }
 
-    const hierarchyData = buildHierarchy(nodes); // Asume que 'syntaxData.nodes' es tu array de nodos
+    const hierarchyData = buildHierarchy(syntaxData); // Asume que 'syntaxData.nodes' es tu array de nodos
     const root = d3.hierarchy(hierarchyData)
         .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
