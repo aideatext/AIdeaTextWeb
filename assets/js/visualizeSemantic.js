@@ -25,9 +25,9 @@ function clearContainer(container) {
 function visualizeGraph(data) {
     semanticNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red semántica
 
-    if (data.semantic_analysis && data.semantic_analysis.nodes && data.semantic_analysis.edges) {
+    if (data.semantic && data.semantic.nodes && data.semantic.edges) {
         // Visualización del Análisis Semántico (Grafo)
-        visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
+        visualizeSemantic(data.semantic, semanticNetworkContainer);
     }
 }
 
