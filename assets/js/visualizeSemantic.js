@@ -75,7 +75,7 @@ function visualizeSemantic(semanticData, container) {
     clearContainer(container);
 
     // Verificar si hay datos válidos de análisis semántico
-    if (!semanticData || !semanticData.nodes || !semanticData.links) {
+    if (!semanticData || !semanticData.nodes || !semanticData.edges) {
         console.error("Error: No se encontraron datos de análisis semántico válidos.");
         return;
     }
@@ -84,7 +84,7 @@ function visualizeSemantic(semanticData, container) {
         return { id: node.id.toString(), label: node.text };
     });
 
-    const edges = semanticData.links.map(link => {
+    const edges = semanticData.edges.map(link => {
         return { from: link.source.toString(), to: link.target.toString(), label: link.relation };
     });
 
