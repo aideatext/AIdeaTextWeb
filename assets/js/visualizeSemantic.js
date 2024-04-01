@@ -59,9 +59,8 @@ function visualizeSemantic(semanticData, container) {
     }
 }
 
- * Visualiza los datos recibidos del backend.
- * @param {Object} semanticData - Los datos de análisis semántico.
- * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
+/**
+ * Nueva función de visualización de dependencias
  */
 function visualizeDependencies(dependencies, container) {
     container.innerHTML = '';
