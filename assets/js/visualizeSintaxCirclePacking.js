@@ -222,4 +222,4 @@ function syntaxProcess() {
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
-// syntaxProcess();
+syntaxProcess();
