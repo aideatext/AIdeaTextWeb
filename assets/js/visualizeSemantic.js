@@ -62,7 +62,7 @@ function visualizeSemantic(semanticData, craData, semanticNetworkContainer) {
     semanticNetworkContainer.innerHTML = '';
 
     // Visualizar el análisis semántico
-    visualizeSemanticGraph(semanticData, semanticNetworkContainer);
+    visualizeSemantic(semanticData, semanticNetworkContainer);
 
     // Visualizar el análisis CRA
     visualizeCRA(craData, semanticNetworkContainer);
