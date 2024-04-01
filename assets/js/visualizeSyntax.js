@@ -132,27 +132,26 @@ const POSLabels = {
 };
 
 function visualizeSemantic(data) {
-    // Definir dimensiones y margen
+    // Asegurarse de que data es un array y cada elemento tiene una frecuencia numérica
+    data.forEach(d => {
+        d.frequency = +d.frequency; // Convertir la frecuencia a número
+    });
+
     const width = 928;
     const height = 600;
     const margin = 1;
 
-    // Formato para valores
     const format = d3.format(",d");
-
-    // Escala de colores basada en categorías gramaticales
     const color = d3.scaleOrdinal(d3.schemeTableau10);
 
-    // Preparar el layout de empaquetamiento
     const pack = d3.pack()
         .size([width - margin * 2, height - margin * 2])
         .padding(3);
 
-    // Calcular la jerarquía y aplicar el layout de empaquetamiento
+    // Asegúrate de que estás sumando los valores correctos
     const root = pack(d3.hierarchy({children: data})
         .sum(d => d.frequency));
 
-    // Crear contenedor SVG
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -160,32 +159,33 @@ function visualizeSemantic(data) {
         .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;")
         .attr("text-anchor", "middle");
 
-    // Posicionar cada nodo
     const node = svg.append("g")
         .selectAll("g")
         .data(root.leaves())
         .join("g")
         .attr("transform", d => `translate(${d.x},${d.y})`);
 
-    // Añadir círculos
     node.append("circle")
         .attr("fill-opacity", 0.7)
-        .attr("fill", d => color(d.data.type)) // Usar categoría gramatical para color
+        .attr("fill", d => color(POSLabels[d.data.type]))
         .attr("r", d => d.r);
 
-    // Añadir etiquetas de texto
     node.append("text")
         .selectAll("tspan")
-        .data(d => [`${d.data.text} [${d.data.frequency}]`, `${POSLabels[d.data.type]}`]) // Mostrar información
+        // Asegúrate de acceder correctamente a los datos
+        .data(d => [`${d.data.text} [${d.data.frequency}]`, `${POSLabels[d.data.type] || d.data.type}`])
         .join("tspan")
         .attr("x", 0)
-        .attr("y", (d, i) => `${i * 1.2}em`)
-        .attr("font-size", "12px")
+        // Ajustar la posición vertical de los tspans
+        .attr("y", (d, i, nodes) => `${1.5 - nodes.length / 2 + i * 1.1}em`)
+        .attr("font-size", "10px")
         .attr("fill-opacity", (d, i) => i ? 0.7 : 1)
         .text(d => d);
 
     return svg.node();
 }
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 syntaxProcess();
