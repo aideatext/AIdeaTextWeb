@@ -29,16 +29,15 @@ body, html {
     margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
 }
 
-/* Contenedor-2 */
+/* Contenedor-2: ajustes para responsividad y espacio fijo */
 .container-2 {
     display: flex;
     flex-direction: column; /* Orientación vertical */
-    flex: 0 0 65%; /* Ocupa el 65% del ancho disponible */
+    flex: 1 1 auto; /* Ajuste para que ocupe el espacio restante */
     overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
     padding: 20px; /* Padding izquierdo y derecho */
     border: 1px solid #ccc; /* Borde */
-    margin-left: auto; /* Ajusta el margen izquierdo para que se ajuste al extremo derecho */
-    margin-right: 0; /* Elimina el margen derecho */
+    height: calc(100vh - 120px - 40px); /* Altura: 100% de la altura de la ventana menos la altura del footer y el padding */
 }
 
 /* Ajuste para cajas en contenedor-2 */
@@ -50,6 +49,7 @@ body, html {
     padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
     border: 1px solid #ccc; /* Borde opcional */
     margin-top: 20px; /* Espacio entre las cajas */
+    height: 50%; /* Cada contenedor ocupa el 50% del espacio vertical disponible */
 }
 
 /* Área de entrada de texto */
