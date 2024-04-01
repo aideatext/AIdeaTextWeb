@@ -126,7 +126,6 @@ function visualizeSyntaxTreemap(syntaxData) {
 
     const hierarchyData = buildHierarchy(syntaxData.nodes);
     const width = 960, height = 600;
-
     const svg = d3.select(syntaxNetworkContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -137,36 +136,34 @@ function visualizeSyntaxTreemap(syntaxData) {
 
     treemap(root);
 
-    // Crea un grupo para cada hoja del treemap
     const leaf = svg.selectAll("g").data(root.leaves()).enter().append("g").attr("transform", d => `translate(${d.x0},${d.y0})`);
 
     leaf.append("rect")
         .attr("id", d => d.data.id)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name));
+        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name)); // Verificar que esta línea funcione correctamente
 
     leaf.append("text")
         .attr("x", 5)
         .attr("y", 20)
         .text(d => d.data.name + " [" + d.data.value + "]");
 
-    // Títulos de categorías gramaticales
     svg.selectAll(".category-title")
         .data(root.descendants().filter(d => d.depth === 1))
         .enter().append("text")
         .attr("x", d => d.x0 + 5)
         .attr("y", d => d.y0 + 15)
-        .text(d => POSLabels[d.data.name] + " [" + d.value + "]")
+        .text(d => `${POSLabels[d.data.name] || d.data.name} [${d.value}]`) // Corrección aplicada aquí
         .attr("font-weight", "bold");
-
-    function getColorByFrequency(value, pos) {
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+   function getColorByFrequency(value, pos) {
         const baseColor = d3.color(getColorByPOS(pos));
         // Ajusta este rango según las frecuencias de tu dataset
         const intensity = d3.scaleLinear().domain([1, 10]).range([1, 0.5])(value);
         return baseColor.darker(intensity);
     }
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para construir la jerarquía basada en las categorías gramaticales y la frecuencia de las palabras
     function buildHierarchy(nodes) {
@@ -196,35 +193,36 @@ function visualizeSyntaxTreemap(syntaxData) {
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
     const colorMap = {
-        'adp': '#1f77b4',
-        'det': '#ff7f0e',
-        'adj': '#2ca02c',
-        'noun': '#d62728',
-        'propn': '#9467bd',
-        'pron': '#8c564b',
-        'verb': '#e377c2',
-        'sconj': '#7f7f7f',
-        'adv': '#bcbd22',
-        'aux': '#17becf',
-        'cconj': '#aec7e8'
+        'ADP': '#1f77b4',
+        'DET': '#ff7f0e',
+        'ADJ': '#2ca02c',
+        'NOUN': '#d62728',
+        'PROPN': '#9467bd',
+        'PRON': '#8c564b',
+        'VERB': '#e377c2',
+        'SCONJ': '#7f7f7f',
+        'ADV': '#bcbd22',
+        'AUX': '#17becf',
+        'CCONJ': '#aec7e8'
     };
     return colorMap[pos] || 'lightblue';
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Definir etiquetas completas para las categorías gramaticales en español
 const POSLabels = {
-    'adp': 'Preposición',
-    'conj': 'Conjunción',
-    'sconj': 'Conjunción Subordinante',
-    'adv': 'Adverbio',
-    'det': 'Determinante',
-    'noun': 'Sustantivo',
-    'verb': 'Verbo',
-    'adj': 'Adjetivo',
-    'pron': 'Pronombre',
-    'propn': 'Nombre Propio',
-    'aux': 'Auxiliar',
-    'cconj': 'Conjunción Coordinante'
+    'ADP': 'Preposición',
+    'CONJ': 'Conjunción',
+    'SCONJ': 'Conjunción Subordinante',
+    'CCONJ': 'Conjunción Coordinante',
+    'ADV': 'Adverbio',
+    'DET': 'Determinante',
+    'NOUN': 'Sustantivo',
+    'VERB': 'Verbo',
+    'ADJ': 'Adjetivo',
+    'PRON': 'Pronombre',
+    'PROPN': 'Nombre Propio',
+    'AUX': 'Auxiliar'
+    
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
