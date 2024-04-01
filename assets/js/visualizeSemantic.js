@@ -80,6 +80,18 @@ function visualizeSemantic(semanticData, container) {
         return;
     }
 
+        // Crear los nodos y enlaces del grafo semántico con los datos recibidos del backend.
+    semanticData.nodes.forEach(node => {
+        node.id = node.id.toString();
+    }   );
+    semanticData.edges.forEach(link => {
+        link.source = link.source.toString();
+        link.target = link.target.toString();
+    });
+    console.log(semanticData);
+    console.log(semanticData.nodes);
+    console.log(semanticData.edges);
+
     const nodes = semanticData.nodes.map(node => {
         return { id: node.id.toString(), label: node.text };
     });
