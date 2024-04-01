@@ -115,7 +115,7 @@ function visualizeSemantic(semanticData, container) {
 ///////////////////////////////////////////////////////////////////////
 
 // Llamar a la función para visualizar el grafo semántico
-visualizeSemantic(semanticData, semanticNetworkContainer);
+visualizeSemantic(data.semantic_analysis, semanticNetworkContainer);
 
 ///////////////////////////////////////////////////////////////////////
 // Llamar a la función semanticProcess al cargar la página
