@@ -77,6 +77,12 @@ body, html {
     font-size: 12px;
 }
 
+#image-button {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+
 /* Área de texto */
 #text-1 {
     width: calc(100% - 40px); /* 100% del ancho menos el padding */
