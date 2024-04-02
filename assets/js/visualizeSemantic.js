@@ -37,7 +37,7 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend para análisis semántico:", data);
         if (data.semantic && data.semantic.entities) {
-            visualizeSemantic(data.semantic, semanticNetworkContainer);
+            visualizeDependencies(data.semantic, semanticNetworkContainer);
         } else {
             console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
         }
@@ -140,22 +140,17 @@ function visualizeDependencies(dependencies, container) {
 
         labels.attr("x", d => d.x)
               .attr("y", d => d.y);
-    });   
+    });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-   function getColorByFrequency(value, pos) {
-        const baseColor = d3.color(getColorByPOS(pos));
-        // Ajusta este rango según las frecuencias de tu dataset
-        const intensity = d3.scaleLinear().domain([1, 10]).range([1, 0.5])(value);
-        return baseColor.darker(intensity);
-    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
     const colorMap = {
         'ADP': '#ff6d6d',    //rojo
-        'DET': '#ff8686',    //rojo 
-        'CONJ': '#ffa0a0',     //rojo  
+        'DET': '#ff8686',    //rojo
+        'CONJ': '#ffa0a0',     //rojo
         'CCONJ': '#ffb9b9',  // rojo
         'SCONJ': '#ffd3d3',  // rojo
         'ADJ': '#ffd3d3', // amarillo
@@ -183,7 +178,7 @@ const POSLabels = {
     'PRON': 'Pronombre',
     'PROPN': 'Nombre Propio',
     'AUX': 'Auxiliar'
-    
+
 };
 //////////////////////////////////////////////////////////////////////////////////
 semanticProcess();
