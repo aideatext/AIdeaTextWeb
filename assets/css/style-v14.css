@@ -48,9 +48,9 @@ li a:hover:not(.active) {
     display: flex;
     flex-direction: row; /* Orientación horizontal */
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
-    background-image: url("https://aideatext.github.io/AIdeaTextWeb/assets/img/img-1.png");
-    background-size: cover; /* Cubre todo el contenedor */
-    background-position: center; /* Centra la imagen */
+    /* background-image: url("https://aideatext.github.io/AIdeaTextWeb/assets/img/img-1.png"); */
+    /* background-size: cover;  Cubre todo el contenedor */
+    /* background-position: center;  Centra la imagen */ 
 }
 
 .container-1 {
