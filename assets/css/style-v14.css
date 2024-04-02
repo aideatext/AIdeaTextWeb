@@ -54,7 +54,7 @@ li a:hover:not(.active) {
     /* width: 100%; */
     /* height: 85%; El complemento del porcentaje de la sección "info" */
     position: absolute;
-    top: 15%; /* Ajusta el porcentaje deseado */
+    top: 20%; /* Ajusta el porcentaje deseado */
     left: 0;
     bottom: 0;
     right: 0;
