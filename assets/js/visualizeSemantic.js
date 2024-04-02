@@ -82,20 +82,22 @@ function visualizeDependencies(dependencies, container) {
  * Nueva función de visualización de dependencias
 */
 function visualizeDependencies(dependencies, container) {
-const data = {
-    nodes: dependencies.map((dep, index) => ({
-        id: index,
-        text: dep.text,
-    })),
-    links: dependencies.map(dep => ({
-        source: dependencies.findIndex(d => d.text === dep.text),
-        target: dependencies.findIndex(d => d.text === dep.head),
-    })).filter(link => link.source !== -1 && link.target !== -1) // Filtramos enlaces inválidos
-};
-    //Definir espacio de visualización
+    const data = {
+        nodes: dependencies.map((dep, index) => ({
+            id: index,
+            text: dep.text,
+            type: dep.type, // Asegúrate de que esta propiedad exista en tus datos
+        })),
+        links: dependencies.map(dep => ({
+            source: dependencies.findIndex(d => d.text === dep.text),
+            target: dependencies.findIndex(d => d.text === dep.head),
+        })).filter(link => link.source !== -1 && link.target !== -1) // Filtramos enlaces inválidos
+    };
+
+    // Definir espacio de visualización
     const width = 1280;
     const height = 720;
-    const svg = d3.select("#semantic-network").append("svg")
+    const svg = d3.select(container).append("svg")
         .attr("width", width)
         .attr("height", height);
 
@@ -105,22 +107,24 @@ const data = {
     .enter().append("line")
     .style("stroke", "#aaa");
 
-    //Dibujar los nodos
+    // Dibujar los nodos
     const nodes = svg.selectAll("circle")
     .data(data.nodes)
     .enter().append("circle")
     .attr("r", 5)
-    .style("fill", "blue");
+    .style("fill", d => getColorByPOS(d.type)); // Asignar color basado en la categoría gramatical
 
+    // Dibujar etiquetas
     const labels = svg.selectAll("text")
         .data(data.nodes)
         .enter().append("text")
         .text(d => d.text)
         .style("font-size", "12px")
         .attr("dx", 8)
-        .attr("dy", ".35em");
+        .attr("dy", ".35em")
+        .attr("fill", "black"); // Asegúrate de que el color de texto contraste con los colores de nodos
 
-    //Aplicar la simulación de fuerzas
+    // Aplicar la simulación de fuerzas
     const simulation = d3.forceSimulation(data.nodes)
     .force("link", d3.forceLink(data.links).id(d => d.id))
     .force("charge", d3.forceManyBody())
@@ -138,5 +142,41 @@ const data = {
               .attr("y", d => d.y);
     });   
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Función para asignar colores a las categorías gramaticales
+function getColorByPOS(pos) {
+    const colorMap = {
+        'ADP': '#ff6d6d',    //rojo
+        'DET': '#ff8686',    //rojo 
+        'CONJ': '#ffa0a0',     //rojo  
+        'CCONJ': '#ffb9b9',  // rojo
+        'SCONJ': '#ffd3d3',  // rojo
+        'ADJ': '#ffd3d3', // amarillo
+        'ADV': '#cccc00', // amarillo
+        'NOUN': '#006700', // verde
+        'VERB': '#008000',     // verde
+        'PROPN': '#009a00',     // verde
+        'PRON': '#00b300',     // verde
+        'AUX': '#00cd00'     // verde
+    };
+    return colorMap[pos] || 'lightblue';
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Definir etiquetas completas para las categorías gramaticales en español
+const POSLabels = {
+    'ADP': 'Preposición',
+    'DET': 'Determinante',
+    'CONJ': 'Conjunción',
+    'CCONJ': 'Conjunción Coordinante',
+    'SCONJ': 'Conjunción Subordinante',
+    'ADJ': 'Adjetivo',
+    'ADV': 'Adverbio',
+    'NOUN': 'Sustantivo',
+    'VERB': 'Verbo',
+    'PRON': 'Pronombre',
+    'PROPN': 'Nombre Propio',
+    'AUX': 'Auxiliar'
+    
+};
+//////////////////////////////////////////////////////////////////////////////////
 semanticProcess();
