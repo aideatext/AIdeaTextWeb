@@ -51,13 +51,15 @@ li a:hover:not(.active) {
     /* background-image: url("https://aideatext.github.io/AIdeaTextWeb/assets/img/img-1.png"); */
     /* background-size: cover;  Cubre todo el contenedor */
     /* background-position: center;  Centra la imagen */ 
+    /* width: 100%; */
+    /* height: 85%; El complemento del porcentaje de la sección "info" */
     position: absolute;
     top: 15%; /* Ajusta el porcentaje deseado */
     left: 0;
     bottom: 0;
     right: 0;
-    width: 100%;
-    height: 85%; /* El complemento del porcentaje de la sección "info" */
+     height: '100%',
+     width: '100%',
     z-index: 1;
 }
 
