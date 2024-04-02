@@ -145,6 +145,7 @@ li a:hover:not(.active) {
     background-color: #ffffff;
     text-align: center;
     font-family: "Montserrat", sans-serif;
+    font-size: 12px; 
 }
 
 .footer-content {
