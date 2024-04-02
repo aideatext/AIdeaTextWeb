@@ -143,6 +143,13 @@ function visualizeDependencies(dependencies, container) {
     });   
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+   function getColorByFrequency(value, pos) {
+        const baseColor = d3.color(getColorByPOS(pos));
+        // Ajusta este rango según las frecuencias de tu dataset
+        const intensity = d3.scaleLinear().domain([1, 10]).range([1, 0.5])(value);
+        return baseColor.darker(intensity);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
     const colorMap = {
