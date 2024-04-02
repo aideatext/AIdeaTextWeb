@@ -37,7 +37,7 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend para análisis semántico:", data);
         if (data.semantic && data.semantic.entities) {
-            visualizeDependencies(data.semantic, semanticNetworkContainer);
+            visualizeSemantic(data.semantic, semanticNetworkContainer);
         } else {
             console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
         }
