@@ -20,6 +20,16 @@ body, html {
 }
 
 /* Contenedor-1 */
+.container-1x {
+    display: flex;
+    flex-direction: column; /* Orientación vertical */
+    flex: 0 0 100%; /* Ocupa el 100% del ancho disponible */
+    overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+    padding: 20px; /* Padding izquierdo y derecho */
+    border: 1px solid #ccc; /* Borde */
+    margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
+}
+
 .container-1 {
     display: flex;
     flex-direction: column; /* Orientación vertical */
@@ -28,7 +38,6 @@ body, html {
     padding: 20px; /* Padding izquierdo y derecho */
     border: 1px solid #ccc; /* Borde */
     margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
-    
 }
 
 /* Contenedor-2: ajustes para responsividad y espacio fijo */
