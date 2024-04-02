@@ -10,7 +10,7 @@
       var player;
       function onYouTubeIframeAPIReady() {
           
-      player = new YT.Player('main-container-1x', {
+      player = new YT.Player('youtube-player', {
           height: '100%',
           width: '100%',
           videoId: 'UA-md1VxaRc',
@@ -21,7 +21,7 @@
           
        playerVars: {
        //  'playsinline': 1
-       'origin': 'https://aideatext.github.io' 
+       'origin': 'https://aideatext.github.io/AIdeaTextWeb' 
        }
     });
     }
