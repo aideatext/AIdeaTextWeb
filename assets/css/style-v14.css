@@ -43,15 +43,11 @@ li a:hover:not(.active) {
     height: calc(100% - 120px); /* Altura total menos la altura del footer */
 }
 
-/* Contenedor-1 */
-.container-1x {
+/* Contenedor principal 1x */
+.main-container-1x {
     display: flex;
-    flex-direction: column; /* Orientación vertical */
-    flex: 0 0 100%; /* Ocupa el 100% del ancho disponible */
-    overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
-    padding: 20px; /* Padding izquierdo y derecho */
-    border: 1px solid #ccc; /* Borde */
-    margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
+    flex-direction: row; /* Orientación horizontal */
+    height: calc(100% - 120px); /* Altura total menos la altura del footer */
     background-image: url("assets/img/img-1.png");
 }
 
