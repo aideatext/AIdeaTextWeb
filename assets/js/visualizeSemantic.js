@@ -94,12 +94,16 @@ function visualizeDependencies(dependencies, container) {
         })).filter(link => link.source !== -1 && link.target !== -1) // Filtramos enlaces inválidos
     };
 
-    // Definir espacio de visualización
+// Dimensiones del SVG
     const width = 1280;
     const height = 720;
+    const margin = {top: 20, right: 30, bottom: 30, left: 40}; // Margen para la leyenda
+
     const svg = d3.select(container).append("svg")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Dibujar los enlaces
     const links = svg.selectAll("line")
@@ -145,25 +149,28 @@ function visualizeDependencies(dependencies, container) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para añadir una leyenda al SVG
-function addLegend(svg, categories) {
+function drawLegend(svg, width, height) {
+    const categories = Object.keys(POSLabels);
+    const colorScale = d3.scaleOrdinal(categories, Object.values(colorMap));
+
     const legend = svg.selectAll(".legend")
-        .data(categories)
+        .data(colorScale.domain())
         .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
     legend.append("rect")
         .attr("x", width - 18)
         .attr("width", 18)
         .attr("height", 18)
-        .style("fill", d => getColorByPOS(d));
+        .style("fill", colorScale);
 
     legend.append("text")
         .attr("x", width - 24)
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .text(d => POSLabels[d] || d);
+        .text(function(d) { return POSLabels[d]; });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
