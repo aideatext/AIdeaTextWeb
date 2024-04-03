@@ -141,9 +141,30 @@ function visualizeDependencies(dependencies, container) {
         labels.attr("x", d => d.x)
               .attr("y", d => d.y);
     });
+    addLegend(svg, Object.keys(POSLabels));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// Función para añadir una leyenda al SVG
+function addLegend(svg, categories) {
+    const legend = svg.selectAll(".legend")
+        .data(categories)
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
 
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", d => getColorByPOS(d));
+
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(d => POSLabels[d] || d);
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
 function getColorByPOS(pos) {
