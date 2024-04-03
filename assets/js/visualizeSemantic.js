@@ -175,7 +175,7 @@ function drawLegend(svg, width, height) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
-function getColorByPOS(pos) {
+
     const colorMap = {
         'ADP': '#ff6d6d',    //rojo
         'DET': '#ff8686',    //rojo
@@ -190,6 +190,8 @@ function getColorByPOS(pos) {
         'PRON': '#00b300',     // verde
         'AUX': '#00cd00'     // verde
     };
+
+function getColorByPOS(pos) {
     return colorMap[pos] || 'lightblue';
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +209,7 @@ const POSLabels = {
     'PRON': 'Pronombre',
     'PROPN': 'Nombre Propio',
     'AUX': 'Auxiliar'
-
 };
+
 //////////////////////////////////////////////////////////////////////////////////
 semanticProcess();
