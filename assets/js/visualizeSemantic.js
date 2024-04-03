@@ -37,7 +37,8 @@ function semanticProcess() {
     .then(data => {
         console.log("Datos recibidos del backend para análisis semántico:", data);
         if (data.semantic && data.semantic.entities) {
-            visualizeSemantic(data.semantic, semanticNetworkContainer);
+            //visualizeSemantic(data.semantic, semanticNetworkContainer);
+            visualizeEntities(semanticData.entities, container);
         } else {
             console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
         }
@@ -52,81 +53,64 @@ function semanticProcess() {
  * @param {Object} semanticData - Los datos de análisis semántico.
  * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
 */
-function visualizeSemantic(semanticData, container) {
+function visualizeEntities(semanticData.entities, container) {
     clearContainer(container);
     if (semanticData.dependencies) {
-        visualizeDependencies(semanticData.dependencies, container);
+        visualizeEntities(semanticData.entities, container);
     }
 }
 
+
 /**
- * Nueva función de visualización de dependencias
-function visualizeDependencies(dependencies, container) {
-    container.innerHTML = '';
+ * Nueva función de visualización de entidades
+*/
+function visualizeSemantic(semanticData, container) {
+    clearContainer(container);
+
+    // Asumiendo que semanticData.entities contiene las entidades
+    if (semanticData.entities) {
+        visualizeEntities(semanticData.entities, container);
+    }
+}
+
+function visualizeEntities(entities, container) {
     const svg = d3.select(container).append("svg")
         .attr("width", "100%")
         .attr("height", 600)
         .style("font", "10px sans-serif");
 
-    dependencies.forEach((dep, index) => {
-        svg.append("text")
-            .attr("x", 10)
-            .attr("y", 20 + index * 20)
-            .text(`${dep.text} (${dep.dep} de ${dep.head})`);
+    // Crea los nodos para cada entidad
+    const nodes = entities.map((entity, index) => ({
+        id: index,
+        text: entity,
+        group: 1 // O categoriza las entidades si tienes esa información
+    }));
+
+    // Asignar posición inicial a los nodos para visualización
+    nodes.forEach((node, index) => {
+        node.x = Math.random() * 800; // Posición aleatoria, ajusta según necesidad
+        node.y = Math.random() * 600;
     });
-}
- */
-
-
-/**
- * Nueva función de visualización de dependencias
-*/
-function visualizeDependencies(dependencies, container) {
-    const data = {
-        nodes: dependencies.map((dep, index) => ({
-            id: index,
-            text: dep.text,
-            type: dep.type, // Asegúrate de que esta propiedad exista en tus datos
-        })),
-        links: dependencies.map(dep => ({
-            source: dependencies.findIndex(d => d.text === dep.text),
-            target: dependencies.findIndex(d => d.text === dep.head),
-        })).filter(link => link.source !== -1 && link.target !== -1) // Filtramos enlaces inválidos
-    };
-
-// Dimensiones del SVG
-    const width = 1280;
-    const height = 720;
-    const margin = {top: 20, right: 30, bottom: 30, left: 40}; // Margen para la leyenda
-
-    const svg = d3.select(container).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    // Dibujar los enlaces
-    const links = svg.selectAll("line")
-    .data(data.links)
-    .enter().append("line")
-    .style("stroke", "#aaa");
 
     // Dibujar los nodos
-    const nodes = svg.selectAll("circle")
-    .data(data.nodes)
-    .enter().append("circle")
-    .attr("r", 5)
-    .style("fill", d => getColorByPOS(d.type)); // Asignar color basado en la categoría gramatical
+    svg.selectAll("circle")
+        .data(nodes)
+        .enter().append("circle")
+        .attr("r", 5) // Radio del círculo
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
+        .style("fill", d => getColorByPOS('NOUN')); // Ejemplo, asignando color, ajusta según necesidad
 
-    // Dibujar etiquetas
-    const labels = svg.selectAll("text")
-        .data(data.nodes)
+    // Dibujar etiquetas para las entidades
+    svg.selectAll("text")
+        .data(nodes)
         .enter().append("text")
+        .attr("x", d => d.x + 8)
+        .attr("y", d => d.y + 3)
         .text(d => d.text)
         .style("font-size", "12px")
-        .attr("dx", 8)
-        .attr("dy", ".35em")
-        .attr("fill", "black"); // Asegúrate de que el color de texto contraste con los colores de nodos
+        .attr("fill", "black");
+}
 
     // Aplicar la simulación de fuerzas
     const simulation = d3.forceSimulation(data.nodes)
