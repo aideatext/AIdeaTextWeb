@@ -145,7 +145,8 @@ function visualizeDependencies(dependencies, container) {
         labels.attr("x", d => d.x)
               .attr("y", d => d.y);
     });
-    addLegend(svg, Object.keys(POSLabels));
+    // Dibujar leyenda
+    drawLegend(svg, width, height);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para añadir una leyenda al SVG
