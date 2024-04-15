@@ -22,7 +22,7 @@ function visualizeGraph(data) {
     }
 
     // Parsea el cuerpo JSON si es necesario
-    const parsedData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+    const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
 
     // Crea un elemento de tipo 'div' para mostrar los resultados
     const resultsDiv = document.createElement('div');
@@ -71,13 +71,34 @@ function visualizeGraph(data) {
 }
 
 /**
- * Función que se ejecuta al cargar la página.
- * Puede ser modificada para inicializar la página o hacer llamadas iniciales al backend.
+ * Procesa el texto ingresado para análisis y visualización.
  */
 function syntaxProcess() {
-    // Puede contener cualquier lógica inicial, por ahora solo imprime en consola
-    console.log('La página está cargada y la función syntaxProcess ha sido ejecutada.');
+    var textInput = document.getElementById("text-1").value;
+    if (!textInput.trim()) {
+        console.error("El texto para analizar no puede estar vacío.");
+        return; // Detener la ejecución si el texto está vacío
+    }
+
+    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: textInput }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Datos recibidos del backend:", data);
+        visualizeGraph(data);
+    })
+    .catch(error => {
+        console.error("Error al procesar el texto:", error);
+    });
 }
 
 // Asegurarse de que syntaxProcess se llama cuando se carga la ventana
-window.onload = syntaxProcess;
+window.onload = function() {
+    // Añadir el evento click al botón para procesar el análisis cuando se hace clic
+    document.getElementById("syntaxButton").addEventListener("click", syntaxProcess);
+};
