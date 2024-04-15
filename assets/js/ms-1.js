@@ -1,3 +1,14 @@
+// Contenedor para la red sintáctica
+const syntaxNetworkContainer = document.getElementById("syntax-network");
+
+/**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
+}
+
 /**
  * Visualiza los datos recibidos del backend.
  * @param {Object} data - Los datos recibidos del backend.
@@ -9,13 +20,13 @@ function visualizeGraph(data) {
         console.error("No data received.");
         return;
     }
-    
+
     // Parsea el cuerpo JSON si es necesario
     const parsedData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-    
+
     // Crea un elemento de tipo 'div' para mostrar los resultados
     const resultsDiv = document.createElement('div');
-    
+
     // Agrega información general sobre el texto
     const wordCount = document.createElement('p');
     wordCount.textContent = `Total de palabras: ${parsedData.word_count}`;
@@ -59,5 +70,14 @@ function visualizeGraph(data) {
     syntaxNetworkContainer.appendChild(resultsDiv);
 }
 
-// Llamar a la función syntaxProcess al cargar la página
+/**
+ * Función que se ejecuta al cargar la página.
+ * Puede ser modificada para inicializar la página o hacer llamadas iniciales al backend.
+ */
+function syntaxProcess() {
+    // Puede contener cualquier lógica inicial, por ahora solo imprime en consola
+    console.log('La página está cargada y la función syntaxProcess ha sido ejecutada.');
+}
+
+// Asegurarse de que syntaxProcess se llama cuando se carga la ventana
 window.onload = syntaxProcess;
