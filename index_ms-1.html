@@ -1,58 +1,75 @@
 <!doctype html>
 <html lang="es" class="h-100">
+    <head>
 
-<head>
-<meta charset="UTF-8" />
-<title>AIdeaText</title>
-<meta name="Content-Type" />
-<meta name="viewport" content= "width=device-width, initial-scale=1" />
-<meta name="description" content= "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
-<meta name="author" content= "ManuelVarZen" />
-<meta name="generator" content= "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
-<!-- Twitter Card -->
-<meta name = "twitter:card" content = "summary_large_image" />
-<meta name = "twitter:site" content = "https://aideatext.ai" />
-<meta name = "twitter:creator" content = "@ManuelVarZen">
-<meta name = "twitter:title" content = "AIdeaText" />
-<meta name = "twitter:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
-<meta name = "twitter:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg"/>
-<!-- Open Graph -->
-<meta property="og:title" content = "AIdeaText" />
-<meta property="og:type" content = "website" />
-<meta property="og:url" content = "https://aideatext.ai" />
-<meta property="og:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
-<meta property="og:image:secure_url" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
-<meta property="og:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
-<meta property="og:image:alt" content="AIdeaText screenshot." />
-<!-- Aquí puedes agregar tus estilos CSS -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
-<link rel="stylesheet" type="text/css" href="assets/css/style-v14.css">
-<link rel="icon" type="image/png" href="favicon.png">
+	<meta charset="UTF-8" />
+	<title>AIdeaText</title>
 
-<!-- D3.js -->
+    <meta name="Content-Type" />
+    <meta name="viewport" content= "width=device-width, initial-scale=1" />
+    <meta name="description" content= "AIdeaText
+    AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+    <meta name="author" content= "ManuelVarZen" />
+    <meta name="generator" content= "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+
+	<!-- Twitter Card -->
+	<meta name = "twitter:card" content = "summary_large_image" />
+    <meta name = "twitter:site" content = "https://aideatext.ai" />
+    <meta name = "twitter:creator" content = "@ManuelVarZen">
+    <meta name = "twitter:title" content = "AIdeaText" />
+    <meta name = "twitter:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta name = "twitter:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg"/>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content = "AIdeaText" />
+	<meta property="og:type" content = "website" />
+	<meta property="og:url" content = "https://aideatext.ai" />
+    <meta property="og:image" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:image:secure_url" content = "https://aideatext.ai/img/AIdeaTextCard.jpg" />
+	<meta property="og:description" content = "AIdeaText is a project aimed at learning writing through the visualization of semantic maps." />
+	<meta property="og:image:alt" content="AIdeaText screenshot." />
+
+    <!-- Aquí puedes agregar tus estilos CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="assets/css/style-v14.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+ <!-- D3.js -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/d3@7"></script> -->
 <script type="text/javascript" src="https://d3js.org/d3.v7.min.js"></script>
+   
 </head>
 
-	
 <body>
-
 <div class="upper-section">
 <h1>AIdeaText - Web</h1>
 <ul>
-<li><a href="#home">Home</a></li>
+<li><a href="index.html">Home</a></li>
 <li><a href="syntax_index.html">Análisis sintáctico</a></li>
 <li><a href="semantic_index.html">Análisis semántico</a></li>
 </ul>
 </div>
 
-<div class="main-container-1x">
-	<div id="youtube-player"></div> <!-- Contenedor específico para el reproductor -->
-</div>
-		  
-<div class="footer"> <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai 
-&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </p> </div>
+<div class="main-container">
+	<div class="container-1">
+	        <div class="text-input-section-1">
+	            <textarea id="text-1" name="text-1" placeholder="Coloca tu texto aquí"></textarea>
+		    <button type="button" id="syntaxButton" onclick="syntaxProcess()">Análisis sintáctico</button>
+	        </div>
+	</div>
 
-	<script src="assets/js/youTubeAPI.js"></script>
-</body>
+	<div class="container-2">
+		<div class="right-section">
+		    <div class="containerUp" id="syntax-network"></div>
+		</div>	
+	</div>
+</div>
+	  
+  <div class="footer">
+        <p>AIdeaText is a project aimed at learning writing through the visualization
+        of semantic maps. Contact: hello [at] aideatext [dot] ai 
+        &copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </p>
+  </div>
+	 <script src="assets/js/.js"></script> 
+  </body>
 </html> 
