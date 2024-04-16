@@ -98,6 +98,20 @@ li a:hover:not(.active) {
     width: 100%; /* Cada contenedor ocupa el % del espacio vertical disponible */
 }
 
+.morphContainer-2 .right-section {
+    display: flex;
+    flex-direction: column;
+}
+
+#morphAnalize-1 {
+    flex: 1 1 25%; /* Asume el 25% del espacio disponible */
+    padding: 10px;
+}
+
+#morphAnalize-2 {
+    flex: 3 1 75%; /* Asume el 75% del espacio disponible */
+    padding: 10px;
+}
 
 /* Área de entrada de texto */
 .text-input-section-1 {
