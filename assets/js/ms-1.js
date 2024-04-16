@@ -7,8 +7,8 @@ function clearContainer(container) {
 
 function formatFeatures(features) {
     return Object.entries(features).map(([key, value]) => {
-        let formattedFeature = key.split('=');
-        return `${formattedFeature[0]}: ${formattedFeature[1]}`;
+        let [featureKey, featureValue] = key.split('=');
+        return `${featureKey}: ${featureValue}`;
     }).join(', ');
 }
 
@@ -26,7 +26,7 @@ function visualizeMorphology(data) {
     morphologyContainer.appendChild(generalInfo);
 
     const totalWords = document.createElement('p');
-    totalWords.textContent = `Cantidad Total de Palabras: ${data.morphology.length}`;
+    totalWords.textContent = `Cantidad Total de Palabras: ${data.totalWords}`;
     morphologyContainer.appendChild(totalWords);
 
     // Distribución por categorías gramaticales
@@ -34,21 +34,9 @@ function visualizeMorphology(data) {
     posDistribution.textContent = '[2] Distribución de la cantidad de palabras por cada una de las categorías gramaticales';
     morphologyContainer.appendChild(posDistribution);
 
-    const categories = data.morphology.reduce((acc, word) => {
-        const pos = word.features['PartOfSpeech'] || 'Unknown';
-        acc[pos] = acc[pos] || [];
-        acc[pos].push(word.text);
-        return acc;
-    }, {});
-
-    Object.entries(categories).forEach(([pos, words]) => {
+    Object.entries(data.posCount).forEach(([pos, details]) => {
         const categoryElement = document.createElement('p');
-        const wordCounts = words.reduce((countAcc, word) => {
-            countAcc[word] = (countAcc[word] || 0) + 1;
-            return countAcc;
-        }, {});
-
-        categoryElement.textContent = `${pos} [${words.length}]: ` + Object.entries(wordCounts).map(([word, count]) => `${word} [${count}]`).join('; ');
+        categoryElement.textContent = `${pos} [${details.count}]: ` + Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join('; ');
         morphologyContainer.appendChild(categoryElement);
     });
 
@@ -58,9 +46,9 @@ function visualizeMorphology(data) {
     morphologyContainer.appendChild(details);
 
     const detailedList = document.createElement('ul');
-    data.morphology.forEach(item => {
+    data.morphology.filter(item => ['NOUN', 'VERB', 'ADJ'].includes(item.pos)).forEach(item => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${item.text} (${item.features['PartOfSpeech'] || 'Unknown'}): ${formatFeatures(item.features)}`;
+        listItem.textContent = `${item.text} (${item.pos}): ${formatFeatures(Object.entries(item.features).map(([k, v]) => `${k}=${v}`))}`;
         detailedList.appendChild(listItem);
     });
     morphologyContainer.appendChild(detailedList);
