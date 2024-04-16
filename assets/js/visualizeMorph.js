@@ -1,5 +1,5 @@
-// Contenedor para la red semántica
-const semanticNetworkContainer = document.getElementById("semantic-network");
+// Contenedor para la red sintáctica
+const syntaxNetworkContainer = document.getElementById("syntax-network");
 
 /**
  * Obtiene un elemento del DOM por su ID.
@@ -19,167 +19,188 @@ function clearContainer(container) {
 }
 
 /**
- * Procesa el texto ingresado para análisis semántico.
+ * Encuentra la palabra más común en un array de palabras.
+ * @param {Array} words - El array de palabras.
+ * @returns {string} - La palabra más común.
  */
-function semanticProcess() {
-    const textInput = document.getElementById("text-1").value;
+function findMostCommonWordInText(words) {
+    const wordFrequency = {};
+    
+    // Contar la frecuencia de cada palabra
+    words.forEach(word => {
+        const normalizedWord = word.toLowerCase(); // Convertir la palabra a minúsculas para evitar distinciones de mayúsculas y minúsculas
+        wordFrequency[normalizedWord] = (wordFrequency[normalizedWord] || 0) + 1;
+    });
+    
+    // Encontrar la palabra con la frecuencia más alta
+    let mostCommonWord = '';
+    let highestFrequency = 0;
+    
+    for (const word in wordFrequency) {
+        if (wordFrequency[word] > highestFrequency) {
+            mostCommonWord = word;
+            highestFrequency = wordFrequency[word];
+        }
+    }
+    
+    return mostCommonWord;
+}
+
+/**
+ * Encuentra la palabra más común en un conjunto de nodos.
+ * @param {Array} nodes - Los nodos a analizar.
+ * @returns {Object} - El nodo más común.
+ */
+function findMostCommonWord(nodes) {
+    return nodes.reduce((max, node) => {
+        return node.frequency > max.frequency ? node : max;
+    }, nodes[0]);
+}
+
+
+/**
+ * Encuentra la palabra menos común en un conjunto de nodos.
+ * @param {Array} nodes - Los nodos a analizar.
+ * @returns {Object} - El nodo menos común.
+ */
+function findLeastCommonWord(nodes) {
+    return nodes.reduce((min, node) => {
+        return node.frequency < min.frequency ? node : min;
+    }, nodes[0]);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Visualiza los datos recibidos del backend.
+ * @param {Object} data - Los datos recibidos del backend.
+ */
+function visualizeGraph(data) {
+    syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
+    
+    if (data.syntax) {
+        // Visualización del Análisis Sintáctico
+        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Procesa el texto ingresado.
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function syntaxProcess() {
+    var textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
-        return;
+        return; // Detener la ejecución si el texto está vacío
     }
 
-    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+    fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ text: textInput }),
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend para análisis semántico:", data);
-        if (data.semantic && data.semantic.entities) {
-            visualizeSemantic(data.semantic, semanticNetworkContainer);
-        } else {
-            console.error("Error: No se encontraron datos de análisis semántico válidos en la respuesta del servidor.");
+        console.log("Datos recibidos del backend:", data);
+        
+        if (data.syntax && data.syntax.nodes) {
+            // Visualiza la sintaxis del texto en la página web
+            visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+        } else {  
+            console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
     })
     .catch(error => {
-        console.error("Error al procesar el texto para el análisis semántico:", error);
+        console.error("Error al procesar el texto:", error)
     });
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function visualizeSyntaxTreemap(syntaxData) {
+    clearContainer(syntaxNetworkContainer);
 
-/**
- * Visualiza los datos recibidos del backend.
- * @param {Object} semanticData - Los datos de análisis semántico.
- * @param {HTMLElement} container - El contenedor para mostrar la red semántica.
-*/
-function visualizeSemantic(semanticData, container) {
-    clearContainer(container);
-    if (semanticData.dependencies) {
-        visualizeDependencies(semanticData.dependencies, container);
+    if (!syntaxData || !syntaxData.nodes) {
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
     }
-}
 
-/**
- * Nueva función de visualización de dependencias
-function visualizeDependencies(dependencies, container) {
-    container.innerHTML = '';
-    const svg = d3.select(container).append("svg")
-        .attr("width", "100%")
-        .attr("height", 600)
-        .style("font", "10px sans-serif");
+    const hierarchyData = buildHierarchy(syntaxData.nodes);
+    const width = 800, height = 540;
+    const svg = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .style("font", "12px sans-serif");
 
-    dependencies.forEach((dep, index) => {
-        svg.append("text")
-            .attr("x", 10)
-            .attr("y", 20 + index * 20)
-            .text(`${dep.text} (${dep.dep} de ${dep.head})`);
-    });
-}
- */
+    const treemap = d3.treemap().size([width, height]).paddingInner(1).paddingOuter(3); // Ajuste de padding para separación interna
+    const root = d3.hierarchy(hierarchyData).sum(d => d.value).sort((a, b) => b.height - a.height || b.value - a.value);
 
+    treemap(root);
 
-/**
- * Nueva función de visualización de dependencias
-*/
-function visualizeDependencies(dependencies, container) {
-    const data = {
-        nodes: dependencies.map((dep, index) => ({
-            id: index,
-            text: dep.text,
-            type: dep.type, // Asegúrate de que esta propiedad exista en tus datos
-        })),
-        links: dependencies.map(dep => ({
-            source: dependencies.findIndex(d => d.text === dep.text),
-            target: dependencies.findIndex(d => d.text === dep.head),
-        })).filter(link => link.source !== -1 && link.target !== -1) // Filtramos enlaces inválidos
-    };
+    const leaf = svg.selectAll("g").data(root.leaves()).enter().append("g").attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-// Dimensiones del SVG
-    const width = 1280;
-    const height = 720;
-    const margin = {top: 20, right: 30, bottom: 30, left: 40}; // Margen para la leyenda
+    leaf.append("rect")
+        .attr("id", d => d.data.id)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name))
+        .attr("stroke", "black"); // Añadir borde a cada rectángulo
 
-    const svg = d3.select(container).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    leaf.append("text")
+        .attr("x", 5)
+        .attr("y", 20)
+        .text(d => d.data.name + " [" + d.data.value + "]")
+        .attr("fill", "white") // Asegurar que el texto sea blanco
+        .attr("font-weight", "bold"); // Añadir negrita al texto
 
-    // Dibujar los enlaces
-    const links = svg.selectAll("line")
-    .data(data.links)
-    .enter().append("line")
-    .style("stroke", "#aaa");
-
-    // Dibujar los nodos
-    const nodes = svg.selectAll("circle")
-    .data(data.nodes)
-    .enter().append("circle")
-    .attr("r", 5)
-    .style("fill", d => getColorByPOS(d.type)); // Asignar color basado en la categoría gramatical
-
-    // Dibujar etiquetas
-    const labels = svg.selectAll("text")
-        .data(data.nodes)
+    // Títulos de categorías gramaticales
+    svg.selectAll(".category-title")
+        .data(root.descendants().filter(d => d.depth === 1))
         .enter().append("text")
-        .text(d => d.text)
-        .style("font-size", "12px")
-        .attr("dx", 8)
-        .attr("dy", ".35em")
-        .attr("fill", "black"); // Asegúrate de que el color de texto contraste con los colores de nodos
-
-    // Aplicar la simulación de fuerzas
-    const simulation = d3.forceSimulation(data.nodes)
-    .force("link", d3.forceLink(data.links).id(d => d.id))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .on("tick", () => {
-        links.attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
-
-        nodes.attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-
-        labels.attr("x", d => d.x)
-              .attr("y", d => d.y);
-    });
-    // Dibujar leyenda
-    drawLegend(svg, width, height);
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 15)
+        .text(d => `${POSLabels[d.data.name] || d.data.name} [${d.value}]`)
+        .attr("font-weight", "bold")
+        .attr("fill", "white"); // Asegurar que el título de la categoría sea blanco y en negrita
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Función para añadir una leyenda al SVG
-function drawLegend(svg, width, height) {
-    const categories = Object.keys(POSLabels);
-    const colorScale = d3.scaleOrdinal(categories, Object.values(colorMap));
+   function getColorByFrequency(value, pos) {
+        const baseColor = d3.color(getColorByPOS(pos));
+        // Ajusta este rango según las frecuencias de tu dataset
+        const intensity = d3.scaleLinear().domain([1, 10]).range([1, 0.5])(value);
+        return baseColor.darker(intensity);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Función para construir la jerarquía basada en las categorías gramaticales y la frecuencia de las palabras
+    function buildHierarchy(nodes) {
+        let root = { name: "root", children: [] };
+        let categoryMap = {};
 
-    const legend = svg.selectAll(".legend")
-        .data(colorScale.domain())
-        .enter().append("g")
-        .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        nodes.forEach(node => {
+            if (!categoryMap[node.type]) {
+                categoryMap[node.type] = { name: node.type, children: [] };
+            }
+            let child = categoryMap[node.type].children.find(child => child.name === node.text);
+            if (child) {
+                child.value += 1; // Si la palabra ya existe, incrementar el contador
+            } else {
+                categoryMap[node.type].children.push({ name: node.text, value: 1 }); // Si no, agregarla nueva
+            }
+        });
 
-    legend.append("rect")
-        .attr("x", width - 18)
-        .attr("width", 18)
-        .attr("height", 18)
-        .style("fill", colorScale);
+        Object.values(categoryMap).forEach(category => {
+            root.children.push(category);
+        });
 
-    legend.append("text")
-        .attr("x", width - 24)
-        .attr("y", 9)
-        .attr("dy", ".35em")
-        .style("text-anchor", "end")
-        .text(function(d) { return POSLabels[d]; });
-}
+        return root;
+    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Función para asignar colores a las categorías gramaticales
-
+function getColorByPOS(pos) {
     const colorMap = {
         'ADP': '#ff6d6d',    //rojo
-        'DET': '#ff8686',    //rojo
-        'CONJ': '#ffa0a0',     //rojo
+        'DET': '#ff8686',    //rojo 
+        'CONJ': '#ffa0a0',     //rojo  
         'CCONJ': '#ffb9b9',  // rojo
         'SCONJ': '#ffd3d3',  // rojo
         'ADJ': '#ffd3d3', // amarillo
@@ -190,8 +211,6 @@ function drawLegend(svg, width, height) {
         'PRON': '#00b300',     // verde
         'AUX': '#00cd00'     // verde
     };
-
-function getColorByPOS(pos) {
     return colorMap[pos] || 'lightblue';
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +228,8 @@ const POSLabels = {
     'PRON': 'Pronombre',
     'PROPN': 'Nombre Propio',
     'AUX': 'Auxiliar'
+    
 };
-
-//////////////////////////////////////////////////////////////////////////////////
-semanticProcess();
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Llamar a la función syntaxProcess al cargar la página
+syntaxProcess();
