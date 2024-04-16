@@ -6,14 +6,30 @@ body, html {
     overflow: hidden;
 }
 
+.container-fluid, .row, .col-md-3, .col-md-2, .col-md-7, .d-flex {
+    height: 100%;  /* Establece la altura al 100% para todos los contenedores flexibles */
+}
+
 #text-1 {
-    height: 75%;  /* Ajusta la altura para asegurarse de que el botón tenga espacio */
-    resize: none; /* Previene que el usuario cambie el tamaño del área de texto */
+    height: auto; /* Permite que el área de texto ajuste su altura automáticamente */
+    flex-grow: 1; /* Ocupa el espacio disponible */
 }
 
 #morphButton {
-    width: 100%; /* Asegura que el botón se extienda a lo ancho del contenedor */
-    padding: 10px 0; /* Da más espacio dentro del botón */
+    width: 100%; /* Ajusta el ancho automáticamente al contenido */
+}
+
+.morphContainer-2 .right-section {
+    display: flex;
+    flex-direction: column;
+}
+
+#morphAnalizeUp {
+    flex: 25%; /* Asigna el 25% de la altura del contenedor padre */
+}
+
+#morphAnalizeCenter {
+    flex: 75%; /* Asigna el 75% de la altura del contenedor padre */
 }
 
 .nav {
