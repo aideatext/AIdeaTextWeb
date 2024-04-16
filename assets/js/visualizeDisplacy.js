@@ -2,15 +2,6 @@
 const syntaxNetworkContainer = document.getElementById("syntax-network");
 
 /**
- * Obtiene un elemento del DOM por su ID.
- * @param {string} id - El ID del elemento.
- * @returns {HTMLElement} - El elemento del DOM.
- */
-function getContainerElement(id) {
-    return document.getElementById(id);
-}
-
-/**
  * Limpia el contenido de un contenedor.
  * @param {HTMLElement} container - El contenedor a limpiar.
  */
@@ -35,12 +26,10 @@ function syntaxProcess() {
         },
         body: JSON.stringify({ text: textInput }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Datos recibidos del backend:", data);
-        
-        // Suponiendo que el servidor devuelve directamente el HTML de Displacy
-        visualizeSyntax(data);
+    .then(response => response.text()) // Cambiado de response.json() a response.text()
+    .then(html => {
+        console.log("HTML recibido del backend:", html);
+        visualizeSyntax(html);
     })
     .catch(error => {
         console.error("Error al procesar el texto:", error);
@@ -49,13 +38,13 @@ function syntaxProcess() {
 
 /**
  * Visualiza el HTML de Displacy recibido del backend.
- * @param {string} data - HTML del análisis sintáctico generado por Displacy.
+ * @param {string} html - HTML del análisis sintáctico generado por Displacy.
  */
-function visualizeSyntax(data) {
+function visualizeSyntax(html) {
     clearContainer(syntaxNetworkContainer);
-    if (data) {
+    if (html) {
         // Insertar directamente el HTML en el contenedor
-        syntaxNetworkContainer.innerHTML = data;
+        syntaxNetworkContainer.innerHTML = html;
     } else {
         console.error("No se recibieron datos válidos del servidor.");
     }
