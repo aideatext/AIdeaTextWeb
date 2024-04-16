@@ -21,8 +21,19 @@ function visualizeMorphology(data) {
         return;
     }
 
-    // Parsea el cuerpo JSON si es necesario
-    const parsedData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+    // Parsea el cuerpo JSON si es necesario. Asegúrate de que la propiedad 'body' exista y sea un string antes de parsear.
+    let parsedData;
+    try {
+        parsedData = (typeof data.body === 'string') ? JSON.parse(data.body) : data;
+    } catch (error) {
+        console.error("Error parsing data:", error);
+        return;
+    }
+
+    if (!parsedData || !parsedData.morphology) {
+        console.error("Morphology data is missing or malformed:", parsedData);
+        return;
+    }
 
     // Crea un elemento de tipo 'div' para mostrar los resultados
     const resultsDiv = document.createElement('div');
@@ -71,7 +82,7 @@ function syntaxProcess() {
     });
 }
 
-// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms1Update
+// Asegurarse de que syntaxProcess se llama cuando se carga la ventana
 window.onload = function() {
     // Añadir el evento click al botón para procesar el análisis cuando se hace clic
     document.getElementById("syntaxButton").addEventListener("click", syntaxProcess);
