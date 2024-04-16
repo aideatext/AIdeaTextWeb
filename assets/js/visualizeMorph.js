@@ -128,12 +128,13 @@ function morphProcess() {
             
             const info = document.createElement('p');
             info.innerHTML = `
-                <strong>Total de palabras:</strong> ${totalWords.text} (Total de palabras: ${totalWords.wordCountInfo})<br>
+                <strong>Total de palabras:</strong> ${totalWords}<br>
                 <strong>Palabra más común:</strong> ${mostCommonNode.text} (Frecuencia: ${mostCommonNode.frequency})<br>
                 <strong>Palabra menos común:</strong> ${leastCommonNode.text} (Frecuencia: ${leastCommonNode.frequency})
             `;
             generalInfoContainer.appendChild(info);
-                
+        }
+
         if (data.syntax && data.syntax.nodes) {
             // Visualiza la sintaxis del texto en la página web
             visualizeSyntaxTreemap(data.syntax, categoryInfoContainer);
@@ -142,7 +143,7 @@ function morphProcess() {
         }
     })
     .catch(error => {
-        console.error("Error al procesar el texto:", error)
+        console.error("Error al procesar el texto:", error);
     });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
