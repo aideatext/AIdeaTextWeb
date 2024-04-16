@@ -10,10 +10,10 @@ function clearContainer(container) {
 }
 
 /**
- * Visualiza los datos recibidos del backend.
+ * Visualiza los datos de análisis morfológico recibidos del backend.
  * @param {Object} data - Los datos recibidos del backend.
  */
-function visualizeGraph(data) {
+function visualizeMorphology(data) {
     clearContainer(syntaxNetworkContainer); // Limpiar el contenedor antes de agregar nuevo contenido
 
     if (!data) {
@@ -22,36 +22,10 @@ function visualizeGraph(data) {
     }
 
     // Parsea el cuerpo JSON si es necesario
-    const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+    const parsedData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
 
     // Crea un elemento de tipo 'div' para mostrar los resultados
     const resultsDiv = document.createElement('div');
-
-    // Agrega información general sobre el texto
-    const wordCount = document.createElement('p');
-    wordCount.textContent = `Total de palabras: ${parsedData.word_count}`;
-    resultsDiv.appendChild(wordCount);
-
-    const mostCommonWord = document.createElement('p');
-    mostCommonWord.textContent = `Palabra más común: ${parsedData.most_common_word}`;
-    resultsDiv.appendChild(mostCommonWord);
-
-    const leastCommonWord = document.createElement('p');
-    leastCommonWord.textContent = `Palabra menos común: ${parsedData.least_common_word}`;
-    resultsDiv.appendChild(leastCommonWord);
-
-    // Visualización del análisis sintáctico
-    const syntaxTitle = document.createElement('h3');
-    syntaxTitle.textContent = 'Análisis Sintáctico:';
-    resultsDiv.appendChild(syntaxTitle);
-
-    const syntaxList = document.createElement('ul');
-    parsedData.syntax.forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${item[0]} (POS: ${item[1]})`;
-        syntaxList.appendChild(listItem);
-    });
-    resultsDiv.appendChild(syntaxList);
 
     // Visualización del análisis morfológico
     const morphologyTitle = document.createElement('h3');
@@ -90,7 +64,7 @@ function syntaxProcess() {
     .then(response => response.json())
     .then(data => {
         console.log("Datos recibidos del backend:", data);
-        visualizeGraph(data);
+        visualizeMorphology(data);
     })
     .catch(error => {
         console.error("Error al procesar el texto:", error);
