@@ -1,4 +1,4 @@
-// Contenedor para la red sintáctica
+// Contenedor para la visualización del análisis morfológico
 const generalInfoContainer = document.getElementById("morphAnalizeUp");
 const categoryInfoContainer = document.getElementById("morphAnalizeCenter");
 
@@ -74,11 +74,11 @@ function findLeastCommonWord(nodes) {
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeGraph(data) {
-    morphAnalizeCenterContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
+    categoryInfoContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
     
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSyntaxTreemap(data.syntax, morphAnalizeCenterContainer);
+        visualizeSyntaxTreemap(data.syntax, categoryInfoContainer);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ function morphProcess() {
         
         if (data.syntax && data.syntax.nodes) {
             // Visualiza la sintaxis del texto en la página web
-            visualizeSyntaxTreemap(data.syntax, morphAnalizeCenterContainer);
+            visualizeSyntaxTreemap(data.syntax, categoryInfoContainer);
         } else {  
             console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
@@ -117,7 +117,7 @@ function morphProcess() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSyntaxTreemap(syntaxData) {
-    clearContainer(morphAnalizeCenterContainer);
+    clearContainer(categoryInfoContainer);
 
     if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
@@ -126,7 +126,7 @@ function visualizeSyntaxTreemap(syntaxData) {
 
     const hierarchyData = buildHierarchy(syntaxData.nodes);
     const width = 800, height = 540;
-    const svg = d3.select(morphAnalizeCenterContainer).append("svg")
+    const svg = d3.select(categoryInfoContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
         .style("font", "12px sans-serif");
@@ -230,6 +230,8 @@ const POSLabels = {
     'AUX': 'Auxiliar'
     
 };
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Llamar a la función syntaxProcess al cargar la página
 morphProcess();
