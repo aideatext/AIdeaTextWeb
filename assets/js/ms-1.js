@@ -1,81 +1,96 @@
 // Contenedor para la red morfológica
 const morphologyContainer = document.getElementById("syntax-network");
 
-/**
- * Limpia el contenido de un contenedor.
- * @param {HTMLElement} container - El contenedor a limpiar.
- */
 function clearContainer(container) {
     container.innerHTML = '';
 }
 
-/**
- * Visualización
- * @param {Object} data - Los datos recibidos del backend.
- */
-
-function formatMorphFeature(key, value) {
-    const featureMapping = {
-        'Gender=Fem': 'Género: Femenino',
-        'Gender=Masc': 'Género: Masculino',
-        'Number=Sing': 'Número: Singular',
-        'Number=Plur': 'Número: Plural',
-        'Tense=Pres': 'Tiempo: Presente',
-        'Tense=Past': 'Tiempo: Pasado',
-        // Agrega más mapeos según necesario
-    };
-    return featureMapping[key] || key;  // Devuelve el mapeo si existe, o la clave original
+function formatMorphFeature(features) {
+    return features.map(f => {
+        const [key, value] = f.split('=');
+        switch (key) {
+            case 'Gender':
+                return value === 'Fem' ? 'Femenino' : 'Masculino';
+            case 'Number':
+                return value === 'Sing' ? 'Singular' : 'Plural';
+            case 'Tense':
+                return value === 'Pres' ? 'Presente' : value === 'Past' ? 'Pasado' : value;
+            case 'Person':
+                return `Persona: ${value}`;
+            default:
+                return `${key}: ${value}`;
+        }
+    }).join(', ');
 }
 
 function visualizeMorphology(data) {
-    clearContainer(morphologyContainer); // Limpiar el contenedor antes de agregar nuevo contenido
+    clearContainer(morphologyContainer);
 
-    if (!data || !data.morphology) {
-        console.error("No morphology data received.");
+    if (!data) {
+        console.error("No data received.");
         return;
     }
 
-    // Crea un elemento de tipo 'div' para mostrar los resultados
     const resultsDiv = document.createElement('div');
+    resultsDiv.style.backgroundColor = "#f0f0f0";
+    resultsDiv.style.padding = "10px";
+    resultsDiv.style.borderRadius = "8px";
 
-    // Visualización del análisis morfológico
-    const morphologyTitle = document.createElement('h3');
-    morphologyTitle.textContent = 'Análisis Morfológico:';
-    resultsDiv.appendChild(morphologyTitle);
+    const generalInfo = document.createElement('h3');
+    generalInfo.textContent = '[1] Resumen General';
+    resultsDiv.appendChild(generalInfo);
 
-    const morphologyList = document.createElement('ul');
-    data.morphology.forEach(item => {
-        const listItem = document.createElement('li');
-        const featuresText = Object.entries(item.features).map(([key, value]) => formatMorphFeature(key, value)).join(', ');
-        listItem.textContent = `${item.text}: ${featuresText}`;
-        morphologyList.appendChild(listItem);
+    const wordCount = document.createElement('p');
+    wordCount.textContent = `Cantidad Total de Palabras: ${data.totalWords}`;
+    resultsDiv.appendChild(wordCount);
+
+    const mostCommonWord = document.createElement('p');
+    mostCommonWord.textContent = `Palabra más Común: ${data.mostCommonWord} [${data.mostCommonWordCount}]`;
+    resultsDiv.appendChild(mostCommonWord);
+
+    const posDistributionTitle = document.createElement('h3');
+    posDistributionTitle.textContent = '[2] Distribución de Categorías Gramaticales';
+    resultsDiv.appendChild(posDistributionTitle);
+
+    const posList = document.createElement('ul');
+    Object.entries(data.posCount).forEach(([pos, details]) => {
+        const item = document.createElement('li');
+        item.textContent = `${pos} [${details.count}]: ${Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join(', ')}`;
+        posList.appendChild(item);
     });
-    resultsDiv.appendChild(morphologyList);
+    resultsDiv.appendChild(posList);
 
-    // Añade el 'div' de resultados al contenedor principal
+    const detailedMorphTitle = document.createElement('h3');
+    detailedMorphTitle.textContent = '[3] Detalles Específicos de Sustantivos, Verbos y Adjetivos';
+    resultsDiv.appendChild(detailedMorphTitle);
+
+    const morphList = document.createElement('ul');
+    data.morphology.forEach(item => {
+        if (['NOUN', 'VERB', 'ADJ'].includes(item.pos)) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${item.text} (${item.pos}): ${formatMorphFeature(Object.entries(item.features).map(([k, v]) => `${k}=${v}`))}`;
+            morphList.appendChild(listItem);
+        }
+    });
+    resultsDiv.appendChild(morphList);
+
     morphologyContainer.appendChild(resultsDiv);
 }
 
-/**
- * Procesa el texto ingresado para análisis y visualización.
- */
 function syntaxProcess() {
-    var textInput = document.getElementById("text-1").value;
+    const textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
-        return; // Detener la ejecución si el texto está vacío
+        return;
     }
 
     fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: textInput }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: textInput })
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Datos recibidos del backend:", data);
         visualizeMorphology(data);
     })
     .catch(error => {
@@ -83,8 +98,6 @@ function syntaxProcess() {
     });
 }
 
-// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms456
 window.onload = function() {
-    // Añadir el evento click al botón para procesar el análisis cuando se hace clic
     document.getElementById("syntaxButton").addEventListener("click", syntaxProcess);
 };
