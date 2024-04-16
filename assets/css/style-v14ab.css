@@ -1,0 +1,221 @@
+<div class="main-container">
+	<div class="container-1">
+	        <div class="text-input-section-1">
+	            <textarea id="text-1" name="text-1" placeholder="Coloca tu texto aquí"></textarea>
+		    <button type="button" id="morphButton" onclick="morphProcess()">Análisis morfológico</button>
+	        </div>
+	</div>
+
+	<div class="morphContainer-2">
+		<div class="right-section">
+		    <div class="morphcontainerUp" id="morphAnalizeUp"></div>
+		    <div class="morphcontainerCenter" id="morphAnalizeCenter"></div> 	
+		</div>	
+	</div>
+</div>
+
+para este caso son dos contenedores uno a la izquierda y otro a la derecha. El de la derecha contiene otros 2 contenedores. El primero ocupa el 25% del espacio y el segundo el 75%. 
+
+el archivo css tiene esa configuración: 
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: "Montserrat", sans-serif;
+    overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+
+/* Upper section */
+.upper-section {
+    text-align: center;
+}
+
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    flex-direction: row; /* Orientación horizontal */
+    height: calc(100% - 120px); /* Altura total menos la altura del footer */
+}
+
+/* Contenedor principal 1x */
+.main-container-1x {
+    /* display: flex;
+    /* flex-direction: row; /* Orientación horizontal */
+    /* height: calc(100% - 120px); /* Altura total menos la altura del footer */
+    /* background-image: url("https://aideatext.github.io/AIdeaTextWeb/assets/img/img-1.png"); */
+    /* background-size: cover;  Cubre todo el contenedor */
+    /* background-position: center;  Centra la imagen */ 
+    /* width: 100%; */
+    /* height: 85%; El complemento del porcentaje de la sección "info" */
+    position: absolute;
+    top: 20%; /* Ajusta el porcentaje deseado */
+    left: 0;
+    bottom: 0;
+    right: 0;
+     height: 100%,
+     width: 100%,
+    z-index: 1;
+}
+
+.container-1 {
+    display: flex;
+    flex-direction: column; /* Orientación vertical */
+    flex: 0 0 35%; /* Ocupa el 35% del ancho disponible */
+    overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+    padding: 20px; /* Padding izquierdo y derecho */
+    border: 1px solid #ccc; /* Borde */
+    margin-right: auto; /* Ajusta el margen derecho para que se ajuste al extremo izquierdo */
+}
+
+/* Contenedor-2: ajustes para responsividad y espacio fijo */
+.container-2 {
+    display: flex;
+    flex-direction: column; /* Orientación vertical */
+    flex: 1 1 auto; /* Ajuste para que ocupe el espacio restante */
+    overflow: hidden; /* Evita que el contenido exceda el tamaño del contenedor */
+    padding: 20px; /* Padding izquierdo y derecho */
+    border: 1px solid #ccc; /* Borde */
+    height: calc(100vh - 120px - 40px); /* Altura: 100% de la altura de la ventana menos la altura del footer y el padding */
+}
+
+/* Ajuste para cajas en contenedor-2 */
+.containerUp,
+.containerCenter,
+.containerDown {
+    flex: 1; /* Expande para ocupar todo el espacio disponible */
+    overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    padding: 20px; /* Ajusta el padding para evitar desplazamiento extra */
+    border: 1px solid #ccc; /* Borde opcional */
+    margin-top: 20px; /* Espacio entre las cajas */
+    height: 100%; /* Cada contenedor ocupa el % del espacio vertical disponible */
+    width: 100%; /* Cada contenedor ocupa el % del espacio vertical disponible */
+}
+
+.morphContainer-2 .right-section {
+    display: flex;
+    flex-direction: column;
+}
+
+#morphAnalizeUp {
+    flex: 1 1 25%; /* Asume el 25% del espacio disponible */
+    padding: 10px;
+}
+
+#morphAnalizeCenter {
+    flex: 3 1 75%; /* Asume el 75% del espacio disponible */
+    padding: 10px;
+}
+
+/* Área de entrada de texto */
+.text-input-section-1 {
+    display: flex; /* Hace que los elementos internos se alineen como una columna */
+    flex-direction: column; /* Cambia la dirección de alineación a columna */
+    align-items: center; /* Centra horizontalmente los elementos en el contenedor */
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: calc(100% - 40px); /* 100% del ancho menos el padding */
+    height: calc(100% - 40px); /* 100% de la altura menos el padding */
+    margin-bottom: 20px; /* Espacio entre la caja de texto y el botón */
+    justify-content: space-between; /* Espacia los elementos internos uniformemente en la columna */
+}
+
+/* Botón de procesamiento */
+#morphButton,
+#semanticButton,
+#syntaxButton {
+    display: inline-block; /* Alinea los botones en la misma línea */
+    width: 100%; /* Establece el ancho de los botones */
+    padding: 10px 20px;
+    font-size: 12px;
+}
+
+#image-button {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+
+/* Área de texto */
+#text-1 {
+    width: calc(100% - 40px); /* 100% del ancho menos el padding */
+    height: calc(100% - 40px); /* 100% de la altura menos el padding */
+    border: 1px solid #ccc; /* Borde opcional */
+    resize: none; /* Evita que el usuario pueda cambiar el tamaño */
+    margin-bottom: 20px; /* Espacio entre la caja de texto y el botón */
+}
+
+/* Placeholder del área de texto */
+#text-1::placeholder {
+    color: #000000; /* Cambia el color del texto del placeholder */
+    font-style: italic; /* Estilo de fuente para el placeholder */
+    font-size: 14px; /* Tamaño de fuente específico para el placeholder */
+    text-align: justify; /* Alinea el texto del placeholder */
+    text-indent: 0;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: auto; /* Ajusta la altura automáticamente según el contenido */
+    background-color: #ffffff;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px; 
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap; /* Permite que el contenido se envuelva si no cabe en una sola línea */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    max-width: calc(100% - 20px); /* Ancho máximo igual al ancho de la pantalla menos el margen izquierdo y derecho */
+    overflow: hidden; /* Oculta cualquier desbordamiento */
+}
+
+.footer-content p {
+    margin: 0; /* Elimina el margen predeterminado */
+    padding: 5px; /* Añade un pequeño espacio entre los párrafos */
+    white-space: nowrap; /* Evita que el texto se envuelva a la siguiente línea */
+}
+
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column; /* Cambio a orientación vertical para dispositivos móviles */
+    }
+
+    .containerUp,
+    .containerDown {
+        height: 200px; /* Altura más pequeña para dispositivos móviles */
+    }
+}
