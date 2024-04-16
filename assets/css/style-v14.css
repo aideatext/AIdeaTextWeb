@@ -6,6 +6,19 @@ body, html {
     overflow: hidden; /* Evita el desplazamiento en el nivel más alto */
 }
 
+.nav {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.nav-item {
+    display: inline-block;
+}
+
+.nav-link {
+    display: block;
+    padding:
+
 ul {
   list-style-type: none;
   margin: 0;
