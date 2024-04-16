@@ -74,11 +74,11 @@ function findLeastCommonWord(nodes) {
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeGraph(data) {
-    syntaxNetworkContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
+    morphAnalizeCenterContainer.innerHTML = ''; // Limpiar el contenedor de red sintáctica
     
     if (data.syntax) {
         // Visualización del Análisis Sintáctico
-        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+        visualizeSyntaxTreemap(data.syntax, morphAnalizeCenterContainer);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
