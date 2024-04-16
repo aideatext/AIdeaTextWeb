@@ -10,16 +10,16 @@ function clearContainers() {
 function visualizeMorphology(data) {
     clearContainers();
 
-    if (!data || !data.morphology) {
-        console.error("No morphology data received or data is malformed.");
+    if (!data) {
+        console.error("No data received or data is malformed.");
         return;
     }
 
     // Resumen general en una sola línea
     const generalInfo = document.createElement('p');
-    generalInfo.textContent = `[1] Resumen General: Cantidad Total de Palabras: ${data.totalWords} || ` +
-        `Palabra más común: ${data.mostCommonWord} [${data.mostCommonWordCount}] || ` +
-        `Palabra menos común: ${data.leastCommonWord} [${data.leastCommonWordCount}]`;
+    generalInfo.textContent = `[1] Resumen General: Cantidad Total de Palabras: ${data.totalWords || 0} || ` +
+        `Palabra más común: ${data.mostCommonWord || 'N/A'} [${data.mostCommonWordCount || 0}] || ` +
+        `Palabra menos común: ${data.leastCommonWord || 'N/A'} [${data.leastCommonWordCount || 0}]`;
     generalInfoContainer.appendChild(generalInfo);
 
     // Distribución por categorías gramaticales
@@ -27,12 +27,20 @@ function visualizeMorphology(data) {
     posDistribution.textContent = '[2] Distribución de la cantidad de palabras por cada una de las categorías gramaticales';
     categoryInfoContainer.appendChild(posDistribution);
 
-    Object.entries(data.posCount).forEach(([pos, details]) => {
-        const categoryElement = document.createElement('p');
-        categoryElement.textContent = `${pos} [${details.count}]: ` + 
-            Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join('; ');
-        categoryInfoContainer.appendChild(categoryElement);
-    });
+    if (data.posCount && Object.keys(data.posCount).length > 0) {
+        Object.entries(data.posCount).forEach(([pos, details]) => {
+            if (details && details.words) {
+                const categoryElement = document.createElement('p');
+                categoryElement.textContent = `${pos} [${details.count || 0}]: ` + 
+                    Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join('; ');
+                categoryInfoContainer.appendChild(categoryElement);
+            }
+        });
+    } else {
+        const noDataMsg = document.createElement('p');
+        noDataMsg.textContent = "No hay datos disponibles para categorías gramaticales.";
+        categoryInfoContainer.appendChild(noDataMsg);
+    }
 }
 
 function morphProcess() {
