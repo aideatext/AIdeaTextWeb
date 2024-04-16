@@ -16,8 +16,11 @@ function visualizeMorphology(data) {
     }
 
     // Resumen general en una sola línea
-    const generalInfo = document.createElement('p');
-    generalInfo.textContent = `[1] Resumen General: Cantidad Total de Palabras: ${data.totalWords} || ` +
+    const posDistribution = document.createElement('h3');
+    posDistribution.textContent = '[1] Extensión del texto ';
+    
+    posDistribution.textContent = 
+        `Cantidad Total de Palabras: ${data.totalWords} || ` +
         `Palabra más común: ${data.mostCommonWord} [${data.mostCommonWordCount}] || ` +
         `Palabra menos común: ${data.leastCommonWord} [${data.leastCommonWordCount}]`;
     generalInfoContainer.appendChild(generalInfo);
