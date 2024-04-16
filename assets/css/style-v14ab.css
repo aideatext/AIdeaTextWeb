@@ -1,22 +1,3 @@
-<div class="main-container">
-	<div class="container-1">
-	        <div class="text-input-section-1">
-	            <textarea id="text-1" name="text-1" placeholder="Coloca tu texto aquí"></textarea>
-		    <button type="button" id="morphButton" onclick="morphProcess()">Análisis morfológico</button>
-	        </div>
-	</div>
-
-	<div class="morphContainer-2">
-		<div class="right-section">
-		    <div class="morphcontainerUp" id="morphAnalizeUp"></div>
-		    <div class="morphcontainerCenter" id="morphAnalizeCenter"></div> 	
-		</div>	
-	</div>
-</div>
-
-para este caso son dos contenedores uno a la izquierda y otro a la derecha. El de la derecha contiene otros 2 contenedores. El primero ocupa el 25% del espacio y el segundo el 75%. 
-
-el archivo css tiene esa configuración: 
 body, html {
     height: 100%;
     margin: 0;
