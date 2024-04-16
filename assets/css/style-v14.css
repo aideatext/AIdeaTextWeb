@@ -86,6 +86,7 @@ li a:hover:not(.active) {
 
 /* Ajuste para cajas en contenedor-2 */
 .containerUp,
+.containerCenter,
 .containerDown {
     flex: 1; /* Expande para ocupar todo el espacio disponible */
     overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
@@ -112,6 +113,7 @@ li a:hover:not(.active) {
 }
 
 /* Botón de procesamiento */
+#morphButton,
 #semanticButton,
 #syntaxButton {
     display: inline-block; /* Alinea los botones en la misma línea */
