@@ -6,6 +6,16 @@ body, html {
     overflow: hidden;
 }
 
+#text-1 {
+    height: 75%;  /* Ajusta la altura para asegurarse de que el botón tenga espacio */
+    resize: none; /* Previene que el usuario cambie el tamaño del área de texto */
+}
+
+#morphButton {
+    width: 100%; /* Asegura que el botón se extienda a lo ancho del contenedor */
+    padding: 10px 0; /* Da más espacio dentro del botón */
+}
+
 .nav {
     list-style-type: none;
     padding-left: 0;
