@@ -82,7 +82,7 @@ function syntaxProcess() {
     });
 }
 
-// Asegurarse de que syntaxProcess se llama cuando se carga la ventana
+// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms2
 window.onload = function() {
     // Añadir el evento click al botón para procesar el análisis cuando se hace clic
     document.getElementById("syntaxButton").addEventListener("click", syntaxProcess);
