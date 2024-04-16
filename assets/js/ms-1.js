@@ -10,9 +10,25 @@ function clearContainer(container) {
 }
 
 /**
- * Visualiza los datos de análisis morfológico recibidos del backend.
+ * Visualización
  * @param {Object} data - Los datos recibidos del backend.
  */
+
+function formatMorphFeature(key, value) {
+    const featureMapping = {
+        'Gender=Fem': 'Género: Femenino',
+        'Gender=Masc': 'Género: Masculino',
+        'Number=Sing': 'Número: Singular',
+        'Number=Plur': 'Número: Plural',
+        'Tense=Pres': 'Tiempo: Presente',
+        'Tense=Past': 'Tiempo: Pasado',
+        // Agrega más mapeos según necesario
+    };
+    return featureMapping[key] || key;  // Devuelve el mapeo si existe, o la clave original
+}
+
+
+
 function visualizeMorphology(data) {
     clearContainer(morphologyContainer); // Limpiar el contenedor antes de agregar nuevo contenido
 
@@ -25,6 +41,7 @@ function visualizeMorphology(data) {
     const resultsDiv = document.createElement('div');
 
     // Visualización del análisis morfológico
+    const resultsDiv = document.createElement('div');
     const morphologyTitle = document.createElement('h3');
     morphologyTitle.textContent = 'Análisis Morfológico:';
     resultsDiv.appendChild(morphologyTitle);
@@ -32,7 +49,8 @@ function visualizeMorphology(data) {
     const morphologyList = document.createElement('ul');
     data.morphology.forEach(item => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${item.text}: ${JSON.stringify(item.features)}`;
+        const featuresText = Object.entries(item.features).map(([key, value]) => formatMorphFeature(key, value)).join(', ');
+        listItem.textContent = `${item.text}: ${featuresText}`;
         morphologyList.appendChild(listItem);
     });
     resultsDiv.appendChild(morphologyList);
@@ -68,7 +86,7 @@ function syntaxProcess() {
     });
 }
 
-// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms43
+// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms456
 window.onload = function() {
     // Añadir el evento click al botón para procesar el análisis cuando se hace clic
     document.getElementById("syntaxButton").addEventListener("click", syntaxProcess);
