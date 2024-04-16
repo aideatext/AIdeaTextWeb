@@ -53,21 +53,27 @@
     </header>
 
     <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="col-md-4 bg-light p-3 d-flex flex-column">
-                <textarea id="text-1" class="form-control mb-3 flex-grow-1" placeholder="Coloca tu texto aquí"></textarea>
-                <button type="button" id="morphButton" class="btn btn-primary mt-auto" onclick="morphProcess()">Análisis morfológico</button>
+    <div class="row h-100">
+        <!-- Contenedor Izquierdo -->
+        <div class="col-md-3 bg-light p-3 d-flex flex-column">
+            <textarea id="text-1" class="form-control mb-3 flex-grow-1" placeholder="Coloca tu texto aquí"></textarea>
+        </div>
+        <!-- Contenedor con Botón -->
+        <div class="col-md-2 d-flex align-items-center justify-content-center p-3">
+            <button type="button" id="morphButton" class="btn btn-primary" onclick="morphProcess()">Análisis morfológico</button>
+        </div>
+        <!-- Contenedor Derecho -->
+        <div class="col-md-7 d-flex flex-column">
+            <div class="bg-primary p-3 flex-fill" style="flex: 25%;" id="morphAnalizeUp">
+                <!-- Resultados del análisis UP se mostrarán aquí -->
             </div>
-            <div class="col-md-8 d-flex flex-column">
-                <div class="bg-primary p-3 flex-fill" style="flex: 25%;" id="morphAnalizeUp">
-                    <!-- Resultados del análisis UP se mostrarán aquí -->
-                </div>
-                <div class="bg-secondary p-3 flex-fill" style="flex: 75%;" id="morphAnalizeCenter">
-                    <!-- Resultados del análisis CENTER se mostrarán aquí -->
-                </div>
+            <div class="bg-secondary p-3 flex-fill" style="flex: 75%;" id="morphAnalizeCenter">
+                <!-- Resultados del análisis CENTER se mostrarán aquí -->
             </div>
         </div>
     </div>
+</div>
+
 	
   <footer class="footer bg-light text-center p-3">
         <p>AIdeaText is a project aimed at learning writing through the visualization
