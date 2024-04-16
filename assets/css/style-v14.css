@@ -103,12 +103,12 @@ li a:hover:not(.active) {
     flex-direction: column;
 }
 
-#morphAnalize-1 {
+#morphAnalizeUp {
     flex: 1 1 25%; /* Asume el 25% del espacio disponible */
     padding: 10px;
 }
 
-#morphAnalize-2 {
+#morphAnalizeCenter {
     flex: 3 1 75%; /* Asume el 75% del espacio disponible */
     padding: 10px;
 }
