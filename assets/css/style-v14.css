@@ -103,14 +103,12 @@ li a:hover:not(.active) {
     flex-direction: column;
 }
 
-#morphAnalizeUp {
-    flex: 1 1 25%; /* Asume el 25% del espacio disponible */
-    padding: 10px;
+#morphAnalizeUp, #morphAnalizeCenter {
+    overflow: auto;  /* Permite desplazamiento si es necesario */
 }
 
-#morphAnalizeCenter {
-    flex: 3 1 75%; /* Asume el 75% del espacio disponible */
-    padding: 10px;
+.container-fluid, .row, .col-md-4, .col-md-8 {
+    height: 100%;  /* Establece la altura al 100% para todos los contenedores flexibles */
 }
 
 /* Área de entrada de texto */
