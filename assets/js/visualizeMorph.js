@@ -1,6 +1,6 @@
 // Contenedor para la red sintáctica
-const generalInfoContainer = document.getElementById("morphAnalize-1");
-const categoryInfoContainer = document.getElementById("morphAnalize-2");
+const generalInfoContainer = document.getElementById("morphAnalizeUp");
+const categoryInfoContainer = document.getElementById("morphAnalizeCenter");
 
 /**
  * Obtiene un elemento del DOM por su ID.
@@ -43,7 +43,6 @@ function findMostCommonWordInText(words) {
             highestFrequency = wordFrequency[word];
         }
     }
-    
     return mostCommonWord;
 }
 
@@ -118,7 +117,7 @@ function morphProcess() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function visualizeSyntaxTreemap(syntaxData) {
-    clearContainer(morphAnalize-2Container);
+    clearContainer(morphAnalizeCenterContainer);
 
     if (!syntaxData || !syntaxData.nodes) {
         console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
@@ -127,7 +126,7 @@ function visualizeSyntaxTreemap(syntaxData) {
 
     const hierarchyData = buildHierarchy(syntaxData.nodes);
     const width = 800, height = 540;
-    const svg = d3.select(morphAnalize-2Container).append("svg")
+    const svg = d3.select(morphAnalizeCenterContainer).append("svg")
         .attr("width", width)
         .attr("height", height)
         .style("font", "12px sans-serif");
