@@ -41,7 +41,6 @@ function visualizeMorphology(data) {
     const resultsDiv = document.createElement('div');
 
     // Visualización del análisis morfológico
-    const resultsDiv = document.createElement('div');
     const morphologyTitle = document.createElement('h3');
     morphologyTitle.textContent = 'Análisis Morfológico:';
     resultsDiv.appendChild(morphologyTitle);
