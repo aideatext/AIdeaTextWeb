@@ -106,7 +106,7 @@ function morphProcess() {
         
         if (data.syntax && data.syntax.nodes) {
             // Visualiza la sintaxis del texto en la página web
-            visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+            visualizeSyntaxTreemap(data.syntax, syntaxNetworkCenterContainer);
         } else {  
             console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
         }
