@@ -6,7 +6,7 @@ function clearContainer(container) {
 }
 
 function syntaxProcess() {
-    var textInput = document.getElementById("text-1").value;
+    const textInput = document.getElementById("text-1").value;
     if (!textInput.trim()) {
         console.error("El texto para analizar no puede estar vacío.");
         return;
@@ -14,14 +14,15 @@ function syntaxProcess() {
 
     fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: textInput }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: textInput })
     })
-    .then(response => response.text())
+    .then(response => {
+        console.log(`Response Status: ${response.status}`); // Ver el estado de la respuesta
+        return response.text(); // Asumimos texto siempre para evitar problemas con JSON.parse
+    })
     .then(html => {
-        console.log("HTML recibido del backend:", html);
+        console.log("HTML recibido del backend:", html.substring(0, 200)); // Mostrar solo los primeros 200 caracteres para diagnóstico
         visualizeSyntax(html);
     })
     .catch(error => {
@@ -31,7 +32,7 @@ function syntaxProcess() {
 
 function visualizeSyntax(html) {
     clearContainer(syntaxNetworkContainer);
-    if (html) {
+    if (html && html.startsWith('<!DOCTYPE html>')) { // Verificación básica de un documento HTML
         syntaxNetworkContainer.innerHTML = html;
     } else {
         console.error("No se recibieron datos válidos del servidor.");
