@@ -27,8 +27,6 @@ function formatMorphFeature(key, value) {
     return featureMapping[key] || key;  // Devuelve el mapeo si existe, o la clave original
 }
 
-
-
 function visualizeMorphology(data) {
     clearContainer(morphologyContainer); // Limpiar el contenedor antes de agregar nuevo contenido
 
