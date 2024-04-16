@@ -121,10 +121,9 @@ function morphProcess() {
             const wordCountInfo = document.createElement('p');
             wordCountInfo.textContent = `Total de palabras: ${totalWords}`;
             generalInfoContainer.appendChild(wordCountInfo);
+            
             const mostCommonNode = findMostCommonWord(data.nodes);
             const leastCommonNode = findLeastCommonWord(data.nodes);
-            
-            clearContainer(generalInfoContainer);
             
             const info = document.createElement('p');
             info.innerHTML = `
