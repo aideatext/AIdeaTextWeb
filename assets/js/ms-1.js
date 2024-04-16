@@ -29,6 +29,14 @@ function visualizeMorphology(data) {
     totalWords.textContent = `Cantidad Total de Palabras: ${data.totalWords}`;
     morphologyContainer.appendChild(totalWords);
 
+    const mostCommonWord = document.createElement('p');
+    mostCommonWord.textContent = `Palabra más común: ${data.mostCommonWord}`;
+    morphologyContainer.appendChild(mostCommonWord);
+
+    const leastCommonWord = document.createElement('p');
+    leastCommonWord.textContent = `Palabra menos común: ${data.leastCommonWord}`;
+    morphologyContainer.appendChild(leastCommonWord);
+    
     // Distribución por categorías gramaticales
     const posDistribution = document.createElement('h3');
     posDistribution.textContent = '[2] Distribución de la cantidad de palabras por cada una de las categorías gramaticales';
