@@ -20,6 +20,16 @@ function clearContainer(container) {
 }
 
 /**
+ * Cuenta el número de palabras
+ * @param {Array} words - El array de palabras.
+ * @returns {string} - La palabra más común.
+ */
+function countWords(text) {
+    // Divide el texto en palabras basándose en espacios y otros caracteres no alfabéticos.
+    return text.trim().split(/\s+|[,.;:!?()]/).filter(word => word.length > 0).length;
+}
+
+/**
  * Encuentra la palabra más común en un array de palabras.
  * @param {Array} words - El array de palabras.
  * @returns {string} - La palabra más común.
@@ -104,6 +114,26 @@ function morphProcess() {
     .then(data => {
         console.log("Datos recibidos del backend:", data);
         
+        // Asumiendo que data contiene un campo 'nodes' para los nodos analizados
+        if (data.nodes && data.nodes.length > 0) {
+            const totalWords = countWords(textInput);
+            clearContainer(generalInfoContainer);
+            const wordCountInfo = document.createElement('p');
+            wordCountInfo.textContent = `Total de palabras: ${totalWords}`;
+            generalInfoContainer.appendChild(wordCountInfo);
+            const mostCommonNode = findMostCommonWord(data.nodes);
+            const leastCommonNode = findLeastCommonWord(data.nodes);
+            
+            clearContainer(generalInfoContainer);
+            
+            const info = document.createElement('p');
+            info.innerHTML = `
+                <strong>Total de palabras:</strong> ${totalWords.text} (Total de palabras: ${totalWords.wordCountInfo})<br>
+                <strong>Palabra más común:</strong> ${mostCommonNode.text} (Frecuencia: ${mostCommonNode.frequency})<br>
+                <strong>Palabra menos común:</strong> ${leastCommonNode.text} (Frecuencia: ${leastCommonNode.frequency})
+            `;
+            generalInfoContainer.appendChild(info);
+                
         if (data.syntax && data.syntax.nodes) {
             // Visualiza la sintaxis del texto en la página web
             visualizeSyntaxTreemap(data.syntax, categoryInfoContainer);
