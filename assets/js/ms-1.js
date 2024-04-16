@@ -34,11 +34,16 @@ function visualizeMorphology(data) {
     posDistribution.textContent = '[2] Distribución de la cantidad de palabras por cada una de las categorías gramaticales';
     morphologyContainer.appendChild(posDistribution);
 
-    Object.entries(data.posCount).forEach(([pos, details]) => {
-        const categoryElement = document.createElement('p');
-        categoryElement.textContent = `${pos} [${details.count}]: ` + Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join('; ');
-        morphologyContainer.appendChild(categoryElement);
-    });
+    if (data.posCount) {
+        Object.entries(data.posCount).forEach(([pos, details]) => {
+            if (details.words) {
+                const categoryElement = document.createElement('p');
+                categoryElement.textContent = `${pos} [${details.count}]: ` + 
+                    Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join('; ');
+                morphologyContainer.appendChild(categoryElement);
+            }
+        });
+    }
 
     // Detalles específicos
     const details = document.createElement('h3');
@@ -48,7 +53,7 @@ function visualizeMorphology(data) {
     const detailedList = document.createElement('ul');
     data.morphology.filter(item => ['NOUN', 'VERB', 'ADJ'].includes(item.pos)).forEach(item => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${item.text} (${item.pos}): ${formatFeatures(Object.entries(item.features).map(([k, v]) => `${k}=${v}`))}`;
+        listItem.textContent = `${item.text} (${item.pos}): ${formatFeatures(item.features)}`;
         detailedList.appendChild(listItem);
     });
     morphologyContainer.appendChild(detailedList);
