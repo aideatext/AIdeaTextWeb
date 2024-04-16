@@ -126,18 +126,21 @@ li a:hover:not(.active) {
 
 /* Botón de procesamiento */
 #semanticButton,
-#syntaxButton {
+#syntaxButton,
+#morphButton {
     display: inline-block; /* Alinea los botones en la misma línea */
     width: 100%; /* Establece el ancho de los botones */
     padding: 10px 20px;
     font-size: 12px;
 }
 
+/*
 #morphButton {
     visibility: visible;
     background-color: red; /* Color de fondo rojo para destacarlo */
     z-index: 1000; /* Asegura que esté al frente */
-}
+} 
+*/
 
 #image-button {
     padding: 10px 20px;
