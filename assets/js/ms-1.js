@@ -1,5 +1,5 @@
-// Contenedor para la red sintáctica
-const syntaxNetworkContainer = document.getElementById("syntax-network");
+// Contenedor para la red morfológica
+const morphologyContainer = document.getElementById("syntax-network");
 
 /**
  * Limpia el contenido de un contenedor.
@@ -14,24 +14,10 @@ function clearContainer(container) {
  * @param {Object} data - Los datos recibidos del backend.
  */
 function visualizeMorphology(data) {
-    clearContainer(syntaxNetworkContainer); // Limpiar el contenedor antes de agregar nuevo contenido
+    clearContainer(morphologyContainer); // Limpiar el contenedor antes de agregar nuevo contenido
 
-    if (!data) {
-        console.error("No data received.");
-        return;
-    }
-
-    // Parsea el cuerpo JSON si es necesario. Asegúrate de que la propiedad 'body' exista y sea un string antes de parsear.
-    let parsedData;
-    try {
-        parsedData = (typeof data.body === 'string') ? JSON.parse(data.body) : data;
-    } catch (error) {
-        console.error("Error parsing data:", error);
-        return;
-    }
-
-    if (!parsedData || !parsedData.morphology) {
-        console.error("Morphology data is missing or malformed:", parsedData);
+    if (!data || !data.morphology) {
+        console.error("No morphology data received.");
         return;
     }
 
@@ -44,15 +30,15 @@ function visualizeMorphology(data) {
     resultsDiv.appendChild(morphologyTitle);
 
     const morphologyList = document.createElement('ul');
-    parsedData.morphology.forEach(item => {
+    data.morphology.forEach(item => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${item[0]}: ${JSON.stringify(item[1])}`;
+        listItem.textContent = `${item.text}: ${JSON.stringify(item.features)}`;
         morphologyList.appendChild(listItem);
     });
     resultsDiv.appendChild(morphologyList);
 
     // Añade el 'div' de resultados al contenedor principal
-    syntaxNetworkContainer.appendChild(resultsDiv);
+    morphologyContainer.appendChild(resultsDiv);
 }
 
 /**
@@ -82,7 +68,7 @@ function syntaxProcess() {
     });
 }
 
-// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms2
+// Asegurarse de que syntaxProcess se llama cuando se carga la ventana ms43
 window.onload = function() {
     // Añadir el evento click al botón para procesar el análisis cuando se hace clic
     document.getElementById("syntaxButton").addEventListener("click", syntaxProcess);
