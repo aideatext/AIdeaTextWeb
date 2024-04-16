@@ -5,76 +5,65 @@ function clearContainer(container) {
     container.innerHTML = '';
 }
 
-function formatMorphFeature(features) {
-    return features.map(f => {
-        const [key, value] = f.split('=');
-        switch (key) {
-            case 'Gender':
-                return value === 'Fem' ? 'Femenino' : 'Masculino';
-            case 'Number':
-                return value === 'Sing' ? 'Singular' : 'Plural';
-            case 'Tense':
-                return value === 'Pres' ? 'Presente' : value === 'Past' ? 'Pasado' : value;
-            case 'Person':
-                return `Persona: ${value}`;
-            default:
-                return `${key}: ${value}`;
-        }
+function formatFeatures(features) {
+    return Object.entries(features).map(([key, value]) => {
+        let formattedFeature = key.split('=');
+        return `${formattedFeature[0]}: ${formattedFeature[1]}`;
     }).join(', ');
 }
 
 function visualizeMorphology(data) {
     clearContainer(morphologyContainer);
 
-    if (!data) {
-        console.error("No data received.");
+    if (!data || !data.morphology) {
+        console.error("No morphology data received or data is malformed.");
         return;
     }
 
-    const resultsDiv = document.createElement('div');
-    resultsDiv.style.backgroundColor = "#f0f0f0";
-    resultsDiv.style.padding = "10px";
-    resultsDiv.style.borderRadius = "8px";
-
+    // Resumen general
     const generalInfo = document.createElement('h3');
     generalInfo.textContent = '[1] Resumen General';
-    resultsDiv.appendChild(generalInfo);
+    morphologyContainer.appendChild(generalInfo);
 
-    const wordCount = document.createElement('p');
-    wordCount.textContent = `Cantidad Total de Palabras: ${data.totalWords}`;
-    resultsDiv.appendChild(wordCount);
+    const totalWords = document.createElement('p');
+    totalWords.textContent = `Cantidad Total de Palabras: ${data.morphology.length}`;
+    morphologyContainer.appendChild(totalWords);
 
-    const mostCommonWord = document.createElement('p');
-    mostCommonWord.textContent = `Palabra más Común: ${data.mostCommonWord} [${data.mostCommonWordCount}]`;
-    resultsDiv.appendChild(mostCommonWord);
+    // Distribución por categorías gramaticales
+    const posDistribution = document.createElement('h3');
+    posDistribution.textContent = '[2] Distribución de la cantidad de palabras por cada una de las categorías gramaticales';
+    morphologyContainer.appendChild(posDistribution);
 
-    const posDistributionTitle = document.createElement('h3');
-    posDistributionTitle.textContent = '[2] Distribución de Categorías Gramaticales';
-    resultsDiv.appendChild(posDistributionTitle);
+    const categories = data.morphology.reduce((acc, word) => {
+        const pos = word.features['PartOfSpeech'] || 'Unknown';
+        acc[pos] = acc[pos] || [];
+        acc[pos].push(word.text);
+        return acc;
+    }, {});
 
-    const posList = document.createElement('ul');
-    Object.entries(data.posCount).forEach(([pos, details]) => {
-        const item = document.createElement('li');
-        item.textContent = `${pos} [${details.count}]: ${Object.entries(details.words).map(([word, count]) => `${word} [${count}]`).join(', ')}`;
-        posList.appendChild(item);
+    Object.entries(categories).forEach(([pos, words]) => {
+        const categoryElement = document.createElement('p');
+        const wordCounts = words.reduce((countAcc, word) => {
+            countAcc[word] = (countAcc[word] || 0) + 1;
+            return countAcc;
+        }, {});
+
+        categoryElement.textContent = `${pos} [${words.length}]: ` + Object.entries(wordCounts).map(([word, count]) => `${word} [${count}]`).join('; ');
+        morphologyContainer.appendChild(categoryElement);
     });
-    resultsDiv.appendChild(posList);
 
-    const detailedMorphTitle = document.createElement('h3');
-    detailedMorphTitle.textContent = '[3] Detalles Específicos de Sustantivos, Verbos y Adjetivos';
-    resultsDiv.appendChild(detailedMorphTitle);
+    // Detalles específicos
+    const details = document.createElement('h3');
+    details.textContent = '[3] Detalles Específicos de los sustantivos, verbos y adjetivos';
+    morphologyContainer.appendChild(details);
 
-    const morphList = document.createElement('ul');
+    const detailedList = document.createElement('ul');
     data.morphology.forEach(item => {
-        if (['NOUN', 'VERB', 'ADJ'].includes(item.pos)) {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${item.text} (${item.pos}): ${formatMorphFeature(Object.entries(item.features).map(([k, v]) => `${k}=${v}`))}`;
-            morphList.appendChild(listItem);
-        }
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.text} (${item.features['PartOfSpeech'] || 'Unknown'}): ${formatFeatures(item.features)}`;
+        detailedList.appendChild(listItem);
     });
-    resultsDiv.appendChild(morphList);
-
-    morphologyContainer.appendChild(resultsDiv);
+    morphologyContainer.appendChild(detailedList);
 }
 
 function syntaxProcess() {
@@ -86,11 +75,14 @@ function syntaxProcess() {
 
     fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ text: textInput })
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Datos recibidos del backend:", data);
         visualizeMorphology(data);
     })
     .catch(error => {
