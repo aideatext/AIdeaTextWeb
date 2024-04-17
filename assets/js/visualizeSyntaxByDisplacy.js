@@ -1,5 +1,6 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
 document.addEventListener("DOMContentLoaded", function() {
+    
     const syntaxNetworkContainer = document.getElementById("syntax-network");
     const syntaxButton = document.getElementById('syntaxButton');
 
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-     function syntaxProcess() {
+    function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
             console.error("El texto para analizar no puede estar vacío.");
@@ -43,8 +44,4 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
     }
-});
-
-    // Event listener para el botón
-    syntaxButton.addEventListener('click', syntaxProcess);
 });
