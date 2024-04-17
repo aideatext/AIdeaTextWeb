@@ -1,11 +1,8 @@
-// Contenedor para la red sintáctica
-const syntaxNetworkContainer = document.getElementById("syntax-network");
+// Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
+document.addEventListener("DOMContentLoaded", function() {
+    const syntaxNetworkContainer = document.getElementById("syntax-network");
+    const syntaxButton = document.getElementById('syntaxButton');
 
-function clearContainer(container) {
-    container.innerHTML = '';
-}
-
-document.addEventListener("DOMContentLoaded", function() { // Asegura que el DOM está completamente cargado
     function clearContainer(container) {
         container.innerHTML = '';
     }
@@ -24,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function() { // Asegura que el DOM
         })
         .then(response => response.text())
         .then(html => {
-            clearContainer(syntaxNetworkContainer);
             if (html && html.startsWith('<!DOCTYPE html>')) {
+                clearContainer(syntaxNetworkContainer);
                 syntaxNetworkContainer.innerHTML = html;
                 console.log("Displacy output has been inserted into the container.");
             } else {
@@ -37,18 +34,6 @@ document.addEventListener("DOMContentLoaded", function() { // Asegura que el DOM
         });
     }
 
-    const syntaxButton = document.getElementById('syntaxButton');
-    syntaxButton.addEventListener('click', syntaxProcess); // Usar addEventListener en lugar de onclick en HTML
+    // Event listener para el botón
+    syntaxButton.addEventListener('click', syntaxProcess);
 });
-
-function visualizeSyntax(html) {
-    clearContainer(syntaxNetworkContainer);
-    if (html && html.startsWith('<!DOCTYPE html>')) {
-        syntaxNetworkContainer.innerHTML = html;
-        console.log("Displacy output has been inserted into the container.");
-    } else {
-        console.error("No se recibieron datos válidos del servidor.");
-    }
-}
-
-syntaxProcess();
