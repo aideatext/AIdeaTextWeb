@@ -2,6 +2,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     const syntaxNetworkContainer = document.getElementById("syntax-network");
     const syntaxButton = document.getElementById('syntaxButton');
+    const translations = {
+    "nsubj": "sujeto",
+    "det": "determinante",
+    "ROOT": "raíz",
+    // Añade más traducciones según sea necesario
+};
 
     function clearContainer(container) {
         container.innerHTML = '';
@@ -22,9 +28,9 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.text())
         .then(html => {
             if (html && html.startsWith('<!DOCTYPE html>')) {
+                html = applyTranslations(html);  // Traducir antes de mostrar
                 clearContainer(syntaxNetworkContainer);
                 syntaxNetworkContainer.innerHTML = html;
-                console.log("Displacy output has been inserted into the container.");
             } else {
                 console.error("No se recibieron datos válidos del servidor.");
             }
