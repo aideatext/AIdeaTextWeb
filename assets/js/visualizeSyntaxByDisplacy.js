@@ -2,26 +2,16 @@
 document.addEventListener("DOMContentLoaded", function() {
     const syntaxNetworkContainer = document.getElementById("syntax-network");
     const syntaxButton = document.getElementById('syntaxButton');
-    const translations = {
-    "nsubj": "sujeto",
-    "det": "determinante",
-    "ROOT": "raíz",
-    // Añade más traducciones según sea necesario
-};
-    
-    function applyTranslations(html) {
-    Object.keys(translations).forEach(key => {
-        const regex = new RegExp(`>${key}<`, 'g');  // Crear una expresión regular para encontrar el texto
-        html = html.replace(regex, `>${translations[key]}<`);
-    });
-    return html;
-    }
 
     function clearContainer(container) {
-        container.innerHTML = '';
+        if (container) {
+            container.innerHTML = '';
+        } else {
+            console.error("El contenedor no existe en el DOM.");
+        }
     }
-    
-    function syntaxProcess() {
+
+     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
             console.error("El texto para analizar no puede estar vacío.");
@@ -36,17 +26,24 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.text())
         .then(html => {
             if (html && html.startsWith('<!DOCTYPE html>')) {
-                // html = applyTranslations(html);  Traducir antes de mostrar
                 clearContainer(syntaxNetworkContainer);
                 syntaxNetworkContainer.innerHTML = html;
+                console.log("Displacy output has been inserted into the container.");
             } else {
-                console.error("No se recibieron datos válidos del servidor.");
+                console.error("No se recibieron datos válidos del servidor:", html);
             }
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
         });
     }
+
+    if (syntaxButton) {
+        syntaxButton.addEventListener('click', syntaxProcess);
+    } else {
+        console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
+    }
+});
 
     // Event listener para el botón
     syntaxButton.addEventListener('click', syntaxProcess);
