@@ -58,20 +58,19 @@
 <li><a href="syntax_index.html">Análisis sintáctico</a></li>
 </ul>
 </div>
-
+	
 <div class="main-container">
-    <div class="container-1">
-        <div class="text-input-section-1">
+    <!-- Contenedor para entrada de texto -->
+    <div class="container-top">
+        <div class="text-input-section">
             <textarea id="text-1" name="text-1" placeholder="Coloca tu texto aquí"></textarea>
-            <button type="button" id="syntaxButton" onclick="syntaxProcess()">Análisis sintáctico</button>
+            <button type="button" id="syntaxButton">Análisis sintáctico</button>
         </div>
     </div>
-	
-    <div class="container-2">
-        <div class="right-section">
-            <!-- Corregido el error en el atributo style -->
-            <div class="containerUp" id="syntax-network" style="width: 100%; min-height: 500px; border: 1px solid red;"></div>
-        </div>    
+
+    <!-- Contenedor para visualización del resultado -->
+    <div class="container-bottom">
+        <div id="syntax-network" style="width: 100%; min-height: 500px; border: 1px solid red;"></div>
     </div>
 </div>
 	  
