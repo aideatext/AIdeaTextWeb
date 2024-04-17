@@ -8,6 +8,14 @@ document.addEventListener("DOMContentLoaded", function() {
     "ROOT": "raíz",
     // Añade más traducciones según sea necesario
 };
+    
+    function applyTranslations(html) {
+    Object.keys(translations).forEach(key => {
+        const regex = new RegExp(`>${key}<`, 'g');  // Crear una expresión regular para encontrar el texto
+        html = html.replace(regex, `>${translations[key]}<`);
+    });
+    return html;
+    }
 
     function clearContainer(container) {
         container.innerHTML = '';
