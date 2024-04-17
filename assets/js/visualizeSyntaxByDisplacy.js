@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.text())
         .then(html => {
             if (html && html.startsWith('<!DOCTYPE html>')) {
-                html = applyTranslations(html);  // Traducir antes de mostrar
+                // html = applyTranslations(html);  Traducir antes de mostrar
                 clearContainer(syntaxNetworkContainer);
                 syntaxNetworkContainer.innerHTML = html;
             } else {
