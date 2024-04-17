@@ -30,11 +30,36 @@ li a:hover:not(.active) {
   background-color: #111;
 }
 
-
 /* Upper section */
 .upper-section {
     text-align: center;
 }
+
+/* Syntax Container */
+.main-Syntax-container {
+    display: flex;
+    flex-direction: column; /* Cambio a dirección vertical */
+    height: 100%;
+}
+
+.container-top, .container-bottom {
+    flex: 1; /* Cada contenedor toma la mitad del espacio disponible */
+    display: flex;
+    flex-direction: column;
+}
+
+.text-input-section {
+    flex: 1; /* Asume todo el espacio disponible en el contenedor superior */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#syntax-network {
+    flex: 1; /* Asume todo el espacio disponible en el contenedor inferior */
+    border: 1px solid red; /* Opcional, solo para visualización */
+}
+
 
 /* Contenedor principal */
 .main-container {
