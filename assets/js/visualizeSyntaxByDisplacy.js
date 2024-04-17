@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function clearContainer(container) {
         container.innerHTML = '';
     }
-
+    
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
