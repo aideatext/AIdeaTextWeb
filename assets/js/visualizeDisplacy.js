@@ -32,8 +32,9 @@ function syntaxProcess() {
 
 function visualizeSyntax(html) {
     clearContainer(syntaxNetworkContainer);
-    if (html && html.startsWith('<!DOCTYPE html>')) { // Verificación básica de un documento HTML
+    if (html && html.startsWith('<!DOCTYPE html>')) {
         syntaxNetworkContainer.innerHTML = html;
+        console.log("Displacy output has been inserted into the container.");
     } else {
         console.error("No se recibieron datos válidos del servidor.");
     }
