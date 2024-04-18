@@ -37,6 +37,18 @@ header {
     color: white;
 }
 
+#progressContainer {
+    width: 100%;
+    background-color: #ddd;
+}
+
+#progressBar {
+    width: 0%;
+    height: 20px;
+    background-color: #4CAF50;
+    transition: width 0.4s ease; /* Suave transición para cambios de ancho */
+}
+
 .footer {
     background-color: #ffffff;
     text-align: center;
