@@ -74,10 +74,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const containerWidth = syntaxNetworkContainer.clientWidth;
         const containerHeight = syntaxNetworkContainer.clientHeight;
             
-        const svg = d3.select(syntaxNetworkContainer).append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .style("font", "10px sans-serif");
+         const svg = d3.select(syntaxNetworkContainer).append("svg")
+                .attr("width", containerWidth)
+                .attr("height", containerHeight)
+                .style("font", "10px sans-serif");
 
         const treemap = d3.treemap().size([width, height]).paddingInner(1).paddingOuter(3);
         const root = d3.hierarchy(hierarchyData).sum(d => d.value).sort((a, b) => b.height - a.height || b.value - a.value);
