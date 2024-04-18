@@ -67,10 +67,9 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
             return;
         }
-
-        const hierarchyData = buildHierarchy(syntaxData.nodes);
         
         // Ajustar tamaño del SVG al contenedor
+        const hierarchyData = buildHierarchy(syntaxData.nodes);
         const containerWidth = syntaxNetworkContainer.clientWidth;
         const containerHeight = syntaxNetworkContainer.clientHeight;
             
