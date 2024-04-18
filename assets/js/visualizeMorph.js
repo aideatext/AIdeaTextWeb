@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error("El contenedor no existe en el DOM.");
         }
     }
+}
 
 /**
  * Limpia el contenido de un contenedor.
