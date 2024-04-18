@@ -28,7 +28,7 @@ header, .footer {
     overflow: auto; /* Asegura que se pueda desplazar si es necesario */
     border: 1px solid red;
     position: relative; /* Establece la posición relativa para el control de overflow */
-    min-height: 500px; /* Altura mínima para asegurar espacio suficiente */
+    min-height: 700px; /* Altura mínima para asegurar espacio suficiente */
 }
 
 /* Estilos para mejorar la legibilidad del texto en el treemap */
