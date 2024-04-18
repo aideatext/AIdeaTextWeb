@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
- function visualizeSyntaxTreemap(syntaxData) {
+function visualizeSyntaxTreemap(syntaxData) {
     clearContainer(syntaxNetworkContainer);
 
     if (!syntaxData || !syntaxData.nodes) {
@@ -68,36 +68,35 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
     
-    // Ajustar tamaño del SVG al contenedor
-    const hierarchyData = buildHierarchy(syntaxData.nodes);
+    // Definir dimensiones para el treemap y la leyenda
     const containerWidth = syntaxNetworkContainer.clientWidth;
-    const margin = { top: 50, right: 10, bottom: 10, left: 10 };
-    const containerHeight = syntaxNetworkContainer.clientHeight;
-        
-    const svg = d3.select(syntaxNetworkContainer).append("svg")
-           .attr("width", containerWidth)
-           .attr("height", containerHeight)
-           .style("font", "10px sans-serif");
+    const containerHeight = syntaxNetworkContainer.clientHeight - 50; // Reserva espacio para la leyenda
 
+    // Crear SVG para el treemap
+    const svgTreemap = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", containerWidth)
+        .attr("height", containerHeight)
+        .style("font", "10px sans-serif");
+
+    // Crear el treemap
     const treemap = d3.treemap()
-         .size([containerWidth, containerHeight]) // Usar las variables correctas aquí
+        .size([containerWidth, containerHeight])
         .paddingInner(1)
         .paddingOuter(3);
-    
+
+    const hierarchyData = buildHierarchy(syntaxData.nodes);
     const root = d3.hierarchy(hierarchyData)
         .sum(d => d.value)
         .sort((a, b) => b.height - a.height || b.value - a.value);
 
     treemap(root);
-    
-    const leaf = svg.selectAll("g")
+
+    const leaf = svgTreemap.selectAll("g")
         .data(root.leaves())
-        .enter()
-        .append("g")
+        .enter().append("g")
         .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
     leaf.append("rect")
-        .attr("id", d => d.data.id)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name))
@@ -111,24 +110,28 @@ document.addEventListener("DOMContentLoaded", function() {
         .attr("font-size", "10px")
         .attr("font-weight", "bold");
 
-    // Añadir leyenda
-    const legend = svg.append("g")
-        .attr("transform", "translate(10,30)");
+    // Crear SVG para la leyenda en el mismo contenedor pero separado
+    const svgLegend = d3.select(syntaxNetworkContainer).append("svg")
+        .attr("width", containerWidth)
+        .attr("height", 50) // Altura fija para la leyenda
+        .style("font", "12px sans-serif");
+
+    const legend = svgLegend.append("g")
+        .attr("transform", "translate(0,20)"); // Posiciona adecuadamente dentro del SVG de la leyenda
 
     const categories = Object.keys(POSLabels);
     categories.forEach((key, index) => {
         const color = getColorByPOS(key);
         legend.append("rect")
-            .attr("x", index * 120)
+            .attr("x", index * 120) // Espaciado entre elementos de la leyenda
             .attr("width", 20)
             .attr("height", 20)
             .style("fill", color);
 
         legend.append("text")
             .attr("x", index * 120 + 25)
-            .attr("y", 12)
+            .attr("y", 15)
             .text(POSLabels[key])
-            .attr("font-size", "10px")
             .style("text-anchor", "start")
             .style("fill", "black");
     });
