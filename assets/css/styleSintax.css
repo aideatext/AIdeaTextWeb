@@ -75,8 +75,13 @@ header {
 
 /* Ajustes para dispositivos móviles */
 @media screen and (max-width: 768px) {
-    .footer {
-        position: relative;
+    .container-fluid, .row, .col-md-6 {
+        width: 100%; /* Asegura que el contenedor use todo el ancho en pantallas pequeñas */
+        padding: 0; /* Elimina el padding innecesario */
+    }
+
+    #syntax-network {
+        min-height: 300px; /* Altura menor para dispositivos más pequeños */
     }
 }
 
