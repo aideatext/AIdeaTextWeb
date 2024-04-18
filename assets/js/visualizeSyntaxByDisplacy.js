@@ -12,6 +12,14 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+/**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
+}
+    
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
