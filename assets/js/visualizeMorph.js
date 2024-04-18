@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Ajustar tamaño del SVG al contenedor
     const hierarchyData = buildHierarchy(syntaxData.nodes);
     const containerWidth = syntaxNetworkContainer.clientWidth;
+    const margin = { top: 50, right: 10, bottom: 10, left: 10 };
     const containerHeight = syntaxNetworkContainer.clientHeight;
         
     const svg = d3.select(syntaxNetworkContainer).append("svg")
@@ -103,8 +104,8 @@ document.addEventListener("DOMContentLoaded", function() {
         .attr("stroke", "black");
 
     leaf.append("text")
-        .attr("x", 10)
-        .attr("y", 20)
+        .attr("x", 5)
+        .attr("y", 15)
         .text(d => d.data.name + " [" + d.data.value + "]")
         .attr("fill", "white")
         .attr("font-size", "10px")
@@ -112,22 +113,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Añadir leyenda
     const legend = svg.append("g")
-        .attr("transform", "translate(0,10)");
+        .attr("transform", "translate(10,30)");
 
     const categories = Object.keys(POSLabels);
     categories.forEach((key, index) => {
         const color = getColorByPOS(key);
         legend.append("rect")
-            .attr("x", index * 100)
-            .attr("width", 15)
-            .attr("height", 15)
+            .attr("x", index * 120)
+            .attr("width", 20)
+            .attr("height", 20)
             .style("fill", color);
 
         legend.append("text")
-            .attr("x", index * 100 + 20)
+            .attr("x", index * 120 + 25)
             .attr("y", 12)
             .text(POSLabels[key])
-            .attr("font-size", "12px")
+            .attr("font-size", "10px")
             .style("text-anchor", "start")
             .style("fill", "black");
     });
