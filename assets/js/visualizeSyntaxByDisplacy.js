@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => response.text())
         .then(html => {
-            if (html && html.startsWith('<!DOCTYPE html>')) {
+            if (html.trim().startsWith('<div')) {
                 clearContainer(syntaxNetworkContainer);
                 syntaxNetworkContainer.innerHTML = html;
                 console.log("Displacy output has been inserted into the container.");
