@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainer = document.getElementById("syntax-network");
     const syntaxButton = document.getElementById('syntaxButton');
+    const progressBar = document.getElementById('progressBar');
+
+    syntaxButton.addEventListener('click', syntaxProcess);
 
     function clearContainer(container) {
         if (container) {
@@ -11,14 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error("El contenedor no existe en el DOM.");
         }
     }
-
-/**
- * Limpia el contenido de un contenedor.
- * @param {HTMLElement} container - El contenedor a limpiar.
- */
-function clearContainer(container) {
-    container.innerHTML = '';
-}
     
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
@@ -27,6 +22,9 @@ function clearContainer(container) {
             return;
         }
 
+        progressBar.style.width = '0%';
+        progressBar.style.display = 'block';
+
         fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -34,6 +32,16 @@ function clearContainer(container) {
         })
         .then(response => response.text())
         .then(html => {
+                let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10; // Incrementar progreso más lentamente
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressBar.style.width = '100%';
+                    setTimeout(() => { progressBar.style.display = 'none'; }, 500);
+
             if (html.trim().startsWith('<div')) {
                 clearContainer(syntaxNetworkContainer);
                 syntaxNetworkContainer.innerHTML = html;
@@ -41,9 +49,15 @@ function clearContainer(container) {
             } else {
                 console.error("No se recibieron datos válidos del servidor:", html);
             }
+        }
+            }, 200); // Modifica este tiempo según la duración esperada del proceso
+        
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
+            clearInterval(interval);
+            progressBar.style.width = '100%';
+            progressBar.style.backgroundColor = 'red';
         });
     }
 
