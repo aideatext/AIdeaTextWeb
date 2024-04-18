@@ -17,9 +17,25 @@ header, .footer {
     overflow-y: auto; /* Añade desplazamiento vertical si el contenido es demasiado alto */
 }
 
+/* 
 #syntax-network {
     overflow-y: auto; /* Permite desplazamiento vertical */
     max-height: 500px; /* Ajusta según las necesidades */
+}
+*/
+
+#syntax-network {
+    overflow: auto; /* Asegura que se pueda desplazar si es necesario */
+    border: 1px solid red;
+    position: relative; /* Establece la posición relativa para el control de overflow */
+    min-height: 500px; /* Altura mínima para asegurar espacio suficiente */
+}
+
+/* Estilos para mejorar la legibilidad del texto en el treemap */
+text {
+    font-size: 12px; /* Tamaño de fuente adecuado para la legibilidad */
+    fill: white; /* Color de fuente para contraste con colores oscuros de fondo */
+    text-shadow: 1px 1px 2px black; /* Sombra para mejorar la legibilidad */
 }
 
 /* Clases para el contenedor del reproductor YouTube */
