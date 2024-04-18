@@ -14,6 +14,15 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 
 /**
+ * Limpia el contenido de un contenedor.
+ * @param {HTMLElement} container - El contenedor a limpiar.
+ */
+function clearContainer(container) {
+    container.innerHTML = '';
+}
+
+                          
+/**
  * Encuentra la palabra más común en un array de palabras.
  * @param {Array} words - El array de palabras.
  * @returns {string} - La palabra más común.
