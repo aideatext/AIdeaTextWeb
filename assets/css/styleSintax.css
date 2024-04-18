@@ -10,17 +10,26 @@ body, html {
     height: 100%; /* Establece la altura al 100% para todos los contenedores flexibles */
 }
 
+/* Clases para el contenedor del reproductor YouTube, si necesario */
+#youtube-player {
+    min-height: 500px; /* Asegura que el contenedor tenga altura mínima si no hay contenido */
+    background-color: #000; /* Fondo negro para destacar el área del reproductor */
+    color: #fff; /* Texto blanco si decides agregar texto */
+    padding: 20px;
+    border: 1px solid #ccc; /* Borde para destacar el contenedor */
+}
+
+#syntax-network {
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    max-height: 500px; /* Ajusta según las necesidades */
+}
+
 .footer {
     background-color: #ffffff;
     text-align: center;
     padding: 10px;
     width: 100%;
     clear: both; /* Esto asegura que el footer no se sobreponga con otros elementos */
-}
-
-#syntax-network {
-    overflow-y: auto; /* Permite desplazamiento vertical */
-    max-height: 500px; /* Ajusta según las necesidades */
 }
 
 /* Media queries para ajustar para dispositivos móviles */
