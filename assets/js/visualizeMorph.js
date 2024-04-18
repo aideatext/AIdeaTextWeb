@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const syntaxNetworkContainer = document.getElementById("syntax-network");
     const syntaxButton = document.getElementById('syntaxButton');
+    const progressBar = document.getElementById('progressBar');
 
     function clearContainer(container) {
         if (container) {
@@ -20,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
             return; // Detener la ejecución si el texto está vacío
         }
 
+        // Iniciar la barra de progreso
+        progressBar.style.width = '0%'; // Reiniciar la barra de progreso
+        progressBar.style.display = 'block'; // Mostrar la barra
+
         fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
             method: 'POST',
             headers: {
@@ -30,6 +35,18 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             console.log("Datos recibidos del backend:", data);
+
+            // Simular progreso
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 20; // Incrementar progreso
+                progressBar.style.width = progress + '%'; // Actualizar barra de progreso
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressBar.style.width = '100%'; // Asegurar que llegue al 100%
+                    setTimeout(() => { progressBar.style.display = 'none'; }, 500); // Ocultar después de completar
+                }
+            }, 200); // Actualizar cada 200 ms
             
             if (data.syntax && data.syntax.nodes) {
                 // Visualiza la sintaxis del texto en la página web
@@ -40,6 +57,9 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
+            clearInterval(interval);
+            progressBar.style.width = '100%';
+            progressBar.style.backgroundColor = 'red';
         });
     }
 
