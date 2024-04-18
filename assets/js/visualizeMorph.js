@@ -1,14 +1,16 @@
-// Contenedor para la red sintáctica
-const syntaxNetworkContainer = document.getElementById("syntax-network");
+// Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
+document.addEventListener("DOMContentLoaded", function() {
+    
+    const syntaxNetworkContainer = document.getElementById("syntax-network");
+    const syntaxButton = document.getElementById('syntaxButton');
 
-/**
- * Obtiene un elemento del DOM por su ID.
- * @param {string} id - El ID del elemento.
- * @returns {HTMLElement} - El elemento del DOM.
- */
-function getContainerElement(id) {
-    return document.getElementById(id);
-}
+    function clearContainer(container) {
+        if (container) {
+            container.innerHTML = '';
+        } else {
+            console.error("El contenedor no existe en el DOM.");
+        }
+    }
 
 /**
  * Limpia el contenido de un contenedor.
