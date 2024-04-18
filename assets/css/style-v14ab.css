@@ -55,7 +55,7 @@ li a:hover:not(.active) {
     flex-direction: column;
 }
 
-#syntax-network {
+.syntax-network {
     width: 100%;
     overflow-y: auto;  // Permite desplazamiento vertical si las oraciones son demasiado altas
     max-height: 600px;  // Ajusta según las necesidades
