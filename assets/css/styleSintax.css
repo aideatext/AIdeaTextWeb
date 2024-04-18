@@ -22,6 +22,15 @@ header, .footer {
     max-height: 500px; /* Ajusta según las necesidades */
 }
 
+/* Clases para el contenedor del reproductor YouTube */
+#youtube-player {
+    height: 70vh; /* Ajusta la altura al 70% de la altura de la ventana */
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
 /* Mejoras para header y footer */
 header {
     background-color: #333;
