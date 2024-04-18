@@ -79,12 +79,22 @@ document.addEventListener("DOMContentLoaded", function() {
                 .attr("height", containerHeight)
                 .style("font", "10px sans-serif");
 
-        const treemap = d3.treemap().size([width, height]).paddingInner(1).paddingOuter(3);
-        const root = d3.hierarchy(hierarchyData).sum(d => d.value).sort((a, b) => b.height - a.height || b.value - a.value);
+        const treemap = d3.treemap()
+             .size([containerWidth, containerHeight]) // Usar las variables correctas aquí
+            .paddingInner(1)
+            .paddingOuter(3);
+        
+        const root = d3.hierarchy(hierarchyData)
+            .sum(d => d.value)
+            .sort((a, b) => b.height - a.height || b.value - a.value);
 
         treemap(root);
-
-        const leaf = svg.selectAll("g").data(root.leaves()).enter().append("g").attr("transform", d => `translate(${d.x0},${d.y0})`);
+        
+        const leaf = svg.selectAll("g")
+            .data(root.leaves())
+            .enter()
+            .append("g")
+            .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
         leaf.append("rect")
             .attr("id", d => d.data.id)
