@@ -60,63 +60,84 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function visualizeSyntaxTreemap(syntaxData) {
-        clearContainer(syntaxNetworkContainer);
+ function visualizeSyntaxTreemap(syntaxData) {
+    clearContainer(syntaxNetworkContainer);
 
-        if (!syntaxData || !syntaxData.nodes) {
-            console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
-            return;
-        }
-        
-        // Ajustar tamaño del SVG al contenedor
-        const hierarchyData = buildHierarchy(syntaxData.nodes);
-        const containerWidth = syntaxNetworkContainer.clientWidth;
-        const containerHeight = syntaxNetworkContainer.clientHeight;
-            
-         const svg = d3.select(syntaxNetworkContainer).append("svg")
-                .attr("width", containerWidth)
-                .attr("height", containerHeight)
-                .style("font", "10px sans-serif");
-
-        const treemap = d3.treemap()
-             .size([containerWidth, containerHeight]) // Usar las variables correctas aquí
-            .paddingInner(1)
-            .paddingOuter(3);
-        
-        const root = d3.hierarchy(hierarchyData)
-            .sum(d => d.value)
-            .sort((a, b) => b.height - a.height || b.value - a.value);
-
-        treemap(root);
-        
-        const leaf = svg.selectAll("g")
-            .data(root.leaves())
-            .enter()
-            .append("g")
-            .attr("transform", d => `translate(${d.x0},${d.y0})`);
-
-        leaf.append("rect")
-            .attr("id", d => d.data.id)
-            .attr("width", d => d.x1 - d.x0)
-            .attr("height", d => d.y1 - d.y0)
-            .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name))
-            .attr("stroke", "black");
-
-    // Ajustar el tamaño y posición del texto para que sea visible
-        leaf.append("text")
-            .attr("x", 10) // Posición x del texto ajustada
-            .attr("y", 20) // Posición y del texto ajustada
-            .text(d => d.data.name + " [" + d.data.value + "]")
-            .attr("fill", "white")
-            .attr("font-size", "10px") // Tamaño del texto reducido para mejor ajuste
-            .attr("font-weight", "bold");
+    if (!syntaxData || !syntaxData.nodes) {
+        console.error("Error: No se encontraron datos de análisis sintáctico válidos.");
+        return;
     }
+    
+    // Ajustar tamaño del SVG al contenedor
+    const hierarchyData = buildHierarchy(syntaxData.nodes);
+    const containerWidth = syntaxNetworkContainer.clientWidth;
+    const containerHeight = syntaxNetworkContainer.clientHeight;
+        
+    const svg = d3.select(syntaxNetworkContainer).append("svg")
+           .attr("width", containerWidth)
+           .attr("height", containerHeight)
+           .style("font", "10px sans-serif");
+
+    const treemap = d3.treemap()
+         .size([containerWidth, containerHeight]) // Usar las variables correctas aquí
+        .paddingInner(1)
+        .paddingOuter(3);
+    
+    const root = d3.hierarchy(hierarchyData)
+        .sum(d => d.value)
+        .sort((a, b) => b.height - a.height || b.value - a.value);
+
+    treemap(root);
+    
+    const leaf = svg.selectAll("g")
+        .data(root.leaves())
+        .enter()
+        .append("g")
+        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+
+    leaf.append("rect")
+        .attr("id", d => d.data.id)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => getColorByFrequency(d.data.value, d.parent.data.name))
+        .attr("stroke", "black");
+
+    leaf.append("text")
+        .attr("x", 10)
+        .attr("y", 20)
+        .text(d => d.data.name + " [" + d.data.value + "]")
+        .attr("fill", "white")
+        .attr("font-size", "10px")
+        .attr("font-weight", "bold");
+
+    // Añadir leyenda
+    const legend = svg.append("g")
+        .attr("transform", "translate(0,10)");
+
+    const categories = Object.keys(POSLabels);
+    categories.forEach((key, index) => {
+        const color = getColorByPOS(key);
+        legend.append("rect")
+            .attr("x", index * 100)
+            .attr("width", 15)
+            .attr("height", 15)
+            .style("fill", color);
+
+        legend.append("text")
+            .attr("x", index * 100 + 20)
+            .attr("y", 12)
+            .text(POSLabels[key])
+            .attr("font-size", "12px")
+            .style("text-anchor", "start")
+            .style("fill", "black");
+    });
+}
 
     function getColorByFrequency(value, pos) {
         const baseColor = d3.color(getColorByPOS(pos));
         const intensity = d3.scaleLinear().domain([1, 10]).range([1, 0.5])(value);
         return baseColor.darker(intensity);
-    }
+    } 
 
     function getColorByPOS(pos) {
         const colorMap = {
