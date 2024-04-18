@@ -5,18 +5,23 @@ body, html {
     font-family: "Montserrat", sans-serif;
 }
 
-/* Estilos específicos de Bootstrap */
-.container-fluid, .row, .col-md-3, .col-md-9 {
-    height: 100%; /* Establece la altura al 100% para todos los contenedores flexibles */
+.container-fluid, .row {
+    min-height: 100%; /* Esto permite que el contenido se ajuste al menos al 100% de la altura de la ventana, pero puede expandirse más si es necesario */
 }
 
-/* Clases para el contenedor del reproductor YouTube, si necesario */
+/* Ajuste del header */
+header.bg-dark {
+    padding: 2px 0; /* Reduce el padding para hacer el header más pequeño */
+    font-size: 0.9rem; /* Reduce el tamaño del texto si es necesario */
+}
+
+/* Clases para el contenedor del reproductor YouTube */
 #youtube-player {
-    min-height: 500px; /* Asegura que el contenedor tenga altura mínima si no hay contenido */
-    background-color: #000; /* Fondo negro para destacar el área del reproductor */
-    color: #fff; /* Texto blanco si decides agregar texto */
+    height: 70vh; /* Ajusta la altura al 70% de la altura de la ventana */
+    background-color: #000;
+    color: #fff;
     padding: 20px;
-    border: 1px solid #ccc; /* Borde para destacar el contenedor */
+    border: 1px solid #ccc;
 }
 
 #syntax-network {
@@ -29,12 +34,11 @@ body, html {
     text-align: center;
     padding: 10px;
     width: 100%;
-    clear: both; /* Esto asegura que el footer no se sobreponga con otros elementos */
+    position: relative; /* Asegura que el footer sea siempre visible al final del contenido */
 }
 
-/* Media queries para ajustar para dispositivos móviles */
 @media screen and (max-width: 768px) {
     .footer {
-        position: relative; /* En dispositivos móviles, asegúrate de que el footer sea relativo y no fijo */
+        position: relative;
     }
 }
