@@ -29,6 +29,7 @@ header, .footer {
     border: 1px solid red;
     position: relative; /* Establece la posición relativa para el control de overflow */
     min-height: 700px; /* Altura mínima para asegurar espacio suficiente */
+    width: 100%; /* Utiliza el ancho completo del contenedor col-md-8 */
 }
 
 /* Estilos para mejorar la legibilidad del texto en el treemap */
