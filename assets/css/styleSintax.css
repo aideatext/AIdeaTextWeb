@@ -1,27 +1,20 @@
 body, html {
     height: 100%;
     margin: 0;
+    padding: 0;
     background-color: #f0f0f0;
     font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column; /* Orienta los elementos en una columna */
 }
 
-.container-fluid, .row {
-    min-height: 100%; /* Esto permite que el contenido se ajuste al menos al 100% de la altura de la ventana, pero puede expandirse más si es necesario */
+header, .footer {
+    flex-shrink: 0; /* Esto previene que header y footer se reduzcan */
 }
 
-/* Ajuste del header */
-header.bg-dark {
-    padding: 2px 0; /* Reduce el padding para hacer el header más pequeño */
-    font-size: 0.9rem; /* Reduce el tamaño del texto si es necesario */
-}
-
-/* Clases para el contenedor del reproductor YouTube */
-#youtube-player {
-    height: 70vh; /* Ajusta la altura al 70% de la altura de la ventana */
-    background-color: #000;
-    color: #fff;
-    padding: 20px;
-    border: 1px solid #ccc;
+.container-fluid {
+    flex-grow: 1; /* Permite que el contenedor se expanda para llenar el espacio disponible */
+    overflow-y: auto; /* Añade desplazamiento vertical si el contenido es demasiado alto */
 }
 
 #syntax-network {
@@ -29,16 +22,23 @@ header.bg-dark {
     max-height: 500px; /* Ajusta según las necesidades */
 }
 
+/* Mejoras para header y footer */
+header {
+    background-color: #333;
+    color: white;
+}
+
 .footer {
     background-color: #ffffff;
     text-align: center;
     padding: 10px;
     width: 100%;
-    position: relative; /* Asegura que el footer sea siempre visible al final del contenido */
 }
 
+/* Ajustes para dispositivos móviles */
 @media screen and (max-width: 768px) {
     .footer {
         position: relative;
     }
 }
+
