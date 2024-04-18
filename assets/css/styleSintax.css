@@ -24,7 +24,7 @@ header, .footer {
 
 /* Clases para el contenedor del reproductor YouTube */
 #youtube-player {
-    height: 70vh; /* Ajusta la altura al 70% de la altura de la ventana */
+    height: 100vh; /* Ajusta la altura al 70% de la altura de la ventana */
     background-color: #000;
     color: #fff;
     padding: 20px;
