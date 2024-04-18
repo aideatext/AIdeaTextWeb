@@ -34,26 +34,23 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Datos recibidos del backend:", data);
-
-            // Simular progreso
             let progress = 0;
             const interval = setInterval(() => {
-                progress += 20; // Incrementar progreso
-                progressBar.style.width = progress + '%'; // Actualizar barra de progreso
+                progress += 10; // Incrementar progreso más lentamente
+                progressBar.style.width = progress + '%';
+
                 if (progress >= 100) {
                     clearInterval(interval);
-                    progressBar.style.width = '100%'; // Asegurar que llegue al 100%
-                    setTimeout(() => { progressBar.style.display = 'none'; }, 500); // Ocultar después de completar
+                    progressBar.style.width = '100%';
+                    setTimeout(() => { progressBar.style.display = 'none'; }, 500);
+
+                    if (data.syntax && data.syntax.nodes) {
+                        visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
+                    } else {
+                        console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
+                    }
                 }
-            }, 200); // Actualizar cada 200 ms
-            
-            if (data.syntax && data.syntax.nodes) {
-                // Visualiza la sintaxis del texto en la página web
-                visualizeSyntaxTreemap(data.syntax, syntaxNetworkContainer);
-            } else {  
-                console.error("Error: No se encontraron datos de análisis sintáctico válidos en la respuesta del servidor.");
-            }
+            }, 200); // Modifica este tiempo según la duración esperada del proceso
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
