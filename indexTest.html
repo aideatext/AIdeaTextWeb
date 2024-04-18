@@ -27,13 +27,9 @@
 
 <!-- Aquí puedes agregar tus estilos CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
-<link rel="stylesheet" type="text/css" href="assets/css/style-v14ab.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="assets/css/styleSintax.css">
 <link rel="icon" type="image/png" href="favicon.png">
-
-<!-- D3.js -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/d3@7"></script> -->
-<script type="text/javascript" src="https://d3js.org/d3.v7.min.js"></script>
-
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XP49EJ2K6P"></script>
@@ -45,24 +41,33 @@
   gtag('config', 'G-XP49EJ2K6P');
 </script>	
 </head>
-
 	
 <body>
+    <header class="bg-dark text-white text-center p-3 mb-3">
+        <h1>AIdeaText - Web</h1>
+        <nav class="nav justify-content-center">
+            <a href="#home" class="nav-link text-white">Home</a>
+            <a href="morph_index.html" class="nav-link text-white">Análisis morfológico</a>
+        </nav>
+    </header>
 
-<div class="upper-section">
-<h1>AIdeaText - Web</h1>
-<ul>
-<li><a href="#home">Home</a></li>
-<li><a href="morph_index.html">Análisis morfológico</a></li>
-</ul>
-</div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="youtube-player"></div> <!-- Contenedor específico para el reproductor -->
+            </div>
+        </div>
+    </div>
 
-<div class="main-container-1x">
-	<div id="youtube-player"></div> <!-- Contenedor específico para el reproductor -->
-</div>
-		  
-<div class="footer"> <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai 
-&copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </p> </div>
+    <footer class="footer bg-light text-center p-3 mt-auto">
+        <p>AIdeaText is a project aimed at learning writing through the visualization of semantic maps. Contact: hello [at] aideatext [dot] ai 
+        &copy; 2024 AIdeaText - AIdeaTextWeb - AIdeaText Analytics Services. All rights reserved </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/youTubeAPI.js"></script>
+</body>
+</html>
 
 	<script src="assets/js/youTubeAPI.js"></script>
 </body>
