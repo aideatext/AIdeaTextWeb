@@ -25,8 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
         progressBar.style.width = '0%'; // Reiniciar la barra de progreso
         progressBar.style.display = 'block'; // Mostrar la barra
 
-        //fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
-        fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/morphAnalyzer', {
+        fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaText_Comprehend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
