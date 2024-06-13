@@ -1,5 +1,6 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// versión 2
+// versión 3
+
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainer = document.getElementById("syntax-network");
@@ -39,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return response.json();
         }) 
         .then(data => {
+            console.log("Datos recibidos del servidor:", data); // Añadir esta línea para depuración
             let progress = 0;
             const interval = setInterval(() => {
                 progress += 10; // Incrementar progreso más lentamente
