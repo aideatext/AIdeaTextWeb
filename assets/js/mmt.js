@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainer = document.getElementById("syntax-network");
-    const syntaxButton = document.getElementById('syntaxButton');
+    const syntaxButton = document.getElementById('translateButton'); // Asegúrate de usar el botón correcto
     const progressBar = document.getElementById('progressBar');
 
     syntaxButton.addEventListener('click', syntaxProcess);
@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
+        const targetLanguage = document.getElementById('language-select').value; // Agrega esta línea para obtener el idioma
         if (!textInput.trim()) {
             console.error("El texto para analizar no puede estar vacío.");
             return;
@@ -28,11 +29,11 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: textInput })
+            body: JSON.stringify({ text: textInput, target_language: targetLanguage }) // Agrega target_language aquí
         })
-        .then(response => response.text())
-        .then(html => {
-                let progress = 0;
+        .then(response => response.json()) // Cambia a response.json()
+        .then(data => {
+            let progress = 0;
             const interval = setInterval(() => {
                 progress += 10; // Incrementar progreso más lentamente
                 progressBar.style.width = progress + '%';
@@ -42,16 +43,18 @@ document.addEventListener("DOMContentLoaded", function() {
                     progressBar.style.width = '100%';
                     setTimeout(() => { progressBar.style.display = 'none'; }, 500);
 
-            if (html.trim().startsWith('<div')) {
-                clearContainer(syntaxNetworkContainer);
-                syntaxNetworkContainer.innerHTML = html;
-                console.log("Displacy output has been inserted into the container.");
-            } else {
-                console.error("No se recibieron datos válidos del servidor:", html);
-            }
-        }
+                    if (data.arc_diagram.trim().startsWith('<div')) {
+                        clearContainer(syntaxNetworkContainer);
+                        syntaxNetworkContainer.innerHTML = data.arc_diagram;
+                        console.log("Displacy output has been inserted into the container.");
+                    } else {
+                        console.error("No se recibieron datos válidos del servidor:", data.arc_diagram);
+                    }
+                }
             }, 200); // Modifica este tiempo según la duración esperada del proceso
         
+            document.getElementById('translation-result').innerText = `Texto traducido: ${data.translated_text}`;
+            document.getElementById('audio-player').src = `data:audio/mp3;base64,${data.audio_base64}`;
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
