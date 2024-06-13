@@ -1,5 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v4xx
+// v5yx
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
@@ -33,7 +33,12 @@ document.addEventListener("DOMContentLoaded", function() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: textInput })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             let progress = 0;
             const interval = setInterval(() => {
