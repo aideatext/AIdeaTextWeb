@@ -1,5 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v1xx
+// v2xx
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     progressBar.style.width = '100%';
                     setTimeout(() => { progressBar.style.display = 'none'; }, 500);
 
-                    if (data.arc_diagram_es.trim().startsWith('<div')) {
+                    if (data.arc_diagram_es && data.arc_diagram_es.trim().startsWith('<div')) {
                         clearContainer(syntaxNetworkContainerEs);
                         syntaxNetworkContainerEs.innerHTML = data.arc_diagram_es;
                         console.log("Displacy output (ES) has been inserted into the container.");
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         console.error("No se recibió texto traducido del servidor");
                     }
 
-                    if (data.arc_diagram_fr.trim().startsWith('<div')) {
+                    if (data.arc_diagram_fr && data.arc_diagram_fr.trim().startsWith('<div')) {
                         clearContainer(syntaxNetworkContainerFr);
                         syntaxNetworkContainerFr.innerHTML = data.arc_diagram_fr;
                         console.log("Displacy output (FR) has been inserted into the container.");
@@ -83,3 +83,4 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
     }
 });
+
