@@ -1,4 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
+// versión 2
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainer = document.getElementById("syntax-network");
