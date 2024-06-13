@@ -1,5 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v2xx
+// v4xx
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
@@ -83,4 +83,3 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
     }
 });
-
