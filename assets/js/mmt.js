@@ -1,5 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// versión 3
+// versión 4
 
 document.addEventListener("DOMContentLoaded", function() {
     
@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error("El texto para analizar no puede estar vacío.");
             return;
         }
+
+        console.log("Enviando datos al servidor:", { text: textInput, target_language: targetLanguage }); // Depuración de datos enviados
 
         progressBar.style.width = '0%';
         progressBar.style.display = 'block';
@@ -86,3 +88,4 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("El botón de traducción no se encuentra en el DOM.");
     }
 });
+
