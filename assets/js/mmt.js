@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
         progressBar.style.width = '0%';
         progressBar.style.display = 'block';
 
-        fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
+        fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: textInput })
