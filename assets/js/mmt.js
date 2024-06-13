@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     progressBar.style.width = '100%';
                     setTimeout(() => { progressBar.style.display = 'none'; }, 500);
 
-                    if (data.arc_diagram.trim().startsWith('<div')) {
+                    if (data.arc_diagram && data.arc_diagram.trim().startsWith('<div')) {
                         clearContainer(syntaxNetworkContainer);
                         syntaxNetworkContainer.innerHTML = data.arc_diagram;
                         console.log("Displacy output has been inserted into the container.");
