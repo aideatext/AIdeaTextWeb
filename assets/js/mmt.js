@@ -1,14 +1,12 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v9X09
+// v1xxx
 document.addEventListener("DOMContentLoaded", function() {
     
-    const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
-    const syntaxNetworkContainerFr = document.getElementById("syntax-network-fr");
-    const translationResult = document.getElementById("translation-result");
-    const syntaxButton = document.getElementById('syntaxButton');
+    const translatedTextContainer = document.getElementById("translated-text");
+    const translateButton = document.getElementById('translateButton');
     const progressBar = document.getElementById('progressBar');
 
-    syntaxButton.addEventListener('click', syntaxProcess);
+    translateButton.addEventListener('click', translateProcess);
 
     function clearContainer(container) {
         if (container) {
@@ -18,10 +16,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function syntaxProcess() {
+    function translateProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
-            console.error("El texto para analizar no puede estar vacío.");
+            console.error("El texto para traducir no puede estar vacío.");
             return;
         }
 
@@ -50,41 +48,27 @@ document.addEventListener("DOMContentLoaded", function() {
                     progressBar.style.width = '100%';
                     setTimeout(() => { progressBar.style.display = 'none'; }, 500);
 
-                    if (data.arc_diagram_es && data.arc_diagram_es.trim().startsWith('<div')) {
-                        clearContainer(syntaxNetworkContainerEs);
-                        syntaxNetworkContainerEs.innerHTML = data.arc_diagram_es;
-                        console.log("Displacy output (ES) has been inserted into the container.");
-                    } else {
-                        console.error("No se recibieron datos válidos del servidor para el diagrama en español:", data.arc_diagram_es);
-                    }
-
                     if (data.translated_text) {
-                        translationResult.innerText = `Texto traducido: ${data.translated_text}`;
+                        clearContainer(translatedTextContainer);
+                        translatedTextContainer.innerText = `Texto traducido: ${data.translated_text}`;
+                        console.log("La traducción ha sido insertada en el contenedor.");
                     } else {
                         console.error("No se recibió texto traducido del servidor");
-                    }
-
-                    if (data.arc_diagram_fr && data.arc_diagram_fr.trim().startsWith('<div')) {
-                        clearContainer(syntaxNetworkContainerFr);
-                        syntaxNetworkContainerFr.innerHTML = data.arc_diagram_fr;
-                        console.log("Displacy output (FR) has been inserted into the container.");
-                    } else {
-                        console.error("No se recibieron datos válidos del servidor para el diagrama en francés:", data.arc_diagram_fr);
                     }
                 }
             }, 200); // Modifica este tiempo según la duración esperada del proceso
         
         })
         .catch(error => {
-            console.error("Error al procesar el texto:", error);
+            console.error("Error al procesar la traducción:", error);
             progressBar.style.width = '100%';
             progressBar.style.backgroundColor = 'red';
         });
     }
 
-    if (syntaxButton) {
-        syntaxButton.addEventListener('click', syntaxProcess);
+    if (translateButton) {
+        translateButton.addEventListener('click', translateProcess);
     } else {
-        console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
+        console.error("El botón de traducción no se encuentra en el DOM.");
     }
 });
