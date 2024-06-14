@@ -1,5 +1,4 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v1xxx
 document.addEventListener("DOMContentLoaded", function() {
     
     const translatedTextContainer = document.getElementById("translated-text");
