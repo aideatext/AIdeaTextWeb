@@ -1,4 +1,4 @@
-// 123v
+// 1345v
 document.addEventListener("DOMContentLoaded", function() {
     const translatedTextContainer = document.getElementById("translated-text");
     const translateButton = document.getElementById('translateButton');
