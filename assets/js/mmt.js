@@ -26,6 +26,8 @@ function encodeUTF8(text) {
             return;
         }
 
+  const utf8Text = new TextDecoder().decode(encodeUTF8(textInput));
+        
         progressBar.style.width = '0%';
         progressBar.style.display = 'block';
 
