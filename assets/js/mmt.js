@@ -1,5 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v75
+// v8585
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
+        console.log(`Sending text: ${textInput}`);  // Log para verificar el texto enviado
         if (!textInput.trim()) {
             console.error("El texto para analizar no puede estar vacío.");
             return;
