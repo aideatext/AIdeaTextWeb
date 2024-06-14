@@ -14,6 +14,11 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+function encodeUTF8(text) {
+    const encoder = new TextEncoder();
+    return encoder.encode(text);
+}
+    
     function translateProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
