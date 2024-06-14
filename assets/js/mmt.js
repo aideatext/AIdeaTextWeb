@@ -1,6 +1,5 @@
-// Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
+//112
 document.addEventListener("DOMContentLoaded", function() {
-    
     const translatedTextContainer = document.getElementById("translated-text");
     const translateButton = document.getElementById('translateButton');
     const progressBar = document.getElementById('progressBar');
@@ -56,7 +55,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }
             }, 200); // Modifica este tiempo según la duración esperada del proceso
-        
         })
         .catch(error => {
             console.error("Error al procesar la traducción:", error);
