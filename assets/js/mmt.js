@@ -1,5 +1,5 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v5yx
+// v6
 document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
