@@ -1,12 +1,12 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
-// v8585
+// v9989
 document.addEventListener("DOMContentLoaded", function() {
-    
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
     const syntaxNetworkContainerFr = document.getElementById("syntax-network-fr");
-    const translatedTextContainer = document.getElementById("translated-text");
     const syntaxButton = document.getElementById('syntaxButton');
     const progressBar = document.getElementById('progressBar');
+    const translationResult = document.createElement('div');
+    syntaxNetworkContainerFr.parentNode.insertBefore(translationResult, syntaxNetworkContainerFr);
 
     syntaxButton.addEventListener('click', syntaxProcess);
 
@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
-        console.log(`Sending text: ${textInput}`);  // Log para verificar el texto enviado
         if (!textInput.trim()) {
             console.error("El texto para analizar no puede estar vacío.");
             return;
@@ -43,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             let progress = 0;
             const interval = setInterval(() => {
-                progress += 10; // Incrementar progreso más lentamente
+                progress += 10;
                 progressBar.style.width = progress + '%';
 
                 if (progress >= 100) {
@@ -51,30 +50,27 @@ document.addEventListener("DOMContentLoaded", function() {
                     progressBar.style.width = '100%';
                     setTimeout(() => { progressBar.style.display = 'none'; }, 500);
 
-                    if (data.arc_diagram_es && data.arc_diagram_es.trim().startsWith('<div')) {
+                    if (data.arc_diagram_es) {
                         clearContainer(syntaxNetworkContainerEs);
                         syntaxNetworkContainerEs.innerHTML = data.arc_diagram_es;
-                        console.log("Displacy output (ES) has been inserted into the container.");
                     } else {
                         console.error("No se recibieron datos válidos del servidor para el diagrama en español:", data.arc_diagram_es);
                     }
 
                     if (data.translated_text) {
-                        translatedTextContainer.innerText = `Texto traducido: ${data.translated_text}`;
+                        translationResult.innerText = `Texto traducido: ${data.translated_text}`;
                     } else {
                         console.error("No se recibió texto traducido del servidor");
                     }
 
-                    if (data.arc_diagram_fr && data.arc_diagram_fr.trim().startsWith('<div')) {
+                    if (data.arc_diagram_fr) {
                         clearContainer(syntaxNetworkContainerFr);
                         syntaxNetworkContainerFr.innerHTML = data.arc_diagram_fr;
-                        console.log("Displacy output (FR) has been inserted into the container.");
                     } else {
                         console.error("No se recibieron datos válidos del servidor para el diagrama en francés:", data.arc_diagram_fr);
                     }
                 }
-            }, 200); // Modifica este tiempo según la duración esperada del proceso
-        
+            }, 200);
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
