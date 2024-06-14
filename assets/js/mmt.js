@@ -1,11 +1,12 @@
 // Agregado dentro de DOMContentLoaded para garantizar que el DOM esté cargado completamente
 document.addEventListener("DOMContentLoaded", function() {
     
-    const syntaxNetworkContainer = document.getElementById("syntax-network");
-    const syntaxButton = document.getElementById('syntaxButton');
+    const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
+    const syntaxNetworkContainerFr = document.getElementById("syntax-network-fr");
+    const translateButton = document.getElementById('syntaxButton');
     const progressBar = document.getElementById('progressBar');
 
-    syntaxButton.addEventListener('click', syntaxProcess);
+    translateButton.addEventListener('click', syntaxProcess);
 
     function clearContainer(container) {
         if (container) {
@@ -42,14 +43,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     progressBar.style.width = '100%';
                     setTimeout(() => { progressBar.style.display = 'none'; }, 500);
 
-            if (html.trim().startsWith('<div')) {
-                clearContainer(syntaxNetworkContainer);
-                syntaxNetworkContainer.innerHTML = html;
-                console.log("Displacy output has been inserted into the container.");
-            } else {
-                console.error("No se recibieron datos válidos del servidor:", html);
-            }
-        }
+                    if (html.trim().startsWith('<div')) {
+                        clearContainer(syntaxNetworkContainerEs);
+                        clearContainer(syntaxNetworkContainerFr);
+                        syntaxNetworkContainerEs.innerHTML = html;
+                        syntaxNetworkContainerFr.innerHTML = html;
+                        console.log("Displacy output has been inserted into both containers.");
+                    } else {
+                        console.error("No se recibieron datos válidos del servidor:", html);
+                    }
+                }
             }, 200); // Modifica este tiempo según la duración esperada del proceso
         
         })
@@ -61,8 +64,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    if (syntaxButton) {
-        syntaxButton.addEventListener('click', syntaxProcess);
+    if (translateButton) {
+        translateButton.addEventListener('click', syntaxProcess);
     } else {
         console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
     }
