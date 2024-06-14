@@ -1,4 +1,4 @@
-// 1345v
+// 2222v
 document.addEventListener("DOMContentLoaded", function() {
     const translatedTextContainer = document.getElementById("translated-text");
     const translateButton = document.getElementById('translateButton');
@@ -14,11 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-function encodeUTF8(text) {
-    const encoder = new TextEncoder();
-    return encoder.encode(text);
-}
-    
     function translateProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
@@ -26,8 +21,6 @@ function encodeUTF8(text) {
             return;
         }
 
-  const utf8Text = new TextDecoder().decode(encodeUTF8(textInput));
-        
         progressBar.style.width = '0%';
         progressBar.style.display = 'block';
 
@@ -59,9 +52,11 @@ function encodeUTF8(text) {
                         console.log("La traducción ha sido insertada en el contenedor.");
                     } else {
                         console.error("No se recibió texto traducido del servidor");
+                        console.log("Datos recibidos del servidor:", data); // Imprimir los datos recibidos para depuración
                     }
                 }
             }, 200); // Modifica este tiempo según la duración esperada del proceso
+        
         })
         .catch(error => {
             console.error("Error al procesar la traducción:", error);
