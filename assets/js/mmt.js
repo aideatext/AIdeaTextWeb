@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const syntaxNetworkContainerEs = document.getElementById("syntax-network-es");
     const syntaxNetworkContainerFr = document.getElementById("syntax-network-fr");
-    const translateButton = document.getElementById('syntaxButton');
+    const syntaxButton = document.getElementById('syntaxButton');
     const progressBar = document.getElementById('progressBar');
 
-    translateButton.addEventListener('click', syntaxProcess);
+    syntaxButton.addEventListener('click', syntaxProcess);
 
     function clearContainer(container) {
         if (container) {
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error("El contenedor no existe en el DOM.");
         }
     }
-    
+
     function syntaxProcess() {
         const textInput = document.getElementById("text-1").value;
         if (!textInput.trim()) {
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", function() {
         progressBar.style.width = '0%';
         progressBar.style.display = 'block';
 
-        fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/AIdeaTextdisplaCy', {
+        fetch('https://5f6b6akff7.execute-api.us-east-2.amazonaws.com/DEV/callmodel', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: textInput })
         })
         .then(response => response.text())
         .then(html => {
-                let progress = 0;
+            let progress = 0;
             const interval = setInterval(() => {
                 progress += 10; // Incrementar progreso más lentamente
                 progressBar.style.width = progress + '%';
@@ -58,14 +58,13 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => {
             console.error("Error al procesar el texto:", error);
-            clearInterval(interval);
             progressBar.style.width = '100%';
             progressBar.style.backgroundColor = 'red';
         });
     }
 
-    if (translateButton) {
-        translateButton.addEventListener('click', syntaxProcess);
+    if (syntaxButton) {
+        syntaxButton.addEventListener('click', syntaxProcess);
     } else {
         console.error("El botón de análisis sintáctico no se encuentra en el DOM.");
     }
